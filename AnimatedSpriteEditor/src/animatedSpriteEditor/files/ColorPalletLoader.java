@@ -75,7 +75,7 @@ public class ColorPalletLoader
         catch(InvalidXMLFileFormatException | DOMException | HeadlessException ex)
         {
             // SOMETHING WENT WRONG LOADING THE .pose XML FILE
-        	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getPoseur();
+        	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
         	AnimatedSpriteEditorGUI gui = singleton.getGUI();
             JOptionPane.showMessageDialog(
                 gui,

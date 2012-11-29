@@ -100,7 +100,7 @@ public class PoseDimensionsDialog extends JDialog
     {
         // DON'T LET THE USER SWITCH BACK AND FORTH BETWEEN THIS
         // DIALOG AND THE Poseur APP
-    	AnimatedSpriteEditorGUI gui = AnimatedSpriteEditor.getPoseur().getGUI();
+    	AnimatedSpriteEditorGUI gui = AnimatedSpriteEditor.getEditor().getGUI();
         setModal(true);
         
         // GIVE THIS DIALOG A TITLE BAR
@@ -114,7 +114,7 @@ public class PoseDimensionsDialog extends JDialog
     private void initDialogGUI()
     {
         // WE'LL NEED THESE THINGS
-    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getPoseur();
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
         PoseurPose pose = new PoseurPose(256, 256);
         
         // CONSTRUCT EVERYTHING

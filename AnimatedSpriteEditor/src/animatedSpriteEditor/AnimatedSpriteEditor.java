@@ -83,7 +83,7 @@ public class AnimatedSpriteEditor {
      * 
      * @return The singleton Poseur used for this application.
      */
-    public static AnimatedSpriteEditor getPoseur()
+    public static AnimatedSpriteEditor getEditor()
     {
         // ONLY CONSTRUCT THE SINGLETON THE FIRST TIME
         if (singleton == null)
@@ -170,7 +170,7 @@ public class AnimatedSpriteEditor {
         // HERE IS THE CONSTRUCTION OF THE SINGLETON Poseur OBJECT,
         // SINCE THIS IS THE FIRST REFERENCE TO getPoseur. THE CONSTRUCTOR
         // WILL FULLY SETUP THE Poseur DATA AND GUI FOR USE.
-        AnimatedSpriteEditor app = AnimatedSpriteEditor.getPoseur();
+        AnimatedSpriteEditor app = AnimatedSpriteEditor.getEditor();
         app.init();
         
         // GET THE GUI AND START IT UP

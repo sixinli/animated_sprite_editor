@@ -107,9 +107,9 @@ public class EditorCanvas extends JPanel
     public void paintToImage(BufferedImage imageToPaintTo)
     {
         Graphics2D imageG2 = (Graphics2D)imageToPaintTo.getGraphics();
-        AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getPoseur();
+        AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
         EditorStateManager poseurStateManager = singleton.getStateManager();
-        PoseurPose pose = poseurStateManager.getPose();
+        PoseurPose pose = poseurStateManager.getPoseurStateManager().getPose();
         
         // FIRST LET'S PUT A TRANSPARENT BACKGROUND THE SIZE OF THE POSE
         Rectangle2D.Double transparentRect = new Rectangle2D.Double(
@@ -142,7 +142,7 @@ public class EditorCanvas extends JPanel
     private void renderDebugText(Graphics2D g2)
     {
         // AND FINALLY, THE DEBUG TEXT, IF THE OPTION IS TURNED ON
-    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getPoseur();
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
         if (singleton.isDebugTextEnabled())
         {
             // SET THE CORRECT FONT AND COLOR
@@ -192,12 +192,12 @@ public class EditorCanvas extends JPanel
         
         // RENDER THE ENTIRE POSE
         Iterator<PoseurShape> shapesIt = pose.getShapesIterator();
-        AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getPoseur();
+        AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
         EditorStateManager poseurStateManager = singleton.getStateManager();
         while (shapesIt.hasNext())
         {
             PoseurShape shape = shapesIt.next();
-            boolean isSelected = poseurStateManager.isSelectedShape(shape);
+            boolean isSelected = poseurStateManager.getPoseurStateManager().isSelectedShape(shape);
             
             // NOTE THAT WE NEVER DEPICT SELECTED SHAPES DIFFERENTLY
             // IN THE TRUE CANVAS, ONLY THE ZOOMABLE CANVAS
@@ -221,9 +221,9 @@ public class EditorCanvas extends JPanel
      */
     private void renderShapeInProgress(Graphics2D g2, Rectangle2D.Double poseArea)
     {
-    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getPoseur();
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
         EditorStateManager poseurStateManager = singleton.getStateManager();
-        PoseurShape shapeInProgress = poseurStateManager.getShapeInProgress();
+        PoseurShape shapeInProgress = poseurStateManager.getPoseurStateManager().getShapeInProgress();
 
         // ONLY DO THIS ON THE RIGHT SIDE
         if (state.isZoomable() && (shapeInProgress != null))

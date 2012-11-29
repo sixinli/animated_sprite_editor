@@ -1,13 +1,13 @@
 package animatedSpriteEditor.gui;
 
 import static animatedSpriteEditor.AnimatedSpriteEditorSettings.*;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.MediaTracker;
@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -32,6 +33,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.border.Border;
 
 import animatedSpriteEditor.events.canvas.PoseCanvasComponentHandler;
 import animatedSpriteEditor.events.canvas.PoseCanvasMouseHandler;
@@ -74,13 +76,18 @@ import animatedSpriteEditor.events.zoom.ZoomOutHandler;
 
 import animatedSpriteEditor.AnimatedSpriteEditor;
 import animatedSpriteEditor.files.ColorPalletLoader;
+import animatedSpriteEditor.files.PoseurFileManager;
 import animatedSpriteEditor.gui.ColorPallet;
 import animatedSpriteEditor.gui.ColorToggleButton;
 import animatedSpriteEditor.gui.EditorCanvas;
 import animatedSpriteEditor.gui.AnimatedSpriteEditorGUI;
+import animatedSpriteEditor.shapes.PoseurShape;
 import animatedSpriteEditor.state.ColorPalletState;
+import animatedSpriteEditor.state.EditorState;
+import animatedSpriteEditor.state.EditorStateManager;
 import animatedSpriteEditor.state.PoseCanvasState;
 import animatedSpriteEditor.state.PoseurPose;
+import animatedSpriteEditor.state.PoseurState;
 import animatedSpriteEditor.gui.PoseDimensionsDialog;
 
 /**
@@ -101,12 +108,14 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     // FOR ZOOMED IN AND OUT VIEWS. NOTE THAT WE'LL PUT
     // THEM INTO A SPLIT PANE
     private JSplitPane canvasSplitPane;
+    private EditorCanvas trueCanvas;
     private EditorCanvas zoomableCanvas;
     private JPanel displayArea;
     private JComboBox stateComboBox;
     private JTextField stateComboBoxMessage;
     private JPanel northOfDisplayArea;
     private JPanel displayToolBar;
+    private JPanel statePanel;
     
     // NORTH PANEL - EVERYTHING ELSE GOES IN HERE
     private JPanel northPanel;
@@ -247,6 +256,14 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     
     /**
      * Accessor method for getting the canvas that will
+     * not zoom and will render the pose as is.
+     * 
+     * @return The true canvas, which is on the left.
+     */
+    public EditorCanvas getTruePoseCanvas() { return trueCanvas; }
+
+    /**
+     * Accessor method for getting the canvas that will
      * zoom in and out, rendering the pose accordingly.
      * 
      * @return The zoomable canvas, which is on the right.
@@ -351,6 +368,140 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         
     }
     
+    /**
+     * Called each time the application's state changes, this method
+     * is responsible for enabling, disabling, and generally updating 
+     * all the GUI control based on what the current application
+     * state (i.e. the PoseurMode) is in.
+     */
+    public final void updateMode()
+    {
+        // WE'LL NEED THESE GUYS
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+        EditorStateManager state = singleton.getStateManager();
+        EditorState mode = state.getMode();
+
+        
+        if (mode == EditorState.SPRITE_TYPE_STATE)
+        {
+
+
+        	
+        }
+        
+        else if (mode == EditorState.SELECT_ANIMATION_STATE)
+        {
+            
+        	
+        	
+        	
+        }
+        
+        else if (mode == EditorState.POSEUR_STATE)
+        {
+            updatePoseurMode();
+        }     
+    }
+
+    /**
+     * Called each time the application's state changes, this method
+     * is responsible for enabling, disabling, and generally updating 
+     * all the GUI control based on what the current application
+     * state (i.e. the PoseurMode) is in.
+     */
+    public final void updatePoseurMode()
+    {
+        // WE'LL NEED THESE GUYS
+        AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+        animatedSpriteEditor.state.PoseurStateManager state = singleton.getStateManager().getPoseurStateManager();
+        animatedSpriteEditor.state.PoseurState mode = state.getMode();
+        PoseurFileManager fileManager = singleton.getFileManager().getPoseurFileManager();
+
+        // IN THIS MODE THE USER IS DRAGGING THE MOUSE TO
+        // COMPLETE THE DRAWING OF A SINGLE SHAPE
+        if (mode == PoseurState.COMPLETE_SHAPE_STATE)
+        {
+            // THIS USES THE CROSSHAIR
+            selectCursor(Cursor.CROSSHAIR_CURSOR);
+        }
+        // IN THIS MODE THE USER IS ABOUT TO START DRAGGING
+        // THE MOUSE TO CREATE A SHAPE
+        else if (mode == PoseurState.CREATE_SHAPE_STATE)
+        {
+            // THIS USES THE CROSSHAIR
+            selectCursor(Cursor.CROSSHAIR_CURSOR);
+            
+            // TURN THE APPROPRIATE CONTROLS ON/OFF
+            setEnabledEditControls(false);
+            selectionButton.setEnabled(true);            
+        }
+        // IN THIS STATE THE USER HAS SELECTED A SHAPE
+        // ON THE CANVAS AND IS DRAGGING IT
+        else if (mode == PoseurState.DRAG_SHAPE_STATE)
+        {
+            // THIS USES THE MOVE 
+            selectCursor(Cursor.MOVE_CURSOR);
+        }
+        // IN THIS STATE THE USER IS ABLE TO CLICK ON
+        // A SHAPE TO SELECT IT. THIS IS THE MOST COMMON
+        // STATE AND IS THE DEFAULT AT THE START OF THE APP
+        else if (mode == PoseurState.SELECT_SHAPE_STATE)
+        {
+            // THIS USES THE ARROW CURSOR
+            selectCursor(Cursor.DEFAULT_CURSOR);
+            
+            // THERE IS NO SHAPE SELECTED, SO WE CAN'T
+            // USE THE EDIT CONTROLS
+            enableSaveAsAndExport();
+            setEnabledEditControls(false);
+            selectionButton.setEnabled(false);
+            setEnabledColorControls(true);
+            setEnabledShapeControls(true);
+            setEnabledZoomControls(true);
+        }
+        // IN THIS STATE A SHAPE HAS BEEN SELECTED AND SO WE
+        // MAY EDIT IT, LIKE CHANGE IT'S COLORS OR TRANSPARENCY
+        else if (mode == PoseurState.SHAPE_SELECTED_STATE)
+        {
+            // THIS USES THE ARROW CURSOR
+            selectCursor(Cursor.DEFAULT_CURSOR);
+            
+            // THE EDIT CONTROLS CAN NOW BE USED
+            setEnabledEditControls(true);
+        }
+        // THIS IS THE STATE WHEN THE Poseur APP FIRST
+        // STARTS. THERE IS NO Pose YET, SO MOST CONTROLS
+        // ARE DISABLED
+        else if (mode == PoseurState.STARTUP_STATE)
+        {
+            // THIS USES THE ARROW CURSOR
+            selectCursor(Cursor.DEFAULT_CURSOR);
+            
+            // NOTHING IS SELECTED SO WE CAN'T EDIT YET
+            enableStartupFileControls();
+            setEnabledEditControls(false);
+            selectionButton.setEnabled(false);
+            setEnabledColorControls(false);
+            toggleOutlineColorButton();
+            setEnabledZoomControls(false);
+            setEnabledShapeControls(false);
+        }
+        saveButton.setEnabled(!fileManager.isSaved());
+        
+        // AND UPDATE THE SLIDER
+        PoseurShape selectedShape = state.getSelectedShape();
+        if (selectedShape != null)
+        {
+            // UPDATE THE SLIDER ACCORDING TO THE SELECTED
+            // SHAPE'S ALPHA (TRANSPARENCY) VALUE, IF THERE
+            // EVEN IS A SELECTED SHAPE
+            transparencySlider.setValue(selectedShape.getAlpha());
+        }    
+
+        // REDRAW EVERYTHING
+        zoomableCanvas.repaint();        
+    }
+    
 
     /**
      * This helper method constructs and lays out all GUI components, initializing
@@ -373,30 +524,29 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     {
         // SOME COMPONENTS MAY NEED THE STATE MANAGER
         // FOR INITIALIZATION, SO LET'S GET IT
-    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getPoseur();
-    	
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+        animatedSpriteEditor.state.PoseurStateManager poseurStateManager = singleton.getStateManager().getPoseurStateManager();
+
         // LET'S START BY INITIALIZING THE CENTER AREA,
         // WHERE WE'LL RENDER EVERYTHING. WE'LL HAVE TWO
         // CANVASES AND PUT THEM INTO DIFFERENT SIDES
         // OF A JSplitPane
         canvasSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
-        // LET'S MAKE THE CANVAS ON THE LEFT SIDE, WHICH
-        // WILL NEVER ZOOM
-        PoseCanvasState zoomableCanvasState = new PoseCanvasState(false, new PoseurPose(256,256), 1, 1, 1);
+        // LET'S MAKE THE CANVAS TO KEEP RECORD
+        PoseCanvasState trueCanvasState = poseurStateManager.getTrueCanvasState();
+        trueCanvas = new EditorCanvas(trueCanvasState);
+        trueCanvasState.setPoseCanvas(trueCanvas);
+        trueCanvas.setBackground(TRUE_CANVAS_COLOR);
+        
+        // AND NOW THE CANVAS ON THE RIGHT SIDE, WHICH
+        // WILL BE ZOOMABLE
+        PoseCanvasState zoomableCanvasState = poseurStateManager.getZoomableCanvasState();
         zoomableCanvas = new EditorCanvas(zoomableCanvasState);
         zoomableCanvasState.setPoseCanvas(zoomableCanvas);
         zoomableCanvas.setBackground(ZOOMABLE_CANVAS_COLOR);
         
         displayArea = new JPanel(new BorderLayout());
-        DefaultComboBoxModel stateComboBoxModel = new DefaultComboBoxModel();
-        stateComboBox = new JComboBox(stateComboBoxModel);
-        stateComboBoxModel.addElement("The Animation States Will Be Displayed Here.");
-        stateComboBox.setPrototypeDisplayValue("The Animation States Will Be Displayed Here.");
-        stateComboBoxMessage = new JTextField("    Select Animation State:     ");
-        stateComboBoxMessage.disable();
-        stateComboBoxMessage.setDisabledTextColor(Color.black);
-        stateComboBoxMessage.setBackground(Color.white);
         displayArea.setBackground(Color.white);
         northOfDisplayArea = new JPanel();
         
@@ -413,8 +563,8 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         // FILE CONTROLS
         fileToolbar  = new JToolBar();
         newButton    = (JButton)initButton(NEW_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, NEW_TOOLTIP);
-        newPoseButton    = (JButton)initButton(NEW_POSE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, NEW_POSE_TOOLTIP);
         newStateButton    = (JButton)initButton(NEW_STATE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, NEW_STATE_TOOLTIP);
+        newPoseButton    = (JButton)initButton(NEW_POSE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, NEW_POSE_TOOLTIP);
         deleteButton    = (JButton)initButton(DELETE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, DELETE_TOOLTIP);
         openButton   = (JButton)initButton(OPEN_IMAGE_FILE,     fileToolbar,  tracker, idCounter++, JButton.class, null, OPEN_TOOLTIP);
         saveButton   = (JButton)initButton(SAVE_IMAGE_FILE,     fileToolbar,  tracker, idCounter++, JButton.class, null, SAVE_TOOLTIP);
@@ -517,6 +667,20 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         speedUpButton   = (JButton)initButton(SPEED_UP_IMAGE_FILE, displayToolBar, tracker, idCounter++, JButton.class, null, SPEED_UP_TOOLTIP);
         slowDownButton   = (JButton)initButton(SLOW_DOWN_IMAGE_FILE, displayToolBar, tracker, idCounter++, JButton.class, null, SLOW_DOWN_TOOLTIP);
       
+      // THE ANIMATION STATE SELECTION PANEL
+        statePanel = new JPanel(new FlowLayout());
+        DefaultComboBoxModel stateComboBoxModel = new DefaultComboBoxModel();
+        stateComboBox = new JComboBox(stateComboBoxModel);
+        stateComboBoxModel.addElement("The Animation States Displayed Here.");
+        stateComboBox.setPrototypeDisplayValue("The Animation States Displayed Here.");
+        stateComboBoxMessage = new JTextField("    Select Animation State:     ");
+        stateComboBoxMessage.disable();
+        stateComboBoxMessage.setDisabledTextColor(Color.black);
+        stateComboBoxMessage.setBackground(Color.white);
+        statePanel.add(stateComboBoxMessage);
+        statePanel.add(stateComboBox);
+        statePanel.setBackground(Color.white);
+        statePanel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
       // THE POSES LIST
         poseList = new JPanel();
        
@@ -543,9 +707,6 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         // THE SPLIT PANE. WE'LL PUT THE DIVIDER
         // RIGHT IN THE MIDDLE AND WON'T LET
         // THE USER MOVE IT - FOOLPROOF DESIGN!
-    	northOfDisplayArea.add(stateComboBoxMessage);
-    	northOfDisplayArea.add(stateComboBox);
-    	displayArea.add(northOfDisplayArea, BorderLayout.NORTH);
     	displayArea.add(displayToolBar, BorderLayout.SOUTH);
         canvasSplitPane.setLeftComponent(zoomableCanvas);
         canvasSplitPane.setRightComponent(displayArea);
@@ -564,9 +725,10 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         // NOW ARRANGE THE TOOLBARS
         northOfNorthPanel.add(fileToolbar);
         northOfNorthPanel.add(editToolbar);
-        northOfNorthPanel.add(shapeToolbar);
+        northOfNorthPanel.add(statePanel);
         southOfNorthPanel.add(zoomToolbar);
         southOfNorthPanel.add(colorSelectionToolbar);
+        southOfNorthPanel.add(shapeToolbar);
         
         // NOW PUT ALL THE CONTROLS IN THE NORTH
         northPanel.setLayout(new BorderLayout());

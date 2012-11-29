@@ -35,6 +35,9 @@ public class EditorFileManager
     // THIS GUY KNOWS HOW TO READ, WRITE, AND EXPORT POESS
     private AnimatedSpriteEditorIO editorIO;
     
+    // THIS GUY KNOWS HOW TO MANAGE POSE FILES
+    private PoseurFileManager poseurFileManager;
+    
     /**
      * This default constructor starts the program without a
      * pose file being edited.
@@ -46,7 +49,14 @@ public class EditorFileManager
         currentFileName = null;
         saved = true;
         editorIO = new AnimatedSpriteEditorIO();
+        poseurFileManager = new PoseurFileManager();
+        
     }
+    
+    /**
+     * Accessor method for the poseur file manager.
+     */
+    public PoseurFileManager getPoseurFileManager(){ return poseurFileManager;}
     
     /**
      * This method starts the process of editing a new pose. If

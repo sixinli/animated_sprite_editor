@@ -99,7 +99,7 @@ public class AnimatedSpriteEditorGUILoader
             // LOADING AND THEREFORE THE PROGRAM SHOULD NOT CONTINUE. 
             // SO WE'LL JUST POST A FEEDBACK MESSAGE TO THE USER
             // AND KILL THE APP
-            JOptionPane.showMessageDialog(  AnimatedSpriteEditor.getPoseur().getGUI(), 
+            JOptionPane.showMessageDialog(  AnimatedSpriteEditor.getEditor().getGUI(), 
                                             ixffe.getMessage(), 
                                             LOADING_XML_ERROR_TEXT, 
                                             JOptionPane.ERROR_MESSAGE);

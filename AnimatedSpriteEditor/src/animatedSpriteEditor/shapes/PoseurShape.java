@@ -42,7 +42,7 @@ public abstract class PoseurShape
     {
         // LET'S FILL IN THIS CLASS' DATA WITH SETTINGS
         // FROM THE GUI CONTROLS
-    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getPoseur();
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
     	AnimatedSpriteEditorGUI gui = singleton.getGUI();
         
         // ASK THE GUI FOR ALL THESE VALUES
