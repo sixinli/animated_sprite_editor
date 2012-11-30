@@ -199,11 +199,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     private JPanel poseList;
     private JScrollPane scrollPane;
     private ArrayList<Pose> posesList;
-    private JButton randomButton;
-    private JButton randomButton2;
-    private JButton randomButton3;
-    private JButton randomButton4;
-    private JButton randomButton5;
+   
     
     private MediaTracker tracker;
     /**
@@ -426,6 +422,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         
         else if (mode == EditorState.SELECT_ANIMATION_STATE)
         {
+        	poseList.removeAll();
             // NOW LOAD THE ANIMATIONS FOR THE NEWLY SELECTED SPRITE TYPE
             if(singleton.getSpriteType().getAnimationStates()!=null)
             {

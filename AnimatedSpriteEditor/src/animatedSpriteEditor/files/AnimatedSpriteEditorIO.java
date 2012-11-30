@@ -68,7 +68,13 @@ public class AnimatedSpriteEditorIO
 		poseIO = new PoseIO();
 	}
 	
-    /**
+	/**
+	 * Accessor method for the poseur IO.
+	 * @return the poseur IO
+	 */
+	public PoseIO getPoseIO(){ return poseIO;}
+ 
+	/**
      * This method extracts the pose of a state of a sprite from the provided
      * xml file argument and loads these pose into the poseList list.
      * 
@@ -139,10 +145,16 @@ public class AnimatedSpriteEditorIO
             	((spriteTypeNode.getChildOfType(IMAGES_LIST_NODE)).getChildrenOfType(IMAGE_FILE_NODE));
             for (int i=0; i<imageFileNodes.size();i++){
             	int id = Integer.parseInt(imageFileNodes.get(i).getAttributeValue(ID_ATTRIBUTE));
-    			Image img = loadImageInBatch(	SPRITE_TYPE_PATH + currentTypeName+"/" ,
+    			Image img = loadImageInBatch(	SPRITE_TYPE_PATH + currentTypeName+ "/" + IMAGE_FOLDER_PATH,
     						imageFileNodes.get(i).getAttributeValue(FILE_NAME_ATTRIBUTE),
     						tracker, id);
     			AnimatedSpriteEditor.getEditor().getSpriteType().addImage(id, img);
+    			String fileName = imageFileNodes.get(i).getAttributeValue(FILE_NAME_ATTRIBUTE);
+    			fileName = fileName.substring(0, fileName.indexOf('.'));
+    			fileName = fileName + ".pose";
+    			AnimatedSpriteEditor.getEditor().getPoseFileNames().put(id, 
+    					SPRITE_TYPE_PATH + currentTypeName+ "/" + POSE_FOLDER_PATH + fileName);
+    			
             }
 }
     

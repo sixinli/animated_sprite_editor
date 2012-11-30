@@ -1,9 +1,11 @@
 package animatedSpriteEditor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.swing.UIManager;
+import javax.xml.crypto.dsig.spec.HMACParameterSpec;
 
 import sprite_renderer.SpriteType;
 
@@ -51,6 +53,7 @@ public class AnimatedSpriteEditor {
     // THIS HOLDS THE CURRENT SPRITE TYPE
     private SpriteType spriteType;
     private String spriteTypeName;
+    private HashMap<Integer, String> poseFileNames;
 
     // THIS IS A SINGLETON OBJECT, SO WE HAVE A CONSTRUCTOR THAT
     // IS PRIVATE THAT DOES NOTHING
@@ -76,6 +79,8 @@ public class AnimatedSpriteEditor {
         
         // INITALIZE THE GUI
         gui = new AnimatedSpriteEditorGUI();
+        
+        poseFileNames = new HashMap<Integer, String>();
         
         // WE'LL USE THIS FOR DEBUGGING
         debugText = new ArrayList();
@@ -148,15 +153,32 @@ public class AnimatedSpriteEditor {
     
     /**
      * Accessor method for the current Sprite Type Name.
+     * @return the sprite type name
      */
     public String getSpriteTypeName() { return spriteTypeName; }
     
     /**
      * Mutator method for the current Sprite Type Name.
+     * @param the name to set
      */
     public void setSpriteTypeName(String nameToSet)
     {
     	this.spriteTypeName = nameToSet;
+    }
+    
+    /**
+     * Accessor method for the current Sprite Type poseur pose file names.
+     * @return the Hash Map of the poseur pose file names
+     */
+    public HashMap<Integer, String> getPoseFileNames(){ return poseFileNames;}
+    
+    /**
+     * Mutator method for the posur pose file names of the sprite type.
+     * @param fileNames the file names to set
+     */
+    public void setPoseFileNames(HashMap<Integer, String> fileNames)
+    {
+    	poseFileNames = fileNames;
     }
     
     /**

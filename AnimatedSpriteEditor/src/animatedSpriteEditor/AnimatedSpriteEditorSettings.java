@@ -31,12 +31,14 @@ public class AnimatedSpriteEditorSettings
     public static final String SETTINGS_PATH = APP_DATA_PATH + "settings/";
     public static final String EXPORTED_IMAGES_PATH = APP_DATA_PATH + "exported_images/";
     public static final String BUTTON_IMAGES_PATH = "./data/buttons/";
+    public static final String IMAGE_FOLDER_PATH = "images/";
+    public static final String POSE_FOLDER_PATH = "poses/";
     
     /***** SCHEMAS *****/
     // ALL THE .xsd FILES WE'LL NEED TO VALIDATE XML 
     public static final String SCHEMA_STANDARD_SPEC_URL = "http://www.w3.org/2001/XMLSchema";
     public static final String SPRITE_TYPE_SCHEMA = SPRITE_TYPE_PATH + "sprite_type.xsd";
-    public static final String POSE_SCHEMA = POSES_PATH + "poseur_pose.xsd";
+    public static final String POSE_SCHEMA = SETTINGS_PATH + "/poseur_pose.xsd";
     public static final String WINDOW_SETTINGS_SCHEMA = SETTINGS_PATH + "window_settings.xsd";
     public static final String COLOR_PALLET_SETTINGS_SCHEMA = SETTINGS_PATH + "color_pallet_settings.xsd";
 
