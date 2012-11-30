@@ -104,6 +104,8 @@ public class AnimatedSpriteEditorSettings
     // POSE MESSAGE
     public static final String POSE_MESSAGE_IMAGE_FILE = BUTTON_IMAGES_PATH + "PoseMessage.png";
 
+    // SELECT ANIMATION STATE IMAGE
+    public static final String SELECT_ANIMATION_STATE_IMAGE_FILE = BUTTON_IMAGES_PATH + "SelectAnimationState.png";
     
     /***** TOOLTIPS (MOUSE-OVER TEXT) *****/
     // THIS LISTS ALL THE TOOLTIPS FOR OUR CONTROLS. THEY
@@ -233,6 +235,7 @@ public class AnimatedSpriteEditorSettings
 
     /***** DIALOG MESSAGES AND TITLES *****/
     // DIALOG BOX MESSAGES TO GIVE FEEDBACK BACK TO THE USER
+    public static final String SELECT_ANIMATION_TEXT = "Select Animation State";
     public static final String SELECT_CUSTOM_COLOR_TEXT = "Select Custom Color";
     public static final String PROMPT_TO_SAVE_TEXT = "Would you like to save your Pose?";
     public static final String PROMPT_TO_SAVE_TITLE_TEXT = "Save your pose?";

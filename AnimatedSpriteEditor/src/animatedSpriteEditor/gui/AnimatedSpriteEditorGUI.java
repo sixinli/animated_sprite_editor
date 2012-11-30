@@ -13,6 +13,8 @@ import java.awt.Insets;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,6 +37,11 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.border.Border;
 
+import sprite_renderer.AnimationState;
+import sprite_renderer.SceneRenderer;
+import sprite_renderer.Sprite;
+import sprite_renderer.SpriteType;
+
 import animatedSpriteEditor.events.canvas.PoseCanvasComponentHandler;
 import animatedSpriteEditor.events.canvas.PoseCanvasMouseHandler;
 import animatedSpriteEditor.events.colors.ColorPalletHandler;
@@ -53,6 +60,7 @@ import animatedSpriteEditor.events.edit.MoveToBackHandler;
 import animatedSpriteEditor.events.edit.MoveToFrontHandler;
 import animatedSpriteEditor.events.edit.PasteHandler;
 import animatedSpriteEditor.events.edit.StartSelectionHandler;
+import animatedSpriteEditor.events.files.AnimationStateSelectionHandler;
 import animatedSpriteEditor.events.files.DeleteHandler;
 import animatedSpriteEditor.events.files.ExitHandler;
 import animatedSpriteEditor.events.files.ExportPoseHandler;
@@ -112,11 +120,16 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     private EditorCanvas trueCanvas;
     private EditorCanvas zoomableCanvas;
     private JPanel displayArea;
+    
     private JComboBox stateComboBox;
-    private JTextField stateComboBoxMessage;
+    private DefaultComboBoxModel stateComboBoxModel; 
+    private JToolBar stateToolBar;
+    
+    // FOR DISPLAYING
     private JPanel northOfDisplayArea;
+    private SceneRenderer sceneRenderingPanel;
     private JPanel displayToolBar;
-    private JPanel statePanel;
+    private ArrayList<Sprite> spriteList;
     
     // NORTH PANEL - EVERYTHING ELSE GOES IN HERE
     private JPanel northPanel;
@@ -205,6 +218,8 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         // AND SETUP THE HANDLERS
         initHandlers();
         
+        updateMode();
+        
     	setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
     
@@ -275,8 +290,15 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     
     /**
      * Accessor method to the media tracker.
+     * @return the media tracker
      */
     public MediaTracker getMediaTracker(){ return tracker;}
+    
+    /**
+     * Accessor Method to the sprite list.
+     * @return the sprite list
+     */
+    public ArrayList<Sprite> getSpriteList(){ return spriteList;}
     
     /**
      * Accessor method to test if the outline color toggle button
@@ -392,22 +414,59 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         
         if (mode == EditorState.SPRITE_TYPE_STATE)
         {
-
-
-        	
+        	stateComboBox.setEnabled(false);
         }
         
         else if (mode == EditorState.SELECT_ANIMATION_STATE)
         {
-            
-        	
-        	
-        	
+            // NOW LOAD THE ANIMATIONS FOR THE NEWLY SELECTED SPRITE TYPE
+            if(singleton.getSpriteType().getAnimationStates()!=null)
+            {
+            	clearStateComboBox();
+            	spriteList.clear();
+                stateComboBox.setEnabled(true);
+            	Iterator<AnimationState> it  = singleton.getSpriteType().getAnimationStates();
+            	while(it.hasNext())
+            	{
+            		AnimationState animState = it.next();
+            		stateComboBoxModel.addElement(animState);
+            	}    
+            }
         }
         
-        else if (mode == EditorState.POSEUR_STATE)
+        else if (mode == EditorState.SELECT_POSE_STATE)
         {
-            updatePoseurMode();
+                // WHICH ONE IS NOW SELECTED?
+                Object selectedItem = stateComboBox.getSelectedItem();
+                
+                // MAKE SURE THIS IS ACTUALLY THE USER
+                if (selectedItem != null)
+                {
+                    // THIS ISN'T AN ANIMATION STATE
+                    if (!selectedItem.equals(SELECT_ANIMATION_TEXT))
+                    {
+                        // FIRST STOP RENDERING FOR A MOMENT
+                        sceneRenderingPanel.pauseScene();
+
+                        // THEN GET THE STATE AND MAKE A SPRITE FOR IT
+                        AnimationState selectedState = (AnimationState)stateComboBox.getSelectedItem();
+                        Sprite spriteToAnimate = new Sprite(singleton.getSpriteType(), selectedState);
+                        // PUT THE SPRITE IN THE MIDDLE OF THE PANEL
+                        int rendererWidth = sceneRenderingPanel.getWidth();
+                        int rendererHeight = sceneRenderingPanel.getHeight();
+                        int x = (rendererWidth/2) - (singleton.getSpriteType().getWidth()/2);
+                        int y = (rendererHeight/2) - (singleton.getSpriteType().getHeight()/2);
+                        spriteToAnimate.setPositionX(x);
+                        spriteToAnimate.setPositionY(y);
+                        
+                        // PUT THE SPRITE WHERE THE RENDERER WILL FIND IT
+                        spriteList.add(spriteToAnimate);
+                        
+                        // AND START IT UP AGAIN
+                        sceneRenderingPanel.unpauseScene();
+                    }
+                
+            }
         }     
     }
 
@@ -510,6 +569,17 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         zoomableCanvas.repaint();        
     }
     
+    /**
+     * This helper method empties the combo box with animations
+     * and disables the component.
+     */
+    private void clearStateComboBox()
+    {
+        stateComboBoxModel.removeAllElements();
+        stateComboBoxModel.addElement(SELECT_ANIMATION_TEXT);        
+        stateComboBox.setEnabled(false);      
+    }
+    
 
     /**
      * This helper method constructs and lays out all GUI components, initializing
@@ -554,6 +624,11 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         zoomableCanvasState.setPoseCanvas(zoomableCanvas);
         zoomableCanvas.setBackground(ZOOMABLE_CANVAS_COLOR);
         
+        // AND OF COURSE OUR RENDERING PANEL
+        spriteList = new ArrayList<Sprite>();
+        sceneRenderingPanel = new SceneRenderer(spriteList);
+        sceneRenderingPanel.setBackground(Color.white);
+        sceneRenderingPanel.startScene();
         displayArea = new JPanel(new BorderLayout());
         displayArea.setBackground(Color.white);
         northOfDisplayArea = new JPanel();
@@ -565,7 +640,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         southOfNorthPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         
         // WE'LL BATCH LOAD THE IMAGES
-       tracker = new MediaTracker(this);
+        tracker = new MediaTracker(this);
         int idCounter = 0;
 
         // FILE CONTROLS
@@ -675,20 +750,14 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         speedUpButton   = (JButton)initButton(SPEED_UP_IMAGE_FILE, displayToolBar, tracker, idCounter++, JButton.class, null, SPEED_UP_TOOLTIP);
         slowDownButton   = (JButton)initButton(SLOW_DOWN_IMAGE_FILE, displayToolBar, tracker, idCounter++, JButton.class, null, SLOW_DOWN_TOOLTIP);
       
-      // THE ANIMATION STATE SELECTION PANEL
-        statePanel = new JPanel(new FlowLayout());
-        DefaultComboBoxModel stateComboBoxModel = new DefaultComboBoxModel();
+      // THE ANIMATION STATE SELECTION COMBO BOX
+        stateToolBar = new JToolBar();
+        stateComboBoxModel = new DefaultComboBoxModel();
         stateComboBox = new JComboBox(stateComboBoxModel);
-        stateComboBoxModel.addElement("The Animation States Displayed Here.");
-        stateComboBox.setPrototypeDisplayValue("The Animation States Displayed Here.");
-        stateComboBoxMessage = new JTextField("    Select Animation State:     ");
-        stateComboBoxMessage.disable();
-        stateComboBoxMessage.setDisabledTextColor(Color.black);
-        stateComboBoxMessage.setBackground(Color.white);
-        statePanel.add(stateComboBoxMessage);
-        statePanel.add(stateComboBox);
-        statePanel.setBackground(Color.white);
-        statePanel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+        stateComboBoxModel.addElement(SELECT_ANIMATION_TEXT);
+        stateComboBox.setPrototypeDisplayValue(SELECT_ANIMATION_TEXT);
+        stateComboBox.setFont(new Font(stateComboBox.getFont().getName(), Font.PLAIN, 14));
+    
       // THE POSES LIST
         poseList = new JPanel();
        
@@ -715,6 +784,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         // THE SPLIT PANE. WE'LL PUT THE DIVIDER
         // RIGHT IN THE MIDDLE AND WON'T LET
         // THE USER MOVE IT - FOOLPROOF DESIGN!
+    	displayArea.add(sceneRenderingPanel);
     	displayArea.add(displayToolBar, BorderLayout.SOUTH);
         canvasSplitPane.setLeftComponent(zoomableCanvas);
         canvasSplitPane.setRightComponent(displayArea);
@@ -731,12 +801,13 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         colorSelectionToolbar.add(transparencySlider);
   
         // NOW ARRANGE THE TOOLBARS
+        stateToolBar.add(stateComboBox);
         northOfNorthPanel.add(fileToolbar);
         northOfNorthPanel.add(editToolbar);
-        northOfNorthPanel.add(statePanel);
+        northOfNorthPanel.add(shapeToolbar);
+        southOfNorthPanel.add(stateToolBar);
         southOfNorthPanel.add(zoomToolbar);
         southOfNorthPanel.add(colorSelectionToolbar);
-        southOfNorthPanel.add(shapeToolbar);
         
         // NOW PUT ALL THE CONTROLS IN THE NORTH
         northPanel.setLayout(new BorderLayout());
@@ -940,8 +1011,9 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         slowDownButton.addActionListener(sdh);
         
         // ANIMATION STATE COMBOBOX HANDLER
-        StateSelectionHandler statesh = new StateSelectionHandler();
-        stateComboBox.addActionListener(statesh);
+   //     StateSelectionHandler statesh = new StateSelectionHandler();
+        AnimationStateSelectionHandler assh = new AnimationStateSelectionHandler();
+        stateComboBox.addItemListener(assh);
         
         // CANVAS MOUSE HANDLERS
         PoseCanvasMouseHandler rsmh = new PoseCanvasMouseHandler();

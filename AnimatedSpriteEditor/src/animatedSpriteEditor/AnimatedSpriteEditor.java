@@ -48,7 +48,7 @@ public class AnimatedSpriteEditor {
     private boolean debugTextEnabled;
     
     // THIS HOLDS THE CURRENT SPRITE TYPE
-    private SpriteType spriteType = null;
+    private SpriteType spriteType;
 
     // THIS IS A SINGLETON OBJECT, SO WE HAVE A CONSTRUCTOR THAT
     // IS PRIVATE THAT DOES NOTHING

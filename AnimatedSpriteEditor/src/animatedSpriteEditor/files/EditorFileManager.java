@@ -286,12 +286,8 @@ public class EditorFileManager
             gui.setTitle(appName + APP_NAME_FILE_NAME_SEPARATOR + currentFile);             
             
             // AND LOAD THE .pose (XML FORMAT) FILE
-            editorIO.loadSpriteType(currentFile.getAbsolutePath());
+            editorIO.loadSpriteType(currentSpriteTypeName);
         }
-        
-        stateManager.setState(EditorState.SELECT_ANIMATION_STATE);
-        stateManager.getPoseurStateManager().clearClipboardShape();
-        gui.updateMode();
     }
     
     /**

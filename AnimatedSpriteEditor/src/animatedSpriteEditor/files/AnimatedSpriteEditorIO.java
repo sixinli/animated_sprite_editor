@@ -77,11 +77,11 @@ public class AnimatedSpriteEditorIO
 		poseIO = new PoseIO();
 	}
 	
-    public void loadSpriteType(String spriteTypeFileName)
+    public void loadSpriteType(String spriteTypeName)
     {
             // BUILD THE PATH WHERE ITS XML FILE AND IMAGES SHOUDL BE
-            String spriteTypeXMLFile = SPRITE_TYPE_PATH + spriteTypeFileName + "/" 
-            							+ spriteTypeFileName + XML_FILE_EXTENSION;
+            String spriteTypeXMLFile = SPRITE_TYPE_PATH + spriteTypeName + "/" 
+            							+ spriteTypeName + XML_FILE_EXTENSION;
             String spriteTypeXSDFile = SPRITE_TYPE_PATH + SPRITE_TYPE_NODE + ".xsd";
             
             // FIRST RETRIEVE AND LOAD THE FILE INTO A TREE
@@ -128,7 +128,7 @@ public class AnimatedSpriteEditorIO
                 int id = Integer.parseInt(idAsText);
                 String fileName = imageFileNode.getAttributeValue(FILE_NAME_ATTRIBUTE);
                 String imageFileNameAndPath = SPRITE_TYPE_PATH
-                                            + spriteTypeFileName
+                                            + spriteTypeName
                                             + "/"
                                             + fileName;
                 Image loadedImage = tk.getImage(imageFileNameAndPath);
@@ -167,14 +167,12 @@ public class AnimatedSpriteEditorIO
           AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
           singleton.setSpriteType(spriteTypeToLoad);
           singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
-          singleton.getGUI().updateMode();
     }
     
     public boolean saveSpriteTye(File spriteTypeFile)
     {
         // GET THE POSE AND ITS DATA THAT WE HAVE TO SAVE
     	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
-        PoseurStateManager poseurStateManager = singleton.getStateManager().getPoseurStateManager();
         
         try 
         {
@@ -218,6 +216,8 @@ public class AnimatedSpriteEditorIO
                 SPRITE_TYPE_SAVED_TEXT,
                 SPRITE_TYPE_SAVED_TITLE_TEXT,
                 JOptionPane.INFORMATION_MESSAGE);
+            
+            singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
             return true;
         }
         catch(TransformerException | ParserConfigurationException | DOMException | HeadlessException ex)
@@ -230,7 +230,7 @@ public class AnimatedSpriteEditorIO
                 SPRITE_TYPE_SAVING_ERROR_TITLE_TEXT,
                 JOptionPane.ERROR_MESSAGE);  
             return false;
-        }  
+        }
     }
     
     public void loadAnimationState(String animationStateFileName)
