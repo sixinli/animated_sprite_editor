@@ -1,6 +1,7 @@
 package animatedSpriteEditor.state;
 
 import animatedSpriteEditor.AnimatedSpriteEditor;
+import animatedSpriteEditor.files.InvalidXMLFileFormatException;
 import animatedSpriteEditor.gui.AnimatedSpriteEditorGUI;
 
 

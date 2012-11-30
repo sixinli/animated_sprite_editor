@@ -22,6 +22,7 @@ import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -38,6 +39,8 @@ import javax.swing.JToolBar;
 import javax.swing.border.Border;
 
 import sprite_renderer.AnimationState;
+import sprite_renderer.Pose;
+import sprite_renderer.PoseList;
 import sprite_renderer.SceneRenderer;
 import sprite_renderer.Sprite;
 import sprite_renderer.SpriteType;
@@ -84,6 +87,7 @@ import animatedSpriteEditor.events.zoom.ZoomOutHandler;
 
 import animatedSpriteEditor.AnimatedSpriteEditor;
 import animatedSpriteEditor.files.ColorPalletLoader;
+import animatedSpriteEditor.files.InvalidXMLFileFormatException;
 import animatedSpriteEditor.files.PoseurFileManager;
 import animatedSpriteEditor.gui.ColorPallet;
 import animatedSpriteEditor.gui.ColorToggleButton;
@@ -192,6 +196,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     // THIS IS FOR THE POSES DISPLAYING
     private JPanel poseList;
     private JScrollPane scrollPane;
+    private PoseList posesList;
     private JButton randomButton;
     private JButton randomButton2;
     private JButton randomButton3;
@@ -207,7 +212,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
      * have already been loaded into the state manager before this constructor
      * is called.
      */
-    public AnimatedSpriteEditorGUI()
+    public AnimatedSpriteEditorGUI() 
     {
         // IN CASE THE PARENT DOES ANYTHING, I USUALLY LIKE TO EXPLICITY INCLUDE THIS
         super();
@@ -464,6 +469,23 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
                         
                         // AND START IT UP AGAIN
                         sceneRenderingPanel.unpauseScene();
+                        
+                        PoseList poses = new PoseList();
+                        String currentSpriteTypeName = singleton.getFileManager().getCurrentSpriteTypeName();
+                        singleton.getFileManager().getEditorIO().loadPoseList(currentSpriteTypeName, selectedState.toString(), poses);
+                        Iterator<Pose> pi = poses.getPoseIterator();
+                        int count = spriteToAnimate.getAnimationCounter();
+                        while(count>0)
+                    	{
+//                    		Pose pose = pi.next();
+//                    		Image image = singleton.getSpriteType().getImage(pose.getImageID());
+//                            JButton poseButton   = new JButton();
+//                            ImageIcon icon = new ImageIcon(image);
+//                            poseButton.setIcon(icon);
+//                            poseList.add(poseButton);
+                        	System.out.println(pi.next().getImageID());
+                        	count--;
+                    	}
                     }
                 
             }

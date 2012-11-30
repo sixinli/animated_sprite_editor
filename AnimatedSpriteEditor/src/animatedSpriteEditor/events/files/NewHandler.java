@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import animatedSpriteEditor.AnimatedSpriteEditor;
+import animatedSpriteEditor.files.InvalidXMLFileFormatException;
 
 /**
  * This class will handler events interact with the new
@@ -18,8 +19,9 @@ public class NewHandler implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
-		singleton.getFileManager().requestNew();
+			AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+			singleton.getFileManager().requestNew();
+		
 	}
 
 }

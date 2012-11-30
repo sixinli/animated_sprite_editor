@@ -10,6 +10,7 @@ import sprite_renderer.SpriteType;
 import static animatedSpriteEditor.AnimatedSpriteEditorSettings.*;
 import animatedSpriteEditor.files.EditorFileManager;
 import animatedSpriteEditor.files.GUILoader;
+import animatedSpriteEditor.files.InvalidXMLFileFormatException;
 import animatedSpriteEditor.gui.*;
 import animatedSpriteEditor.state.EditorStateManager;
 
@@ -60,8 +61,9 @@ public class AnimatedSpriteEditor {
      * xml file and using that to setup the window. Notice that the constructor
      * is a singleton object, so we make the constructor private to prevent
      * misuse. This method has the obligation of initialization of the app.
+     * @throws InvalidXMLFileFormatException 
      */
-    public void init()
+    public void init() throws InvalidXMLFileFormatException
     {
     	try{
     		UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -187,7 +189,7 @@ public class AnimatedSpriteEditor {
      * 
      * @param args Command line arguments are not used by this application.
      */
-    public static void main(String[] args)
+    public static void main(String[] args) throws InvalidXMLFileFormatException
     {
         // HERE IS THE CONSTRUCTION OF THE SINGLETON Poseur OBJECT,
         // SINCE THIS IS THE FIRST REFERENCE TO getPoseur. THE CONSTRUCTOR

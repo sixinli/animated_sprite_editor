@@ -59,8 +59,23 @@ public class EditorFileManager
     
     /**
      * Accessor method for the poseur file manager.
+     * @return the poseur file manager
+     * 
      */
     public PoseurFileManager getPoseurFileManager(){ return poseurFileManager;}
+    
+    /**
+     * Accessor method for the current sprite type name.
+     * @return the current sprite type name.
+     */
+    public String getCurrentSpriteTypeName(){ return currentSpriteTypeName;}
+    
+    /**
+     * Accessor method for the editor IO.
+     * @return the editor IO
+     */
+    public AnimatedSpriteEditorIO getEditorIO(){ return editorIO;}
+    
     
     /**
      * This method starts the process of editing a new sprite type. 

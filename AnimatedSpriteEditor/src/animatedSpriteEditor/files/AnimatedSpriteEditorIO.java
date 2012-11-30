@@ -48,18 +48,9 @@ import sprite_renderer.PoseList;
 import sprite_renderer.SpriteType;
 import animatedSpriteEditor.AnimatedSpriteEditor;
 import static animatedSpriteEditor.AnimatedSpriteEditorSettings.*;
-import animatedSpriteEditor.gui.EditorCanvas;
 import animatedSpriteEditor.gui.AnimatedSpriteEditorGUI;
-import animatedSpriteEditor.shapes.PoseurRectangle;
-import animatedSpriteEditor.shapes.PoseurEllipse;
-import animatedSpriteEditor.shapes.PoseurLine;
-import animatedSpriteEditor.shapes.PoseurShape;
-import animatedSpriteEditor.shapes.PoseurShapeType;
 import animatedSpriteEditor.state.EditorState;
-import animatedSpriteEditor.state.PoseurPose;
-import animatedSpriteEditor.state.PoseurState;
-import animatedSpriteEditor.state.EditorStateManager;
-import animatedSpriteEditor.state.PoseurStateManager;
+
 
 
 /**
@@ -77,7 +68,56 @@ public class AnimatedSpriteEditorIO
 		poseIO = new PoseIO();
 	}
 	
-    public void loadSpriteType(String spriteTypeName)
+    /**
+     * This method extracts the pose of a state of a sprite from the provided
+     * xml file argument and loads these pose into the poseList list.
+     * 
+     * @param path Path to where the sprite types home directory. Note that
+     * each sprite would have its own directory inside this directory.
+     * 
+     * @param spriteTypesXMLFile File name for the xml file with a list of
+     * all the sprite types.
+     * 
+     * @param currentTypeNames the name of the selected sprite type 
+     * 
+     * @param currentState the state of the sprite
+     * 
+     * @param poseList the list we load all the pose to.
+     * 
+     */
+    public void loadPoseList( 	String currentTypeName,
+								String currentState,
+								PoseList poseList) {
+    	String xmlFile = SPRITE_TYPE_PATH + currentTypeName + "/" + currentTypeName+ XML_FILE_EXTENSION;
+        
+        String xsdFile = SPRITE_TYPE_PATH + SPRITE_TYPE_NODE + ".xsd";
+        
+        WhitespaceFreeXMLDoc cleanDoc;
+		try {
+			cleanDoc = loadXMLDocument(xmlFile, xsdFile);
+		} catch (InvalidXMLFileFormatException e) {
+			// TODO Auto-generated catch block
+			return;
+		}
+                
+        WhitespaceFreeXMLNode spriteTypeNode = cleanDoc.getRoot();
+        ArrayList<WhitespaceFreeXMLNode> animationStateNodes = 
+        	((spriteTypeNode.getChildOfType(ANIMATIONS_LIST_NODE)).getChildrenOfType(ANIMATION_STATE_NODE));
+        for (int i=0; i<animationStateNodes.size(); i++){
+        	if(animationStateNodes.get(i).getChildOfType(STATE_NODE).getData().equals(currentState)){
+        		ArrayList<WhitespaceFreeXMLNode> animationSequenceNodes = 
+        			animationStateNodes.get(i).getChildOfType(ANIMATION_SEQUENCE_NODE).getChildrenOfType(POSE_NODE);
+        		for( int j=0; j<animationSequenceNodes.size(); j++){
+        			poseList.addPose(
+        				Integer.parseInt(animationSequenceNodes.get(j).getAttributeValue(IMAGE_ID_ATTRIBUTE)),
+        				Integer.parseInt(animationSequenceNodes.get(j).getAttributeValue(DURATION_ATTRIBUTE)));
+        		}
+        	}
+        	
+        }
+    }
+    
+    public void loadSpriteType(String spriteTypeName) 
     {
             // BUILD THE PATH WHERE ITS XML FILE AND IMAGES SHOUDL BE
             String spriteTypeXMLFile = SPRITE_TYPE_PATH + spriteTypeName + "/" 
@@ -169,7 +209,7 @@ public class AnimatedSpriteEditorIO
           singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
     }
     
-    public boolean saveSpriteTye(File spriteTypeFile)
+    public boolean saveSpriteTye(File spriteTypeFile) 
     {
         // GET THE POSE AND ITS DATA THAT WE HAVE TO SAVE
     	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
