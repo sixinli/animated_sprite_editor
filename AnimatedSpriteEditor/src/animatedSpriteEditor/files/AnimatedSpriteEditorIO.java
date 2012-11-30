@@ -44,13 +44,13 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import sprite_renderer.AnimationState;
+import sprite_renderer.Pose;
 import sprite_renderer.PoseList;
 import sprite_renderer.SpriteType;
 import animatedSpriteEditor.AnimatedSpriteEditor;
 import static animatedSpriteEditor.AnimatedSpriteEditorSettings.*;
 import animatedSpriteEditor.gui.AnimatedSpriteEditorGUI;
 import animatedSpriteEditor.state.EditorState;
-
 
 
 /**
@@ -87,7 +87,7 @@ public class AnimatedSpriteEditorIO
      */
     public void loadPoseList( 	String currentTypeName,
 								String currentState,
-								PoseList poseList) {
+								ArrayList<Pose> poseList) {
     	String xmlFile = SPRITE_TYPE_PATH + currentTypeName + "/" + currentTypeName+ XML_FILE_EXTENSION;
         
         String xsdFile = SPRITE_TYPE_PATH + SPRITE_TYPE_NODE + ".xsd";
@@ -108,14 +108,43 @@ public class AnimatedSpriteEditorIO
         		ArrayList<WhitespaceFreeXMLNode> animationSequenceNodes = 
         			animationStateNodes.get(i).getChildOfType(ANIMATION_SEQUENCE_NODE).getChildrenOfType(POSE_NODE);
         		for( int j=0; j<animationSequenceNodes.size(); j++){
-        			poseList.addPose(
-        				Integer.parseInt(animationSequenceNodes.get(j).getAttributeValue(IMAGE_ID_ATTRIBUTE)),
-        				Integer.parseInt(animationSequenceNodes.get(j).getAttributeValue(DURATION_ATTRIBUTE)));
+        			Pose poseToAdd = new Pose(
+        						Integer.parseInt(animationSequenceNodes.get(j).getAttributeValue(IMAGE_ID_ATTRIBUTE)),
+            					Integer.parseInt(animationSequenceNodes.get(j).getAttributeValue(DURATION_ATTRIBUTE)));
+        			poseList.add(poseToAdd);
         		}
         	}
-        	
         }
     }
+    
+    
+    public void loadImageList( 	String currentTypeName) 
+    {
+    	
+    		String xmlFile = SPRITE_TYPE_PATH + currentTypeName + "/" + currentTypeName+ XML_FILE_EXTENSION;
+
+    		String xsdFile = SPRITE_TYPE_PATH + SPRITE_TYPE_NODE + ".xsd";
+
+    		MediaTracker tracker = AnimatedSpriteEditor.getEditor().getGUI().getMediaTracker();
+    		WhitespaceFreeXMLDoc cleanDoc;
+    		try {
+    				cleanDoc = loadXMLDocument(xmlFile, xsdFile);
+    		} catch (InvalidXMLFileFormatException e) {
+    			// TODO Auto-generated catch block
+    		return;
+    		}
+            
+            WhitespaceFreeXMLNode spriteTypeNode = cleanDoc.getRoot();
+            ArrayList<WhitespaceFreeXMLNode> imageFileNodes = 
+            	((spriteTypeNode.getChildOfType(IMAGES_LIST_NODE)).getChildrenOfType(IMAGE_FILE_NODE));
+            for (int i=0; i<imageFileNodes.size();i++){
+            	int id = Integer.parseInt(imageFileNodes.get(i).getAttributeValue(ID_ATTRIBUTE));
+    			Image img = loadImageInBatch(	SPRITE_TYPE_PATH + currentTypeName+"/" ,
+    						imageFileNodes.get(i).getAttributeValue(FILE_NAME_ATTRIBUTE),
+    						tracker, id);
+    			AnimatedSpriteEditor.getEditor().getSpriteType().addImage(id, img);
+            }
+}
     
     public void loadSpriteType(String spriteTypeName) 
     {
@@ -206,10 +235,11 @@ public class AnimatedSpriteEditorIO
             }         
           AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
           singleton.setSpriteType(spriteTypeToLoad);
+          singleton.setSpriteTypeName(spriteTypeName);
           singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
     }
     
-    public boolean saveSpriteTye(File spriteTypeFile) 
+    public boolean saveSpriteTye(File spriteTypeFile, SpriteType spriteTypeToSave) 
     {
         // GET THE POSE AND ITS DATA THAT WE HAVE TO SAVE
     	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
@@ -368,6 +398,32 @@ public class AnimatedSpriteEditorIO
         }           
     }
     
+    /**
+     * This method is used to load an individual image among many
+     * in a batch. The reason for batch loading is to use a single
+     * MediaTracker to ensure that all images in the batch are fully
+     * loaded before continuing.
+     * 
+     * @param path Relative path to the image location from the working directory.
+     * 
+     * @param fileName File name of the image to load
+     * 
+     * @param tracker The MediaTracker to ensure the image is fully loaded.
+     * 
+     * @param id A unique number for the image so the tracker can identify it.
+     * 
+     * @return A reference to the Image represented by the path + fileName.
+     */
+	private Image loadImageInBatch( String path, String fileName, 
+									MediaTracker tracker, int id)
+	{
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		String fullFileNameWithPath = path + fileName;
+		Image img = tk.getImage(fullFileNameWithPath);
+		tracker.addImage(img, id);
+		return img;
+	}
+	
     /**
      * This method validates the xmlDocNameAndPath doc against the 
      * xmlSchemaNameAndPath schema and returns true if valid, false

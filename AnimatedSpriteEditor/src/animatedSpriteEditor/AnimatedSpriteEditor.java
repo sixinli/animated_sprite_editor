@@ -50,6 +50,7 @@ public class AnimatedSpriteEditor {
     
     // THIS HOLDS THE CURRENT SPRITE TYPE
     private SpriteType spriteType;
+    private String spriteTypeName;
 
     // THIS IS A SINGLETON OBJECT, SO WE HAVE A CONSTRUCTOR THAT
     // IS PRIVATE THAT DOES NOTHING
@@ -143,6 +144,19 @@ public class AnimatedSpriteEditor {
     public void setSpriteType(SpriteType spriteTypeToSet)
     {
     	this.spriteType = spriteTypeToSet;
+    }
+    
+    /**
+     * Accessor method for the current Sprite Type Name.
+     */
+    public String getSpriteTypeName() { return spriteTypeName; }
+    
+    /**
+     * Mutator method for the current Sprite Type Name.
+     */
+    public void setSpriteTypeName(String nameToSet)
+    {
+    	this.spriteTypeName = nameToSet;
     }
     
     /**

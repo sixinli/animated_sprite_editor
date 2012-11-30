@@ -5,6 +5,8 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import sprite_renderer.SpriteType;
+
 import animatedSpriteEditor.AnimatedSpriteEditor;
 import static animatedSpriteEditor.AnimatedSpriteEditorSettings.*;
 import animatedSpriteEditor.gui.AnimatedSpriteEditorGUI;
@@ -234,13 +236,20 @@ public class EditorFileManager
             	  System.err.println("Error: " + e.getMessage());
             }
 	        
+	        SpriteType newSpriteType = new SpriteType();
+	        newSpriteType.setWidth(Integer.parseInt(SPRITE_TYPE_WIDTH_NODE));
+	        newSpriteType.setHeight(Integer.parseInt(SPRITE_TYPE_HEIGHT_NODE));
+	        
+	        
+	        
             // SAVE OUR NEW FILE
-            editorIO.saveSpriteTye(currentFile);
+            editorIO.saveSpriteTye(currentFile, newSpriteType);
             saved = true;
 
             // AND PUT THE FILE NAME IN THE TITLE BAR
             String appName = gui.getAppName();
             gui.setTitle(appName + APP_NAME_FILE_NAME_SEPARATOR + currentFile); 
+            AnimatedSpriteEditor.getEditor().setSpriteTypeName(currentSpriteTypeName);
             
             // WE DID IT!
             return true;

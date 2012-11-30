@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
@@ -14,6 +15,7 @@ import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -196,7 +198,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     // THIS IS FOR THE POSES DISPLAYING
     private JPanel poseList;
     private JScrollPane scrollPane;
-    private PoseList posesList;
+    private ArrayList<Pose> posesList;
     private JButton randomButton;
     private JButton randomButton2;
     private JButton randomButton3;
@@ -435,8 +437,10 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
             	{
             		AnimationState animState = it.next();
             		stateComboBoxModel.addElement(animState);
-            	}    
+            	}
             }
+      
+            singleton.getFileManager().getEditorIO().loadImageList(singleton.getSpriteTypeName());
         }
         
         else if (mode == EditorState.SELECT_POSE_STATE)
@@ -470,22 +474,24 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
                         // AND START IT UP AGAIN
                         sceneRenderingPanel.unpauseScene();
                         
-                        PoseList poses = new PoseList();
+                        posesList = new ArrayList<Pose>();
                         String currentSpriteTypeName = singleton.getFileManager().getCurrentSpriteTypeName();
-                        singleton.getFileManager().getEditorIO().loadPoseList(currentSpriteTypeName, selectedState.toString(), poses);
-                        Iterator<Pose> pi = poses.getPoseIterator();
-                        int count = spriteToAnimate.getAnimationCounter();
-                        while(count>0)
+                        singleton.getFileManager().getEditorIO().loadPoseList(currentSpriteTypeName, selectedState.toString(), posesList);
+                        PoseSelectionHandler psh = new PoseSelectionHandler();
+                        poseList.removeAll();
+                        for(int i = 0; i<posesList.size(); i++)
                     	{
-//                    		Pose pose = pi.next();
-//                    		Image image = singleton.getSpriteType().getImage(pose.getImageID());
-//                            JButton poseButton   = new JButton();
-//                            ImageIcon icon = new ImageIcon(image);
-//                            poseButton.setIcon(icon);
-//                            poseList.add(poseButton);
-                        	System.out.println(pi.next().getImageID());
-                        	count--;
+                        	System.out.println(posesList.get(i).getImageID());
+                            Image currentPoseImage = singleton.getSpriteType().getSpriteImages().get(posesList.get(i).getImageID());
+                            ImageIcon currentPoseIcon = new ImageIcon(currentPoseImage);
+                            JButton currentPoseButton = new JButton();
+                            currentPoseButton.addActionListener(psh);
+                            currentPoseButton.setActionCommand("" + posesList.get(i).getImageID());
+                            currentPoseButton.setIcon(currentPoseIcon);
+                            poseList.add(currentPoseButton);
+                            
                     	}
+                        poseList.revalidate();
                     }
                 
             }
@@ -782,15 +788,9 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     
       // THE POSES LIST
         poseList = new JPanel();
-       
         poseList.setLayout(new FlowLayout());
-        poseList.setBackground(Color.white);
-        randomButton   = (JButton)initButton(POSE_MESSAGE_IMAGE_FILE, poseList, tracker, idCounter++, JButton.class, null, null);
-        randomButton2   = (JButton)initButton(POSE_MESSAGE_IMAGE_FILE, poseList, tracker, idCounter++, JButton.class, null, null);
-        randomButton3   = (JButton)initButton(POSE_MESSAGE_IMAGE_FILE, poseList, tracker, idCounter++, JButton.class, null, null);
-        randomButton4   = (JButton)initButton(POSE_MESSAGE_IMAGE_FILE, poseList, tracker, idCounter++, JButton.class, null, null);
-        randomButton5   = (JButton)initButton(POSE_MESSAGE_IMAGE_FILE, poseList, tracker, idCounter++, JButton.class, null, null);
         scrollPane = new JScrollPane(poseList);
+        scrollPane.setPreferredSize(new Dimension(1100, 165));
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         
     }
@@ -1048,14 +1048,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         // BOTH CANVASES
         PoseCanvasComponentHandler pcch = new PoseCanvasComponentHandler();
         zoomableCanvas.addComponentListener(pcch);
-        
-        // POSE BUTTONS HANDLERS
-        PoseSelectionHandler psh = new PoseSelectionHandler();
-        randomButton.addActionListener(psh);
-        randomButton2.addActionListener(psh);
-        randomButton3.addActionListener(psh);
-        randomButton4.addActionListener(psh);
-        randomButton5.addActionListener(psh);
+       
         
     }
        

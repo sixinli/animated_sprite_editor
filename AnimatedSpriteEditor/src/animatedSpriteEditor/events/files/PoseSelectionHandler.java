@@ -17,9 +17,8 @@ public class PoseSelectionHandler implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		JOptionPane.showMessageDialog(null,
-										"A Pose Image is clicked", 
+										"Pose Image" + e.getActionCommand() + " is clicked", 
 										"To the user: ",
 										JOptionPane.OK_OPTION);
 	}
-
 }
