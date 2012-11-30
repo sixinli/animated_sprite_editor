@@ -26,6 +26,7 @@ public class AnimatedSpriteEditorSettings
     /***** PATHS *****/
     // FIRST, ALL THE PATHS WE'LL WANT TO USE FOR LOCATING FILES 
     public static final String APP_DATA_PATH = "./data/";
+    public static final String SPRITE_TYPE_PATH = APP_DATA_PATH + "sprite_types/";
     public static final String POSES_PATH = APP_DATA_PATH + "poses/";
     public static final String SETTINGS_PATH = APP_DATA_PATH + "settings/";
     public static final String EXPORTED_IMAGES_PATH = APP_DATA_PATH + "exported_images/";
@@ -33,7 +34,8 @@ public class AnimatedSpriteEditorSettings
     
     /***** SCHEMAS *****/
     // ALL THE .xsd FILES WE'LL NEED TO VALIDATE XML 
-    public static final String SCHEMA_STANDARD_SPEC_URL = "http://www.w3.org/2001/XMLSchema";    
+    public static final String SCHEMA_STANDARD_SPEC_URL = "http://www.w3.org/2001/XMLSchema";
+    public static final String SPRITE_TYPE_SCHEMA = SPRITE_TYPE_PATH + "sprite_type.xsd";
     public static final String POSE_SCHEMA = POSES_PATH + "poseur_pose.xsd";
     public static final String WINDOW_SETTINGS_SCHEMA = SETTINGS_PATH + "window_settings.xsd";
     public static final String COLOR_PALLET_SETTINGS_SCHEMA = SETTINGS_PATH + "color_pallet_settings.xsd";
@@ -48,6 +50,7 @@ public class AnimatedSpriteEditorSettings
     public static final String PNG_FORMAT_NAME = "png";
     public static final String PNG_FILE_EXTENSION = "." + PNG_FORMAT_NAME;
     public static final String POSE_FILE_EXTENSION = ".pose";
+    public static final String XML_FILE_EXTENSION = ".xml";
     public static final String STROKE_SELECTION_FILE_PREFIX = BUTTON_IMAGES_PATH + "Stroke";
     public static final String ZOOM_LABEL_TEXT_PREFIX = "Zoom: ";
     public static final String ZOOM_LABEL_TEXT_POSTFIX = "X";
@@ -171,6 +174,24 @@ public class AnimatedSpriteEditorSettings
     public static final String GREEN_NODE = "green";
     public static final String BLUE_NODE = "blue";
 
+    // SPRITE TYPE DATA FILE NODE AND ATTRIBUTE NAMES
+    public static final String SPRITE_TYPE_NODE = "sprite_type";
+    public static final String SPRITE_TYPE_WIDTH_NODE = "width";
+    public static final String SPRITE_TYPE_HEIGHT_NODE = "height";
+    public static final String SPRITE_TYPE_WIDTH = "128";
+    public static final String SPRITE_TYPE_HEIGHT = "128";
+    public static final String IMAGES_LIST_NODE = "images_list";
+    public static final String ANIMATIONS_LIST_NODE = "animations_list";
+    public static final String IMAGE_FILE_NODE = "image_file";
+    public static final String ID_ATTRIBUTE = "id";
+    public static final String FILE_NAME_ATTRIBUTE = "file_name";
+    public static final String ANIMATION_STATE_NODE = "animation_state";
+    public static final String STATE_NODE = "state";
+    public static final String ANIMATION_SEQUENCE_NODE = "animation_sequence";
+    public static final String POSE_NODE = "pose";
+    public static final String IMAGE_ID_ATTRIBUTE = "image_id";
+    public static final String DURATION_ATTRIBUTE = "duration";
+    
     // .pose DATA FILE NODE AND ATTRIBUTE NAMES
     public static final String POSEUR_POSE_NODE = "poseur_pose";
     public static final String POSE_WIDTH_NODE = "pose_width";
@@ -215,8 +236,16 @@ public class AnimatedSpriteEditorSettings
     public static final String SELECT_CUSTOM_COLOR_TEXT = "Select Custom Color";
     public static final String PROMPT_TO_SAVE_TEXT = "Would you like to save your Pose?";
     public static final String PROMPT_TO_SAVE_TITLE_TEXT = "Save your pose?";
+    public static final String SPRITE_TYPE_NAME_REQUEST_TEXT = "What do you want to name your sprite type?";
+    public static final String SPRITE_TYPE_NAME_REQUEST_TITLE_TEXT = "Enter Sprite Type File Name";
+    public static final String ANIMATION_STATE_NAME_REQUEST_TEXT = "What do you want to name your animation state?";
+    public static final String ANIMATION_STATE_NAME_REQUEST_TITLE_TEXT = "Enter Animation State File Name";
     public static final String POSE_NAME_REQUEST_TEXT = "What do you want to name your pose?";
     public static final String POSE_NAME_REQUEST_TITLE_TEXT = "Enter Pose File Name";
+    public static final String SPRITE_TYPE_SAVED_TEXT = "Sprite Type File has been Saved";
+    public static final String SPRITE_TYPE_SAVED_TITLE_TEXT = "Sprite Type File Saved";
+    public static final String SPRITE_TYPE_SAVING_ERROR_TEXT = "An Error Occured While Saving the Sprite Type";
+    public static final String SPRITE_TYPE_SAVING_ERROR_TITLE_TEXT = "Sprite Type Saving Error";
     public static final String IMAGE_EXPORTED_TEXT = "Your pose has been exportetd to ";
     public static final String IMAGE_EXPORTED_TITLE_TEXT = "Image Exported";
     public static final String IMAGE_EXPORTING_ERROR_TEXT = "An Error Occured While Exporting the Image";

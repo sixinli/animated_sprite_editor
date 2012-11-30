@@ -88,6 +88,7 @@ import animatedSpriteEditor.state.EditorStateManager;
 import animatedSpriteEditor.state.PoseCanvasState;
 import animatedSpriteEditor.state.PoseurPose;
 import animatedSpriteEditor.state.PoseurState;
+import animatedSpriteEditor.state.PoseurStateManager;
 import animatedSpriteEditor.gui.PoseDimensionsDialog;
 
 /**
@@ -183,6 +184,8 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     private JButton randomButton3;
     private JButton randomButton4;
     private JButton randomButton5;
+    
+    private MediaTracker tracker;
     /**
      * Default constructor for initializing the GUI. Note that the Poseur
      * application's state manager must have already been constructed and
@@ -269,6 +272,11 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
      * @return The zoomable canvas, which is on the right.
      */
     public EditorCanvas getZoomablePoseCanvas() { return zoomableCanvas; }
+    
+    /**
+     * Accessor method to the media tracker.
+     */
+    public MediaTracker getMediaTracker(){ return tracker;}
     
     /**
      * Accessor method to test if the outline color toggle button
@@ -525,7 +533,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         // SOME COMPONENTS MAY NEED THE STATE MANAGER
         // FOR INITIALIZATION, SO LET'S GET IT
     	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
-        animatedSpriteEditor.state.PoseurStateManager poseurStateManager = singleton.getStateManager().getPoseurStateManager();
+        PoseurStateManager poseurStateManager = singleton.getStateManager().getPoseurStateManager();
 
         // LET'S START BY INITIALIZING THE CENTER AREA,
         // WHERE WE'LL RENDER EVERYTHING. WE'LL HAVE TWO
@@ -557,7 +565,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         southOfNorthPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         
         // WE'LL BATCH LOAD THE IMAGES
-        MediaTracker tracker = new MediaTracker(this);
+       tracker = new MediaTracker(this);
         int idCounter = 0;
 
         // FILE CONTROLS

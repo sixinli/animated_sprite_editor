@@ -5,6 +5,8 @@ import java.util.Iterator;
 
 import javax.swing.UIManager;
 
+import sprite_renderer.SpriteType;
+
 import static animatedSpriteEditor.AnimatedSpriteEditorSettings.*;
 import animatedSpriteEditor.files.EditorFileManager;
 import animatedSpriteEditor.files.GUILoader;
@@ -30,7 +32,7 @@ public class AnimatedSpriteEditor {
 
     // THIS WILL STORE ALL THE DATA IN USE FOR THE
     // POSE THE USER IS CURRENTLY EDITING
-    private EditorStateManager poseurStateManager;
+    private EditorStateManager stateManager;
     
     // THIS WILL MANAGE ALL THE FILE I/O FOR LOADING
     // AND SAVING POSES THAT THE USER HAS CREATED
@@ -44,6 +46,9 @@ public class AnimatedSpriteEditor {
     // TEXT ON THE SCREEN WHILE TESTING OUR APP
     private ArrayList<String> debugText;
     private boolean debugTextEnabled;
+    
+    // THIS HOLDS THE CURRENT SPRITE TYPE
+    private SpriteType spriteType = null;
 
     // THIS IS A SINGLETON OBJECT, SO WE HAVE A CONSTRUCTOR THAT
     // IS PRIVATE THAT DOES NOTHING
@@ -61,8 +66,11 @@ public class AnimatedSpriteEditor {
     	try{
     		UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
     	}catch(Exception e){}
-    	
-
+        
+        stateManager = new EditorStateManager();
+        
+        fileManager = new EditorFileManager();
+        
         // INITALIZE THE GUI
         gui = new AnimatedSpriteEditorGUI();
         
@@ -114,13 +122,27 @@ public class AnimatedSpriteEditor {
      * @return The PoseurDataManager for this application, which contains
      * all the data for the pose being edited.
      */
-    public EditorStateManager getStateManager() { return poseurStateManager; }
+    public EditorStateManager getStateManager() { return stateManager; }
     
     /**
      * Accessor method for getting this application's file manager. Note
      * that since this is a singleton, anyone can get access to this object.
      */
     public EditorFileManager getFileManager() { return fileManager; }
+    
+    /**
+     * Accessor method for the current Sprite Type.
+     */
+    public SpriteType getSpriteType() { return spriteType; }
+    
+    /**
+     * Mutator method for the current Sprite Type.
+     */
+    public void setSpriteType(SpriteType spriteTypeToSet)
+    {
+    	this.spriteType = spriteTypeToSet;
+    }
+    
     /**
      * This accessor method gets an iterator for going through
      * all the current debug text sequentially.

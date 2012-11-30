@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
+import animatedSpriteEditor.AnimatedSpriteEditor;
+
 /**
  * This class will handler events interact with the open
  * button.
@@ -16,10 +18,8 @@ public class OpenHandler implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		JOptionPane.showMessageDialog(null,  
-				"The Open Button is clicked.", 
-				"To the User: ",
-				JOptionPane.OK_OPTION);
+		AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+		singleton.getFileManager().requestOpen();
 	}
 
 }

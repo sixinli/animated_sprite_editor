@@ -4,11 +4,14 @@ package animatedSpriteEditor.files;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+
 import animatedSpriteEditor.AnimatedSpriteEditor;
 import static animatedSpriteEditor.AnimatedSpriteEditorSettings.*;
 import animatedSpriteEditor.gui.AnimatedSpriteEditorGUI;
+import animatedSpriteEditor.state.EditorState;
 import animatedSpriteEditor.state.PoseurState;
 import animatedSpriteEditor.state.EditorStateManager;
+import animatedSpriteEditor.state.PoseurStateManager;
 
 /**
  * This class provides all the file servicing for the AnimatedSpriteEditor
@@ -26,7 +29,8 @@ public class EditorFileManager
     // WE'LL STORE THE FILE CURRENTLY BEING WORKED ON
     // AND THE NAME OF THE FILE
     private File currentFile;
-    private String currentPoseName;
+    private String currentSpriteTypeName;
+    private String currentAnimationStateName;
     private String currentFileName;
     
     // WE WANT TO KEEP TRACK OF WHEN SOMETHING HAS NOT BEEN SAVED
@@ -47,9 +51,9 @@ public class EditorFileManager
         // NOTHING YET
         currentFile = null;
         currentFileName = null;
-        saved = true;
         editorIO = new AnimatedSpriteEditorIO();
         poseurFileManager = new PoseurFileManager();
+        saved = poseurFileManager.isSaved();
         
     }
     
@@ -59,13 +63,33 @@ public class EditorFileManager
     public PoseurFileManager getPoseurFileManager(){ return poseurFileManager;}
     
     /**
-     * This method starts the process of editing a new pose. If
-     * a pose is already being edited, it will prompt the user
+     * This method starts the process of editing a new sprite type. 
+     * If a pose is already being edited, it will prompt the user
      * to save it first.
      */
-    public void requestNewPose()
+    public void requestNew()
     {
-  
+    	// WE MAY HAVE TO SAVE CURRENT WORK
+        boolean continueToMakeNew = true;
+        if (!saved)
+        {
+            // THE USER CAN OPT OUT HERE WITH A CANCEL
+            continueToMakeNew = promptToSave();
+        }
+        
+        // IF THE USER REALLY WANTS TO MAKE A NEW POSE
+        if (continueToMakeNew)
+        {
+            // GO AHEAD AND PROCEED MAKING A NEW POSE
+            continueToMakeNew = promptForNew();
+
+            if (continueToMakeNew)
+            {
+                // NOW THAT WE'VE SAVED, LET'S MAKE SURE WE'RE IN THE RIGHT MODE
+                EditorStateManager stateManager = AnimatedSpriteEditor.getEditor().getStateManager();
+                stateManager.setState(EditorState.SELECT_ANIMATION_STATE);
+            }
+        }
     }
     
     /**
@@ -75,17 +99,7 @@ public class EditorFileManager
      */
     public void requestNewState()
     {
-  
-    }
-    
-    /**
-     * This method starts the process of editing a new sprite type. 
-     * If a pose is already being edited, it will prompt the user
-     * to save it first.
-     */
-    public void requestNew()
-    {
-  
+    	
     }
     
     /**
@@ -95,17 +109,21 @@ public class EditorFileManager
      */
     public void requestOpen()
     {
-   
-    }
-    
-    /**
-     * This method lets the user open a pose saved
-     * to a file. It will also make sure data for the
-     * current pose is not lost.
-     */
-    public void requestOpenPose()
-    {
-   
+    	EditorState state = AnimatedSpriteEditor.getEditor().getStateManager().getMode();
+        // WE MAY HAVE TO SAVE CURRENT WORK
+        boolean continueToOpen = true;
+        if (!saved)
+        {
+            // THE USER CAN OPT OUT HERE WITH A CANCEL
+            continueToOpen = promptToSave();
+        }
+        
+        // IF THE USER REALLY WANTS TO OPEN A POSE
+        if (continueToOpen)
+        {
+            // GO AHEAD AND PROCEED MAKING A NEW POSE
+            promptToOpen();
+        }
     }
     
     /**
@@ -119,31 +137,22 @@ public class EditorFileManager
     }
     
     /**
-     * This method will save the current pose to a file. Note that 
-     * we already know the name of the file, so we won't need to
-     * prompt the user.
+     * This method lets the user to duplicate an 
+     * animation state or a pose
      */
-    public void requestSavePose()
+    public void requestDuplicate()
     {
-
+    	
+    	
     }
     
     /**
-     * This method will save the current pose as a named file provided
-     * by the user.
+     * This method lets the user to delete an
+     * animation state or a pose
      */
-    public void requestSaveAsPose()
-    {
-        // ASK THE USER FOR A FILE NAME
-        promptForNew();
-    }
-    
-    /**
-     * This method will export the current pose to an image file.
-     */
-    public void requestExportPose()
-    {
-        
+    public void requestDelete(){
+    	
+    	
     }
     
     /**
@@ -178,7 +187,51 @@ public class EditorFileManager
      */
     private boolean promptForNew()
     {
-    	return false;
+        // SO NOW ASK THE USER FOR A SPRITE TYPE NAME
+        AnimatedSpriteEditorGUI gui = AnimatedSpriteEditor.getEditor().getGUI();
+        String fileName = JOptionPane.showInputDialog(
+                gui,
+                SPRITE_TYPE_NAME_REQUEST_TEXT,
+                SPRITE_TYPE_NAME_REQUEST_TITLE_TEXT,
+                JOptionPane.QUESTION_MESSAGE);
+        
+        // IF THE USER CANCELLED, THEN WE'LL GET A fileName
+        // OF NULL, SO LET'S MAKE SURE THE USER REALLY
+        // WANTS TO DO THIS ACTION BEFORE MOVING ON
+        if ((fileName != null)
+                &&
+            (fileName.length() > 0))
+        {
+            // UPDATE THE FILE NAMES AND FILE
+            currentSpriteTypeName = fileName;
+            currentFileName = fileName + XML_FILE_EXTENSION;
+	        currentFile = new File(SPRITE_TYPE_PATH + fileName + File.separator + currentFileName);
+
+	        try 
+            {
+            	boolean success = (
+            			  new File(SPRITE_TYPE_PATH + fileName)).mkdir();
+            			  if (success) {
+            			  System.out.println("Directory: " 
+            			   + fileName + " created");
+            			  }  
+            }catch (Exception e){//Catch exception if any
+            	  System.err.println("Error: " + e.getMessage());
+            }
+	        
+            // SAVE OUR NEW FILE
+            editorIO.saveSpriteTye(currentFile);
+            saved = true;
+
+            // AND PUT THE FILE NAME IN THE TITLE BAR
+            String appName = gui.getAppName();
+            gui.setTitle(appName + APP_NAME_FILE_NAME_SEPARATOR + currentFile); 
+            
+            // WE DID IT!
+            return true;
+        }
+        // USER DECIDED AGAINST IT
+        return false;
     }
 
     /**
@@ -210,7 +263,35 @@ public class EditorFileManager
      */
     private void promptToOpen()
     {
-       
+        // WE'LL NEED THE GUI
+        AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+        AnimatedSpriteEditorGUI gui = singleton.getGUI();
+        EditorStateManager stateManager = singleton.getStateManager();
+        
+        // AND NOW ASK THE USER FOR THE POSE TO OPEN
+        JFileChooser poseFileChooser = new JFileChooser(SPRITE_TYPE_PATH);
+        int buttonPressed = poseFileChooser.showOpenDialog(gui);
+        
+        // ONLY OPEN A NEW FILE IF THE USER SAYS OK
+        if (buttonPressed == JFileChooser.APPROVE_OPTION)
+        {
+            // GET THE FILE THE USER ENTERED
+            currentFile = poseFileChooser.getSelectedFile();
+            currentFileName = currentFile.getName();
+            currentSpriteTypeName = currentFileName.substring(0, currentFileName.indexOf("."));
+            saved = true;
+ 
+            // AND PUT THE FILE NAME IN THE TITLE BAR
+            String appName = gui.getAppName();
+            gui.setTitle(appName + APP_NAME_FILE_NAME_SEPARATOR + currentFile);             
+            
+            // AND LOAD THE .pose (XML FORMAT) FILE
+            editorIO.loadSpriteType(currentFile.getAbsolutePath());
+        }
+        
+        stateManager.setState(EditorState.SELECT_ANIMATION_STATE);
+        stateManager.getPoseurStateManager().clearClipboardShape();
+        gui.updateMode();
     }
     
     /**

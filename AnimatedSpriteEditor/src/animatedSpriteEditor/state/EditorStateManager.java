@@ -1,5 +1,8 @@
 package animatedSpriteEditor.state;
 
+import animatedSpriteEditor.AnimatedSpriteEditor;
+import animatedSpriteEditor.gui.AnimatedSpriteEditorGUI;
+
 
 /**
  * This class stores all the state information about the application
@@ -48,4 +51,21 @@ public class EditorStateManager
       */
       public PoseurStateManager getPoseurStateManager() {return poseurStateManager;} 
  
+      /**
+       * This mutator method changes the mode of the application,
+       * which may result in a cursor change and the enabling and
+       * disabling of various controls.
+       * 
+       * @param newMode The mode to set as the current mode.
+       */
+      public void setState(EditorState newMode)
+      {
+          // KEEP THE MODE
+          editorState = newMode;
+          
+          // AND UPDATE THE GUI
+          AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+          AnimatedSpriteEditorGUI gui = singleton.getGUI();
+          gui.updateMode();
+      }
 }
