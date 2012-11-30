@@ -1,9 +1,11 @@
 package animatedSpriteEditor.events.colors;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-import javax.swing.JOptionPane;
+import animatedSpriteEditor.AnimatedSpriteEditor;
+import animatedSpriteEditor.state.PoseurStateManager;
 
 /**
  * This class will handler events interact with the transparency 
@@ -11,19 +13,27 @@ import javax.swing.JOptionPane;
  * @author sixin
  *
  */
-public class TransparencyHandler implements MouseMotionListener{
+public class TransparencyHandler implements ChangeListener
+{
+    /**
+     * This event handler method is called when the user changes the
+     * alpha (transparency) slider. Note that 0 means fully 
+     * transparent and 255 means fully opaque. When the slider value
+     * is changed we get that value and send it off to the state
+     * manager to update the current state.
+     * 
+     * @param ce The Event Object.
+     */
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
+	public void stateChanged(ChangeEvent ce) {
 		// TODO Auto-generated method stub
-		JOptionPane.showMessageDialog(null,  
-				"The Transparency Slide Bar is dragged.", 
-				"To the User: ",
-				JOptionPane.OK_OPTION);
+		AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+        PoseurStateManager stateManager = singleton.getStateManager().getPoseurStateManager();
+        JSlider alphaSlider = (JSlider)ce.getSource();
+        int alpha = alphaSlider.getValue();
+        
+        // AND SEND IT OFF TO UPDATE THE SELECTED SHAPE
+        stateManager.changeSelectedShapeAlpha(alpha);
+		
 	}
-
-	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-	}
-
 }

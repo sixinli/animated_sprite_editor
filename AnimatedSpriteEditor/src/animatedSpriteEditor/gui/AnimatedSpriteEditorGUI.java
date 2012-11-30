@@ -1015,11 +1015,11 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         ColorPalletHandler cph = new ColorPalletHandler();
         colorPallet.registerColorPalletHandler(cph);
         TransparencyHandler tph = new TransparencyHandler();
-        transparencySlider.addMouseMotionListener(tph);
+        transparencySlider.addChangeListener(tph);
         CustomColorHandler cch = new CustomColorHandler();
         customColorSelectorButton.addActionListener(cch);
         LineThicknessHandler lth = new LineThicknessHandler();
-        lineStrokeSelectionComboBox.addActionListener(lth);
+        lineStrokeSelectionComboBox.addItemListener(lth);
     
         // DISPLAY TOOLBAR HANDLERS
         StartHandler sh = new StartHandler();
