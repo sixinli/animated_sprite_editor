@@ -6,59 +6,71 @@ import java.awt.event.MouseMotionListener;
 
 import javax.swing.JOptionPane;
 
-/**
- * This class will handler mouse events inside the pose canvas.
+import animatedSpriteEditor.AnimatedSpriteEditor;
+import animatedSpriteEditor.state.PoseurStateManager;
+
+/** This class will handler mouse events inside the pose canvas.
  * @author sixin
  *  
  */
-public class PoseCanvasMouseHandler implements MouseListener, MouseMotionListener{
-	
-	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		JOptionPane.showMessageDialog(null,  
-				"The mouse is dragged inside the zoomable canvas.", 
-				"To the User: ",
-				JOptionPane.OK_OPTION);
-	}
+public class PoseCanvasMouseHandler implements MouseListener, MouseMotionListener
+{
+	/**
+     * This method responds to when the user presses the mouse
+     * on the pose editing canvas. Note that it forwards the
+     * response to the poseur state manager, since that object
+     * manages the data it intends to change.
+     * 
+     * @param e The event object.
+     */
+    @Override
+    public void mousePressed(MouseEvent e) 
+    {
+        AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+        PoseurStateManager state = singleton.getStateManager().getPoseurStateManager();
+        state.processMousePress(e.getX(), e.getY());
+    }
 
-	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+    /**
+     * This method responds to when the user releases the mouse
+     * on the pose editing canvas. Note that it forwards the
+     * response to the poseur state manager, since that object
+     * manages the data it intends to change.
+     * 
+     * @param e The event object.
+     */
+    @Override
+    public void mouseReleased(MouseEvent e) 
+    {
+        AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+        PoseurStateManager state = singleton.getStateManager().getPoseurStateManager();
+        state.processMouseReleased(e.getX(), e.getY());
+    }
+    
+    /**
+     * This method responds to when the user drags the mouse
+     * on the pose editing canvas. Note that it forwards the
+     * response to the poseur state manager, since that object
+     * manages the data it intends to change.
+     * 
+     * @param e The event object.
+     */
+    @Override
+    public void mouseDragged(MouseEvent e) 
+    {
+        AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+        PoseurStateManager poseurStateManager = singleton.getStateManager().getPoseurStateManager();
+        poseurStateManager.processMouseDragged(e.getX(), e.getY());
+    }
 
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		JOptionPane.showMessageDialog(null,  
-				"The mouse is clicked inside the zoomable canvas.", 
-				"To the User: ",
-				JOptionPane.OK_OPTION);
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
+    // WE ARE NOT USING THE REST OF THESE INTERACTIONS
+    
+    @Override
+    public void mouseMoved(MouseEvent e)    {}    
+    @Override
+    public void mouseClicked(MouseEvent e)  {}
+    @Override
+    public void mouseEntered(MouseEvent e)  {}
+    @Override
+    public void mouseExited(MouseEvent e)   {}
 }

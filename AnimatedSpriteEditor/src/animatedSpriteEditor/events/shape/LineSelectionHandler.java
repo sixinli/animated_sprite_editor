@@ -3,23 +3,34 @@ package animatedSpriteEditor.events.shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JOptionPane;
+import animatedSpriteEditor.AnimatedSpriteEditor;
+import animatedSpriteEditor.shapes.PoseurShapeType;
+import animatedSpriteEditor.state.PoseurStateManager;
 
 /**
- * This class will handler events interact with the line
- * button.
- * @author sixin
- *
+ * This handler responds to when the user requests to
+ * start drawing a line.
+ * 
+ * @author  Richard McKenna
+ *          Debugging Enterprises
+ * @version 1.0
  */
-public class LineSelectionHandler implements ActionListener{
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		JOptionPane.showMessageDialog(null,  
-				"The Line Button is clicked.", 
-				"To the User: ",
-				JOptionPane.OK_OPTION);
-	}
-
+public class LineSelectionHandler implements ActionListener
+{
+    /**
+     * When the user requests to draw a line, we'll need
+     * to notify the data manager, since it managers the 
+     * shape in progress. It will update the gui as needed
+     * as well.
+     * 
+     * @param ae The Event Object.
+     */
+    @Override
+    public void actionPerformed(ActionEvent ae)
+    {
+        // RELAY THE REQUEST TO THE DATA MANAGER
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+        PoseurStateManager poseurStateManager = singleton.getStateManager().getPoseurStateManager();
+        poseurStateManager.selectShapeToDraw(PoseurShapeType.LINE);
+    }
 }

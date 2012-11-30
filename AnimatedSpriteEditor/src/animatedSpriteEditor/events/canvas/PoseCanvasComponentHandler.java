@@ -2,7 +2,10 @@ package animatedSpriteEditor.events.canvas;
 
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import javax.swing.JOptionPane;
+
+import animatedSpriteEditor.gui.PoseCanvas;
+import animatedSpriteEditor.state.PoseCanvasState;
+
 
 /**
  * This class will handler events interact with the pose canvas component.
@@ -24,13 +27,12 @@ public class PoseCanvasComponentHandler implements ComponentListener{
 	}
 
 	@Override
-	public void componentResized(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-        // GET THE CANVAS' STATE AND UPDATE IT
-		JOptionPane.showMessageDialog(null,  
-				"The zoomable canvas component is resized.", 
-				"To the User: ",
-				JOptionPane.OK_OPTION);
+	public void componentResized(ComponentEvent arg0) 
+	{
+	        // GET THE CANVAS' STATE AND UPDATE IT
+	        PoseCanvas canvas = (PoseCanvas)arg0.getSource();       
+	        PoseCanvasState canvasState = canvas.getState();
+	        canvasState.updatePoseArea();
 	}
 
 	@Override

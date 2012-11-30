@@ -1,6 +1,7 @@
 package animatedSpriteEditor.gui;
 
 import static animatedSpriteEditor.AnimatedSpriteEditorSettings.*;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
@@ -93,7 +94,6 @@ import animatedSpriteEditor.files.InvalidXMLFileFormatException;
 import animatedSpriteEditor.files.PoseurFileManager;
 import animatedSpriteEditor.gui.ColorPallet;
 import animatedSpriteEditor.gui.ColorToggleButton;
-import animatedSpriteEditor.gui.EditorCanvas;
 import animatedSpriteEditor.gui.AnimatedSpriteEditorGUI;
 import animatedSpriteEditor.shapes.PoseurShape;
 import animatedSpriteEditor.state.ColorPalletState;
@@ -123,8 +123,8 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     // FOR ZOOMED IN AND OUT VIEWS. NOTE THAT WE'LL PUT
     // THEM INTO A SPLIT PANE
     private JSplitPane canvasSplitPane;
-    private EditorCanvas trueCanvas;
-    private EditorCanvas zoomableCanvas;
+    private PoseCanvas trueCanvas;
+    private PoseCanvas zoomableCanvas;
     private JPanel displayArea;
     
     private JComboBox stateComboBox;
@@ -281,7 +281,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
      * 
      * @return The true canvas, which is on the left.
      */
-    public EditorCanvas getTruePoseCanvas() { return trueCanvas; }
+    public PoseCanvas getTruePoseCanvas() { return trueCanvas; }
 
     /**
      * Accessor method for getting the canvas that will
@@ -289,7 +289,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
      * 
      * @return The zoomable canvas, which is on the right.
      */
-    public EditorCanvas getZoomablePoseCanvas() { return zoomableCanvas; }
+    public PoseCanvas getZoomablePoseCanvas() { return zoomableCanvas; }
     
     /**
      * Accessor method to the media tracker.
@@ -636,18 +636,20 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         // OF A JSplitPane
         canvasSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
-        // LET'S MAKE THE CANVAS TO KEEP RECORD
+        // LET'S MAKE THE CANVAS ON THE LEFT SIDE, WHICH
+        // WILL NEVER ZOOM
         PoseCanvasState trueCanvasState = poseurStateManager.getTrueCanvasState();
-        trueCanvas = new EditorCanvas(trueCanvasState);
+        trueCanvas = new PoseCanvas(trueCanvasState);
         trueCanvasState.setPoseCanvas(trueCanvas);
         trueCanvas.setBackground(TRUE_CANVAS_COLOR);
         
         // AND NOW THE CANVAS ON THE RIGHT SIDE, WHICH
         // WILL BE ZOOMABLE
         PoseCanvasState zoomableCanvasState = poseurStateManager.getZoomableCanvasState();
-        zoomableCanvas = new EditorCanvas(zoomableCanvasState);
+        zoomableCanvas = new PoseCanvas(zoomableCanvasState);
         zoomableCanvasState.setPoseCanvas(zoomableCanvas);
         zoomableCanvas.setBackground(ZOOMABLE_CANVAS_COLOR);
+        
         
         // AND OF COURSE OUR RENDERING PANEL
         spriteList = new ArrayList<Sprite>();

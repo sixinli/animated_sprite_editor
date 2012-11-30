@@ -1,7 +1,7 @@
 package animatedSpriteEditor.state;
 
 import java.awt.geom.Rectangle2D;
-import animatedSpriteEditor.gui.EditorCanvas;
+import animatedSpriteEditor.gui.PoseCanvas;
 
 /**
  * This class stores some state information regarding the
@@ -33,7 +33,7 @@ public class PoseCanvasState
     
     // HERE'S THE VIEW, WHICH WE'LL NEED TO FORCE
     // A REPAINT WHEN THE ZOOM LEVEL CHANGES
-    private EditorCanvas canvas;
+    private PoseCanvas canvas;
     
     // HERE'S THE POSE THAT IS BEING EDITED
     private PoseurPose pose;
@@ -96,7 +96,7 @@ public class PoseCanvasState
      * 
      * @return The canvas that renders this state info.
      */
-    public EditorCanvas getCanvas() { return canvas; }
+    public PoseCanvas getCanvas() { return canvas; }
 
     /**
      * Accessor method for getting the pose used by the
@@ -138,7 +138,7 @@ public class PoseCanvasState
      * 
      * @param initCanvas The canvas associated with this state.
      */
-    public void setPoseCanvas(EditorCanvas initCanvas)
+    public void setPoseCanvas(PoseCanvas initCanvas)
     {
         // KEEP THE CANVAS FOR LATER
         canvas = initCanvas;

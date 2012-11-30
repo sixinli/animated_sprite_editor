@@ -208,30 +208,30 @@ public class PoseurLine extends PoseurShape
         }
         
         // CLAMP ON RIGHT SIDE
-        if ((geometry.x1 ) > poseArea.width)
+        if ((geometry.x1 ) > poseArea.width-1)
         {
-            geometry.x1 = poseArea.width ;
+            geometry.x1 = poseArea.width-1 ;
             geometry.x2 -= incX;
         }
         
         // CLAMP ON RIGHT SIDE
-        if ((geometry.x2 ) > poseArea.width)
+        if ((geometry.x2 ) > poseArea.width-1)
         {
-            geometry.x2 = poseArea.width ;
+            geometry.x2 = poseArea.width-1 ;
             geometry.x1 -= incX;
         }
         
         // CLAMP ON BOTTOM
-        if ((geometry.y2) > poseArea.height)
+        if ((geometry.y1) > poseArea.height-1)
         {
-            geometry.y2 = poseArea.height ;
-            geometry.y1 -= incY;
+            geometry.y1 = poseArea.height-1 ;
+            geometry.y2 -= incY;
         }
         
         // CLAMP ON BOTTOM
-        if ((geometry.y2) > poseArea.height)
+        if ((geometry.y2) > poseArea.height-1)
         {
-            geometry.y2 = poseArea.height ;
+            geometry.y2 = poseArea.height-1 ;
             geometry.y1 -= incY;
         }
     }
