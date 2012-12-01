@@ -94,6 +94,11 @@ public class EditorFileManager
             continueToMakeNew = promptToSave();
         }
         
+        if (!poseurFileManager.isSaved())
+        {
+        	continueToMakeNew = poseurFileManager.promptToSave();
+        }
+        
         // IF THE USER REALLY WANTS TO MAKE A NEW POSE
         if (continueToMakeNew)
         {
@@ -116,7 +121,30 @@ public class EditorFileManager
      */
     public void requestNewState()
     {
-    	
+    	// WE MAY HAVE TO SAVE CURRENT WORK
+        boolean continueToMakeNew = true;
+        if (!saved)
+        {
+            // THE USER CAN OPT OUT HERE WITH A CANCEL
+            continueToMakeNew = promptToSave();
+        }
+        
+        if (!poseurFileManager.isSaved())
+        {
+        	continueToMakeNew = poseurFileManager.promptToSave();
+        }
+        
+        // IF THE USER REALLY WANTS TO MAKE A NEW POSE
+        if (continueToMakeNew)
+        {
+            // GO AHEAD AND PROCEED MAKING A NEW POSE
+            continueToMakeNew = promptForNewState();
+
+            // NOW THAT WE'VE SAVED, LET'S MAKE SURE WE'RE IN THE RIGHT MODE
+            EditorStateManager stateManager = AnimatedSpriteEditor.getEditor().getStateManager();
+            stateManager.setState(EditorState.SELECT_POSE_STATE);
+        }   
+        
     }
     
     /**
@@ -133,6 +161,11 @@ public class EditorFileManager
         {
             // THE USER CAN OPT OUT HERE WITH A CANCEL
             continueToOpen = promptToSave();
+        }
+        
+        if(!poseurFileManager.isSaved())
+        {
+        	continueToOpen = poseurFileManager.promptToSave();
         }
         
         // IF THE USER REALLY WANTS TO OPEN A POSE
@@ -212,12 +245,18 @@ public class EditorFileManager
                 SPRITE_TYPE_NAME_REQUEST_TITLE_TEXT,
                 JOptionPane.QUESTION_MESSAGE);
         
+        String animationStateName = JOptionPane.showInputDialog(
+                gui,
+                ANIMATION_STATE_NAME_REQUEST_TEXT,
+                ANIMATION_STATE_NAME_REQUEST_TITLE_TEXT,
+                JOptionPane.QUESTION_MESSAGE);
+        
+        
+        
         // IF THE USER CANCELLED, THEN WE'LL GET A fileName
         // OF NULL, SO LET'S MAKE SURE THE USER REALLY
         // WANTS TO DO THIS ACTION BEFORE MOVING ON
-        if ((fileName != null)
-                &&
-            (fileName.length() > 0))
+        if ( (fileName != null)&& (fileName.length() > 0))
         {
             // UPDATE THE FILE NAMES AND FILE
             currentSpriteTypeName = fileName;
@@ -231,19 +270,36 @@ public class EditorFileManager
             			  if (success) {
             			  System.out.println("Directory: " 
             			   + fileName + " created");
+            			  }
+            	success = (
+            			  new File(SPRITE_TYPE_PATH + fileName + "/poses")).mkdir();
+            			  if (success) {
+            			  System.out.println("Directory: " 
+            			   + fileName + "/poses" + " created");
             			  }  
+                success = (
+                    	new File(SPRITE_TYPE_PATH + fileName + "/images")).mkdir();
+                    	if (success) {
+                    		System.out.println("Directory: " 
+                    		+ fileName  + "/poses" + " created");
+                    		}       			  
             }catch (Exception e){//Catch exception if any
             	  System.err.println("Error: " + e.getMessage());
             }
 	        
 	        SpriteType newSpriteType = new SpriteType();
-	        newSpriteType.setWidth(Integer.parseInt(SPRITE_TYPE_WIDTH_NODE));
-	        newSpriteType.setHeight(Integer.parseInt(SPRITE_TYPE_HEIGHT_NODE));
 	        
+	        newSpriteType.setWidth(Integer.parseInt(SPRITE_TYPE_WIDTH));
+	        newSpriteType.setHeight(Integer.parseInt(SPRITE_TYPE_HEIGHT));
+	        AnimatedSpriteEditor.getEditor().setSpriteType(newSpriteType);
+	        AnimatedSpriteEditor.getEditor().setSpriteTypeName(currentSpriteTypeName);
 	        
+	        poseurFileManager.promptForNew();
+	        
+	        String poseDuration = ""+ poseurFileManager.getPoseDuration();
 	        
             // SAVE OUR NEW FILE
-            editorIO.saveSpriteTye(currentFile, newSpriteType);
+            editorIO.saveSpriteTye(currentFile, newSpriteType, animationStateName, poseDuration);
             saved = true;
 
             // AND PUT THE FILE NAME IN THE TITLE BAR
@@ -256,6 +312,30 @@ public class EditorFileManager
         }
         // USER DECIDED AGAINST IT
         return false;
+    }
+    
+    private boolean promptForNewState()
+    {
+    	// SO NOW ASK THE USER FOR AN ANIMATION STATE NAME
+        AnimatedSpriteEditorGUI gui = AnimatedSpriteEditor.getEditor().getGUI();
+        String stateName = JOptionPane.showInputDialog(
+                gui,
+                ANIMATION_STATE_NAME_REQUEST_TEXT,
+                ANIMATION_STATE_NAME_REQUEST_TITLE_TEXT,
+                JOptionPane.QUESTION_MESSAGE);
+        
+        // IF THE USER CANCELLED, THEN WE'LL GET A fileName
+        // OF NULL, SO LET'S MAKE SURE THE USER REALLY
+        // WANTS TO DO THIS ACTION BEFORE MOVING ON
+        if ((stateName != null)
+                &&
+            (stateName.length() > 0))
+        {
+            // UPDATE THE FILE NAMES AND FILE
+            return editorIO.saveAnimationState(currentSpriteTypeName, stateName);
+        }
+        
+        else return false;
     }
 
     /**
@@ -275,7 +355,7 @@ public class EditorFileManager
      */
     private boolean promptToSave()
     {
-    	return false;
+    	return true;
     }
     
     /**

@@ -247,10 +247,16 @@ public class AnimatedSpriteEditorSettings
     public static final String ANIMATION_STATE_NAME_REQUEST_TITLE_TEXT = "Enter Animation State File Name";
     public static final String POSE_NAME_REQUEST_TEXT = "What do you want to name your pose?";
     public static final String POSE_NAME_REQUEST_TITLE_TEXT = "Enter Pose File Name";
+    public static final String POSE_DURATION_REQUEST_TEXT = "How long do you the pose to render?";
+    public static final String POSE_DURATION_REQUEST_TITLE_TEXT = "Enter Pose Duration Value (Positive Integer)";
     public static final String SPRITE_TYPE_SAVED_TEXT = "Sprite Type File has been Saved";
     public static final String SPRITE_TYPE_SAVED_TITLE_TEXT = "Sprite Type File Saved";
     public static final String SPRITE_TYPE_SAVING_ERROR_TEXT = "An Error Occured While Saving the Sprite Type";
     public static final String SPRITE_TYPE_SAVING_ERROR_TITLE_TEXT = "Sprite Type Saving Error";
+    public static final String ANIMATION_STATE_SAVED_TEXT = "Animation State File has been Saved";
+    public static final String ANIMATION_STATE_SAVED_TITLE_TEXT = "Animation State File Saved";
+    public static final String ANIMATION_STATE_SAVING_ERROR_TEXT = "An Error Occured While Saving the Animation State";
+    public static final String ANIMATION_STATE_SAVING_ERROR_TITLE_TEXT = "Animation State Saving Error";
     public static final String IMAGE_EXPORTED_TEXT = "Your pose has been exportetd to ";
     public static final String IMAGE_EXPORTED_TITLE_TEXT = "Image Exported";
     public static final String IMAGE_EXPORTING_ERROR_TEXT = "An Error Occured While Exporting the Image";

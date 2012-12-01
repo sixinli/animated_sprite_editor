@@ -251,7 +251,7 @@ public class AnimatedSpriteEditorIO
           singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
     }
     
-    public boolean saveSpriteTye(File spriteTypeFile, SpriteType spriteTypeToSave) 
+    public boolean saveSpriteTye(File spriteTypeFile, SpriteType spriteTypeToSave, String animationStateName, String poseDuration) 
     {
         // GET THE POSE AND ITS DATA THAT WE HAVE TO SAVE
     	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
@@ -274,11 +274,23 @@ public class AnimatedSpriteEditorIO
                     SPRITE_TYPE_WIDTH_NODE, SPRITE_TYPE_WIDTH);
             Element spriteTypeHeightElement = makeElement(doc, rootElement, 
                     SPRITE_TYPE_HEIGHT_NODE, SPRITE_TYPE_HEIGHT);
-            Element spriteTypeImagesListElement = makeElement(doc, rootElement,
-                    IMAGES_LIST_NODE, "" );
-            Element spriteTypeAnimationsListElement = makeElement(doc, rootElement,
-                    ANIMATIONS_LIST_NODE, "" );
-       
+            Element imageListElement = makeElement(doc, rootElement, 
+                    IMAGES_LIST_NODE, "");
+            Element animationListElement = makeElement(doc, rootElement, 
+                    ANIMATIONS_LIST_NODE, "");
+            Element animationStateElement = makeElement(doc, animationListElement, 
+                    ANIMATION_STATE_NODE, "");
+            Element stateElement = makeElement(doc, animationStateElement, 
+                    STATE_NODE, animationStateName);
+            Element animationSequenceElement = makeElement(doc, animationStateElement, 
+                    ANIMATION_SEQUENCE_NODE, "");
+            Element poseElement = makeElement(doc, animationSequenceElement, 
+                    POSE_NODE, "");
+            poseElement.setAttribute(IMAGE_ID_ATTRIBUTE, "1");
+            poseElement.setAttribute(DURATION_ATTRIBUTE, poseDuration);
+            
+            
+            
             // THE TRANSFORMER KNOWS HOW TO WRITE A DOC TO
             // An XML FORMATTED FILE, SO LET'S MAKE ONE
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -320,9 +332,55 @@ public class AnimatedSpriteEditorIO
     	
     }
     
-    public boolean saveAnimationState(File animationStateFile)
+    public boolean saveAnimationState(String spriteTypeName, String animationStateName)
     {
-    	return false;
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+
+    	String spriteTypeXMLFile = SPRITE_TYPE_PATH + spriteTypeName + "/" 
+				+ spriteTypeName + XML_FILE_EXTENSION;
+    	String spriteTypeXSDFile = SPRITE_TYPE_PATH + SPRITE_TYPE_NODE + ".xsd";
+    	// FIRST RETRIEVE AND LOAD THE FILE INTO A TREE
+        WhitespaceFreeXMLDoc cleanDoc;
+        
+        try
+        {
+            cleanDoc = loadXMLDocument(spriteTypeXMLFile, spriteTypeXSDFile);
+        }
+        catch(InvalidXMLFileFormatException ixffe)
+        {
+            // COULD NOT LOAD THE SPRITE TYPE BECAUSE OF A FAULTY
+            // XML DOC, SO WE'LL JUST SKIP IT
+        	AnimatedSpriteEditorGUI gui = singleton.getGUI();
+            JOptionPane.showMessageDialog(
+                gui,
+                ANIMATION_STATE_SAVING_ERROR_TEXT,
+                ANIMATION_STATE_SAVING_ERROR_TITLE_TEXT,
+                JOptionPane.ERROR_MESSAGE);  
+            return false;
+        }
+ 
+        // GET THE ROOT NODE
+        WhitespaceFreeXMLNode animationsListNode = cleanDoc.getRoot().getChildOfType(ANIMATIONS_LIST_NODE);
+        
+        WhitespaceFreeXMLNode animationStateNode = new WhitespaceFreeXMLNode(ANIMATION_STATE_NODE);
+        WhitespaceFreeXMLNode stateNode = new WhitespaceFreeXMLNode(STATE_NODE);
+        WhitespaceFreeXMLNode animationSequenceNode = new WhitespaceFreeXMLNode(ANIMATION_SEQUENCE_NODE);
+        
+        stateNode.setData(animationStateName);
+        animationStateNode.addChild(stateNode);
+        animationStateNode.addChild(animationSequenceNode);
+        animationsListNode.addChild(animationStateNode);
+ 
+        AnimatedSpriteEditorGUI gui = singleton.getGUI();
+        JOptionPane.showMessageDialog(
+                gui,
+                ANIMATION_STATE_SAVED_TEXT,
+                ANIMATION_STATE_SAVED_TITLE_TEXT,
+                JOptionPane.INFORMATION_MESSAGE);
+            
+        singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
+        return true;
+       
     }
     
 

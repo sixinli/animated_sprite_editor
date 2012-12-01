@@ -423,7 +423,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         {
         	poseList.removeAll();
             // NOW LOAD THE ANIMATIONS FOR THE NEWLY SELECTED SPRITE TYPE
-            if(singleton.getSpriteType().getAnimationStates()!=null)
+            if(singleton.getSpriteType() != null && singleton.getSpriteType().getAnimationStates()!=null)
             {
             	clearStateComboBox();
             	spriteList.clear();
