@@ -1022,17 +1022,16 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         lineStrokeSelectionComboBox.addItemListener(lth);
     
         // DISPLAY TOOLBAR HANDLERS
-        StartHandler sh = new StartHandler();
+        StartHandler sh = new StartHandler(sceneRenderingPanel);
         startButton.addActionListener(sh);
-        StopHandler st = new StopHandler();
+        StopHandler st = new StopHandler(sceneRenderingPanel);
         stopButton.addActionListener(st);
-        SpeedUpHandler suh = new SpeedUpHandler();
+        SpeedUpHandler suh = new SpeedUpHandler(sceneRenderingPanel);
         speedUpButton.addActionListener(suh);
-        SlowDownHandler sdh = new SlowDownHandler();
+        SlowDownHandler sdh = new SlowDownHandler(sceneRenderingPanel);
         slowDownButton.addActionListener(sdh);
         
         // ANIMATION STATE COMBOBOX HANDLER
-   //     StateSelectionHandler statesh = new StateSelectionHandler();
         AnimationStateSelectionHandler assh = new AnimationStateSelectionHandler();
         stateComboBox.addItemListener(assh);
         
