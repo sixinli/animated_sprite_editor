@@ -1,10 +1,15 @@
 package animatedSpriteEditor.files;
 
 
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import sprite_renderer.AnimationState;
 import sprite_renderer.SpriteType;
 
 import animatedSpriteEditor.AnimatedSpriteEditor;
@@ -294,14 +299,15 @@ public class EditorFileManager
 	        AnimatedSpriteEditor.getEditor().setSpriteType(newSpriteType);
 	        AnimatedSpriteEditor.getEditor().setSpriteTypeName(currentSpriteTypeName);
 	        
-	        poseurFileManager.promptForNew();
-	        
-	        String poseDuration = ""+ poseurFileManager.getPoseDuration();
 	        
             // SAVE OUR NEW FILE
-            editorIO.saveSpriteTye(currentFile, newSpriteType, animationStateName, poseDuration);
+            editorIO.saveSpriteTye(currentFile, newSpriteType, animationStateName);
             saved = true;
+            currentAnimationStateName = animationStateName;
+            AnimatedSpriteEditor.getEditor().setAnimationState(AnimationState.valueOf(animationStateName));
 
+            poseurFileManager.promptForNew();
+            
             // AND PUT THE FILE NAME IN THE TITLE BAR
             String appName = gui.getAppName();
             gui.setTitle(appName + APP_NAME_FILE_NAME_SEPARATOR + currentFile); 
@@ -332,7 +338,11 @@ public class EditorFileManager
             (stateName.length() > 0))
         {
             // UPDATE THE FILE NAMES AND FILE
-            return editorIO.saveAnimationState(currentSpriteTypeName, stateName);
+            editorIO.saveAnimationState(currentSpriteTypeName, stateName);
+            currentAnimationStateName = stateName;
+            AnimatedSpriteEditor.getEditor().setAnimationState((AnimationState.valueOf(stateName)));
+            poseurFileManager.promptForNew();
+            return true;
         }
         
         else return false;
@@ -415,5 +425,29 @@ public class EditorFileManager
     public boolean isSaved()
     {
         return saved;
+    }
+    
+    /**
+     * This method will resize an image.
+     * @param originalImage the original image
+     * @param scaledWidth	the intended width
+     * @param scaledHeight	the intended height
+     * @param preserveAlpha	perserveAlpha or not
+     * @return
+     */
+    public BufferedImage createResizedCopy(Image originalImage, 
+    		int scaledWidth, int scaledHeight, 
+    		boolean preserveAlpha)
+    {
+    	System.out.println("resizing...");
+    	int imageType = preserveAlpha ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+    	BufferedImage scaledBI = new BufferedImage(scaledWidth, scaledHeight, imageType);
+    	Graphics2D g = scaledBI.createGraphics();
+    	if (preserveAlpha) {
+    		g.setComposite(AlphaComposite.Src);
+    	}
+    	g.drawImage(originalImage, 0, 0, scaledWidth, scaledHeight, null); 
+    	g.dispose();
+    	return scaledBI;
     }
 }

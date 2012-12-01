@@ -7,6 +7,7 @@ import java.util.Iterator;
 import javax.swing.UIManager;
 import javax.xml.crypto.dsig.spec.HMACParameterSpec;
 
+import sprite_renderer.AnimationState;
 import sprite_renderer.SpriteType;
 
 import static animatedSpriteEditor.AnimatedSpriteEditorSettings.*;
@@ -54,6 +55,10 @@ public class AnimatedSpriteEditor {
     private SpriteType spriteType;
     private String spriteTypeName;
     private HashMap<Integer, String> poseFileNames;
+    
+    // THIS HOLDS THE CURRENT ANIMATION STATE
+    private AnimationState animationState;
+    private String animationStateName;
 
     // THIS IS A SINGLETON OBJECT, SO WE HAVE A CONSTRUCTOR THAT
     // IS PRIVATE THAT DOES NOTHING
@@ -144,20 +149,42 @@ public class AnimatedSpriteEditor {
     public SpriteType getSpriteType() { return spriteType; }
     
     /**
-     * Mutator method for the current Sprite Type.
-     */
-    public void setSpriteType(SpriteType spriteTypeToSet)
-    {
-    	this.spriteType = spriteTypeToSet;
-    }
-    
-    /**
      * Accessor method for the current Sprite Type Name.
      * @return the sprite type name
      */
     public String getSpriteTypeName() { return spriteTypeName; }
     
     /**
+     * Accseeor method for the current animation state.
+     * @return the current animation state
+     */
+    public AnimationState getAnimationState() { return animationState;}
+    
+    /**
+     * Accessor method for the current animation state name.
+     * @return the name of the current animation state.
+     */
+    public String getAnimationStateName() { return animationStateName;}
+    
+    /**
+     * Mutator of the animation state name
+     * @param stateName the name to set
+     */
+    public void setAnimationState(AnimationState state)
+    {    	
+    	animationState = state;
+    	animationStateName = state.name();
+    }
+    
+    /**
+	 * Mutator method for the current Sprite Type.
+	 */
+	public void setSpriteType(SpriteType spriteTypeToSet)
+	{
+		this.spriteType = spriteTypeToSet;
+	}
+
+	/**
      * Mutator method for the current Sprite Type Name.
      * @param the name to set
      */

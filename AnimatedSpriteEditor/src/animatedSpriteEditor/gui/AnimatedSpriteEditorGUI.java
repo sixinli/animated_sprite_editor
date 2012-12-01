@@ -487,9 +487,11 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
                         poseList.removeAll();
                         for(int i = 0; i<posesList.size(); i++)
                     	{
-                            Image currentPoseImage = singleton.getSpriteType().getSpriteImages().get(posesList.get(i).getImageID());
+                            Image currentPoseImage = singleton.getSpriteType().getSpriteImages().get(posesList.get(i).getImageID()); 
+                            currentPoseImage = singleton.getFileManager().createResizedCopy(currentPoseImage, 128, 128, false);
                             ImageIcon currentPoseIcon = new ImageIcon(currentPoseImage);
                             JButton currentPoseButton = new JButton();
+                            currentPoseButton.setSize(128, 128);
                             currentPoseButton.addActionListener(psh);
                             currentPoseButton.setActionCommand("" + posesList.get(i).getImageID());
                             currentPoseButton.setIcon(currentPoseIcon);
@@ -834,7 +836,8 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         poseList = new JPanel();
         poseList.setLayout(new FlowLayout());
         scrollPane = new JScrollPane(poseList);
-        scrollPane.setPreferredSize(new Dimension(1100, 165));
+        scrollPane.setPreferredSize(new Dimension(1100, 166));
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         
     }
