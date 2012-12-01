@@ -24,5 +24,6 @@ public class PoseSelectionHandler implements ActionListener{
 										"To the user: ",
 										JOptionPane.OK_OPTION);
 		AnimatedSpriteEditor.getEditor().getFileManager().getEditorIO().getPoseIO().loadPose(poseFileName);
+		AnimatedSpriteEditor.getEditor().getFileManager().getPoseurFileManager().setCurrentFile(poseFileName);
 	}
 }

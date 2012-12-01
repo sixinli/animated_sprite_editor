@@ -490,6 +490,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
                     	}
                         poseList.revalidate();
                     }
+                    AnimatedSpriteEditor.getEditor().getStateManager().setState(EditorState.POSEUR_STATE);
                 
             }
         }     
@@ -593,6 +594,32 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         // REDRAW EVERYTHING
         zoomableCanvas.repaint();        
     }
+    
+    /**
+     * This method updates the zoom label display with the current
+     * zoom level.
+     */
+    public void updateZoomLabel()
+    {
+        // GET THE RIGHT CANVAS STATE, SINCE IT ZOOMS
+        AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+        PoseurStateManager poseurStateManager = singleton.getStateManager().getPoseurStateManager();
+        PoseCanvasState zoomableCanvasState = poseurStateManager.getZoomableCanvasState();
+
+        // GET THE ZOOM LEVEL
+        float zoomLevel = zoomableCanvasState.getZoomLevel();
+        
+        // MAKE IT LOOK NICE
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setMinimumFractionDigits(1);
+        nf.setMaximumFractionDigits(1);
+        String zoomText = ZOOM_LABEL_TEXT_PREFIX
+                + nf.format(zoomLevel)
+                + ZOOM_LABEL_TEXT_POSTFIX;
+        
+        // AND PUT IT IN THE LABEL
+        zoomLabel.setText(zoomText);
+    }   
     
     /**
      * This helper method empties the combo box with animations
@@ -1058,13 +1085,12 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     {
         // THESE BUTTONS ARE ALWAYS ENABLED
         newButton.setEnabled(true);
-        newPoseButton.setEnabled(true);
-        newStateButton.setEnabled(true);
         openButton.setEnabled(true);
         exitButton.setEnabled(true);
         
         // THESE BUTTONS START OFF AS DISABLED
         saveButton.setEnabled(false);
+        saveAsButton.setEnabled(false);
         exportButton.setEnabled(false);
     }
     
@@ -1073,7 +1099,8 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
      */
     private void enableSaveAsAndExport()
     {
-        // THESE ARE ENABLED AS SOON AS WE START EDITING
+    	// THESE ARE ENABLED AS SOON AS WE START EDITING
+        saveAsButton.setEnabled(true);
         exportButton.setEnabled(true);
     }    
     
@@ -1086,10 +1113,16 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         // THE SELECTION BUTTON NEEDS TO BE CHECKED SEPARATELY
 
         // THESE ARE EASY, JUST DO AS THEY'RE TOLD
-    	moveToFrontButton.setEnabled(isEnabled);
-    	moveToBackButton.setEnabled(isEnabled);
-        pasteButton.setEnabled(isEnabled);
-
+        cutButton.setEnabled(isEnabled);
+        copyButton.setEnabled(isEnabled);
+        moveToBackButton.setEnabled(isEnabled);
+        moveToFrontButton.setEnabled(isEnabled);
+                
+        // WE ONLY WANT PASTE ENABLED IF THERE IS
+        // SOMETHING ON THE CLIPBOARD
+        AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+        PoseurStateManager state = singleton.getStateManager().getPoseurStateManager();
+        pasteButton.setEnabled(state.isShapeOnClipboard());
     }
     
     /**

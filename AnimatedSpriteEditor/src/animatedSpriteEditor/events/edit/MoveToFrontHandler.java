@@ -5,6 +5,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
+import animatedSpriteEditor.AnimatedSpriteEditor;
+import animatedSpriteEditor.state.EditorState;
+import animatedSpriteEditor.state.PoseurStateManager;
+
 /**
  * This class will handler events interact with the move 
  * to front button.
@@ -14,12 +18,23 @@ import javax.swing.JOptionPane;
 public class MoveToFrontHandler implements ActionListener{
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		JOptionPane.showMessageDialog(null,  
-				"The Move To Front Button is clicked.", 
-				"To the User: ",
-				JOptionPane.OK_OPTION);
+	public void actionPerformed(ActionEvent arg0) 
+	{
+		AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+		if(singleton.getStateManager().getMode() == EditorState.SELECT_ANIMATION_STATE)
+		{
+			
+		}
+		
+		else if(singleton.getStateManager().getMode() == EditorState.SELECT_POSE_STATE)
+		{
+			
+		}
+		
+		else if(singleton.getStateManager().getMode() == EditorState.POSEUR_STATE)
+		{
+	        PoseurStateManager poseurStateManager = singleton.getStateManager().getPoseurStateManager();
+	        poseurStateManager.moveSelectedItemToFront();
+	    }  
 	}
-
 }

@@ -14,9 +14,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
 import animatedSpriteEditor.AnimatedSpriteEditor;
 import static animatedSpriteEditor.AnimatedSpriteEditorSettings.*;
 import animatedSpriteEditor.state.PoseurPose;
+import animatedSpriteEditor.state.PoseurStateManager;
 
 /**
  * This class is used for prompting the user for new dimensions
@@ -81,7 +83,15 @@ public class PoseDimensionsDialog extends JDialog
                         JOptionPane.showMessageDialog(PoseDimensionsDialog.this, INVALID_POSE_DIM_TEXT, 
                                 INVALID_POSE_DIM_TITLE_TEXT, JOptionPane.ERROR_MESSAGE);
                     }
-               
+                    else
+                    {
+                        AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+                        PoseurStateManager state = singleton.getStateManager().getPoseurStateManager();
+                        state.setPoseDimensions(poseWidth, poseHeight); 
+                        setVisible(false);
+                    }
+                
+                
                 }
                 catch(NumberFormatException | NullPointerException ex)
                 {

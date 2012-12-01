@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
+import animatedSpriteEditor.gui.PoseDimensionsDialog;
+
 /**
  * This class will handler events interact with the resize
  * button.
@@ -15,11 +17,9 @@ public class ChangePoseDimensionsHandler implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		JOptionPane.showMessageDialog(null,  
-				"The Resize Button is clicked.", 
-				"To the User: ",
-				JOptionPane.OK_OPTION);
+        PoseDimensionsDialog dialog = new PoseDimensionsDialog();
+        dialog.initLocation();
+        dialog.setVisible(true);
 	}
 
 }
