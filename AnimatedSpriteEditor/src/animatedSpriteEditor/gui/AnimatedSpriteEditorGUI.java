@@ -132,7 +132,6 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     private JToolBar stateToolBar;
     
     // FOR DISPLAYING
-    private JPanel northOfDisplayArea;
     private SceneRenderer sceneRenderingPanel;
     private JPanel displayToolBar;
     private ArrayList<Sprite> spriteList;
@@ -451,8 +450,18 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
                     // THIS ISN'T AN ANIMATION STATE
                     if (!selectedItem.equals(SELECT_ANIMATION_TEXT))
                     {
+                        boolean continueToSelectState = true;
+                        if (!singleton.getFileManager().getPoseurFileManager().isSaved())
+                        {
+                            // THE USER CAN OPT OUT HERE WITH A CANCEL
+                            continueToSelectState = singleton.getFileManager().getPoseurFileManager().promptToSave();
+                        }
+                        
+                        if (continueToSelectState)
+                        {
                         // FIRST STOP RENDERING FOR A MOMENT
                         sceneRenderingPanel.pauseScene();
+                        
 
                         // THEN GET THE STATE AND MAKE A SPRITE FOR IT
                         AnimationState selectedState = (AnimationState)stateComboBox.getSelectedItem();
@@ -478,7 +487,6 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
                         poseList.removeAll();
                         for(int i = 0; i<posesList.size(); i++)
                     	{
-                        	System.out.println(posesList.get(i).getImageID());
                             Image currentPoseImage = singleton.getSpriteType().getSpriteImages().get(posesList.get(i).getImageID());
                             ImageIcon currentPoseIcon = new ImageIcon(currentPoseImage);
                             JButton currentPoseButton = new JButton();
@@ -489,11 +497,22 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
                             
                     	}
                         poseList.revalidate();
+                    
+                        singleton.getFileManager().getPoseurFileManager().setCurrentFile(null);
+                        PoseurPose tempPose = new PoseurPose(DEFAULT_POSE_WIDTH, DEFAULT_POSE_HEIGHT);
+                        PoseurStateManager stateManager = singleton.getStateManager().getPoseurStateManager();
+                        PoseurPose actualPose = stateManager.getPose();
+                        actualPose.loadPoseData(tempPose);  
+                        zoomableCanvas.revalidate();
+                        zoomableCanvas.repaint();
                     }
-                    AnimatedSpriteEditor.getEditor().getStateManager().setState(EditorState.POSEUR_STATE);
-                
+                }       
             }
-        }     
+        }
+        
+        else if (mode == EditorState.POSEUR_STATE){
+        	
+        }
     }
 
     /**
@@ -685,7 +704,6 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         sceneRenderingPanel.startScene();
         displayArea = new JPanel(new BorderLayout());
         displayArea.setBackground(Color.white);
-        northOfDisplayArea = new JPanel();
         
         // ULTIMATELY EVERYTHING IN THE NORTH GOES IN HERE, INCLUDING
         // TWO PANELS FULL OF JToolBars

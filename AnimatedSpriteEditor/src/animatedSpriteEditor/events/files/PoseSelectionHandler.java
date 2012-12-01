@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import animatedSpriteEditor.AnimatedSpriteEditor;
+import animatedSpriteEditor.state.EditorState;
 
 /**
  * This class will handler events interact with the pose
@@ -23,6 +24,8 @@ public class PoseSelectionHandler implements ActionListener{
 										"Pose Image" + e.getActionCommand() + " is clicked " + poseFileName, 
 										"To the user: ",
 										JOptionPane.OK_OPTION);
+		
+		AnimatedSpriteEditor.getEditor().getStateManager().setState(EditorState.POSEUR_STATE);
 		AnimatedSpriteEditor.getEditor().getFileManager().getEditorIO().getPoseIO().loadPose(poseFileName);
 		AnimatedSpriteEditor.getEditor().getFileManager().getPoseurFileManager().setCurrentFile(poseFileName);
 	}
