@@ -25,9 +25,10 @@ public class PoseSelectionHandler implements ActionListener{
 										"To the user: ",
 										JOptionPane.OK_OPTION);
 		
-		AnimatedSpriteEditor.getEditor().getFileManager().getPoseurFileManager().setPoseID(Integer.parseInt(e.getActionCommand()));
-		AnimatedSpriteEditor.getEditor().getStateManager().setState(EditorState.POSEUR_STATE);
-		AnimatedSpriteEditor.getEditor().getFileManager().getEditorIO().getPoseIO().loadPose(poseFileName);
-		AnimatedSpriteEditor.getEditor().getFileManager().getPoseurFileManager().setCurrentFile(poseFileName);
+		AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+		singleton.getFileManager().getPoseurFileManager().setPoseID(Integer.parseInt(e.getActionCommand()));
+		singleton.getStateManager().setState(EditorState.POSEUR_STATE);
+		singleton.getFileManager().getEditorIO().getPoseIO().loadPose(poseFileName);
+		singleton.getFileManager().getPoseurFileManager().setCurrentFile(poseFileName);
 	}
 }

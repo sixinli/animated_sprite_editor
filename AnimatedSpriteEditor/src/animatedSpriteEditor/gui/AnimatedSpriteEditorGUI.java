@@ -521,7 +521,6 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
                         
                         // AND START IT UP AGAIN
                         sceneRenderingPanel.unpauseScene();
-                        updateImageList();
                         updatePoseList();
 //                        posesList = new ArrayList<Pose>();
 //                        String currentSpriteTypeName = singleton.getFileManager().getCurrentSpriteTypeName();
@@ -561,6 +560,11 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         	movePoseDownButton.setEnabled(true);
         	movePoseUpButton.setEnabled(true);
         }
+        
+        poseList.revalidate();
+        poseList.repaint();
+        zoomableCanvas.revalidate();
+        zoomableCanvas.repaint();
         
         
     }
@@ -719,14 +723,14 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         poseList.repaint();
     }
     
-    /**
-     * This method update the image list of the sprite type.
-     */
-    public void updateImageList()
-    {
-    	AnimatedSpriteEditorIO editorIO= AnimatedSpriteEditor.getEditor().getFileManager().getEditorIO();
-    	editorIO.loadImageList(AnimatedSpriteEditor.getEditor().getSpriteTypeName());
-    }
+//    /**
+//     * This method update the image list of the sprite type.
+//     */
+//    public void updateImageList()
+//    {
+//    	AnimatedSpriteEditorIO editorIO= AnimatedSpriteEditor.getEditor().getFileManager().getEditorIO();
+//    	editorIO.loadImageList(AnimatedSpriteEditor.getEditor().getSpriteTypeName());
+//    }
     
     /**
      * This method update the animation state list.
