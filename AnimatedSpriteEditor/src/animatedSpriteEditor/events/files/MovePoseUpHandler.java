@@ -6,18 +6,18 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 /**
- * This class will handler events interact with the 
- * delete button.
+ * This class will handler events interact with the save
+ * as button.
  * @author sixin
  *
  */
-public class DeleteHandler implements ActionListener{
+public class MovePoseUpHandler implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		JOptionPane.showMessageDialog(null,  
-				"The Delete Button is clicked.", 
+				"The Move Pose Up Button is clicked.", 
 				"To the User: ",
 				JOptionPane.OK_OPTION);
 	}

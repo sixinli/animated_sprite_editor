@@ -67,15 +67,19 @@ import animatedSpriteEditor.events.edit.MoveToFrontHandler;
 import animatedSpriteEditor.events.edit.PasteHandler;
 import animatedSpriteEditor.events.edit.StartSelectionHandler;
 import animatedSpriteEditor.events.files.AnimationStateSelectionHandler;
-import animatedSpriteEditor.events.files.DeleteHandler;
+import animatedSpriteEditor.events.files.CopyPoseHandler;
+import animatedSpriteEditor.events.files.CopyStateHandler;
+import animatedSpriteEditor.events.files.DeletePoseHandler;
+import animatedSpriteEditor.events.files.DeleteStateHandler;
 import animatedSpriteEditor.events.files.ExitHandler;
-import animatedSpriteEditor.events.files.ExportPoseHandler;
+import animatedSpriteEditor.events.files.MovePoseDownHandler;
+import animatedSpriteEditor.events.files.MovePoseUpHandler;
 import animatedSpriteEditor.events.files.NewHandler;
 import animatedSpriteEditor.events.files.NewPoseHandler;
 import animatedSpriteEditor.events.files.NewStateHandler;
 import animatedSpriteEditor.events.files.OpenHandler;
 import animatedSpriteEditor.events.files.PoseSelectionHandler;
-import animatedSpriteEditor.events.files.SaveAsHandler;
+import animatedSpriteEditor.events.files.RenameStateHandler;
 import animatedSpriteEditor.events.files.SaveHandler;
 import animatedSpriteEditor.events.files.StateSelectionHandler;
 import animatedSpriteEditor.events.shape.EllipseSelectionHandler;
@@ -147,11 +151,15 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     private JButton newButton;
     private JButton newStateButton;
     private JButton newPoseButton;
-    private JButton deleteButton;
+    private JButton copyStateButton;
+    private JButton copyPoseButton;
+    private JButton renameStateButton;
+    private JButton deleteStateButton;
+    private JButton deletePoseButton;
     private JButton openButton;
+    private JButton movePoseUpButton;
+    private JButton movePoseDownButton;
     private JButton saveButton;
-    private JButton saveAsButton;
-    private JButton exportButton;
     private JButton exitButton;
     
     // EDIT CONTROLS
@@ -425,11 +433,15 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         	setEnabledDisplayControls(false);
         	newStateButton.setEnabled(false);
         	newPoseButton.setEnabled(false);
+        	copyStateButton.setEnabled(false);
+        	copyPoseButton.setEnabled(false);
+        	renameStateButton.setEnabled(false);
         	selectionButton.setEnabled(false);
-        	deleteButton.setEnabled(false);
+        	deleteStateButton.setEnabled(false);
+        	deletePoseButton.setEnabled(false);
         	saveButton.setEnabled(false);
-        	saveAsButton.setEnabled(false);
-        	exportButton.setEnabled(false);
+        	movePoseUpButton.setEnabled(false);
+        	movePoseDownButton.setEnabled(false);
         	
         	
         }
@@ -465,9 +477,9 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         	setEnabledEditControls(false);
         	setEnabledShapeControls(false);
         	setEnabledZoomControls(false);
-        	copyButton.setEnabled(true);
-        	deleteButton.setEnabled(true);
-        	saveAsButton.setEnabled(true);
+        	copyStateButton.setEnabled(true);
+        	renameStateButton.setEnabled(true);
+        	deleteStateButton.setEnabled(true);
         	newPoseButton.setEnabled(true);
         	setEnabledDisplayControls(true);
         	
@@ -544,8 +556,13 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         }
         
         else if (mode == EditorState.POSEUR_STATE){
-        	
+        	copyPoseButton.setEnabled(true);
+        	deletePoseButton.setEnabled(true);
+        	movePoseDownButton.setEnabled(true);
+        	movePoseUpButton.setEnabled(true);
         }
+        
+        
     }
 
     /**
@@ -558,10 +575,10 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     {
         // WE'LL NEED THESE GUYS
         AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
-        animatedSpriteEditor.state.PoseurStateManager state = singleton.getStateManager().getPoseurStateManager();
-        animatedSpriteEditor.state.PoseurState mode = state.getMode();
+        PoseurStateManager state = singleton.getStateManager().getPoseurStateManager();
+        PoseurState mode = state.getMode();
         PoseurFileManager fileManager = singleton.getFileManager().getPoseurFileManager();
-
+        
         // IN THIS MODE THE USER IS DRAGGING THE MOUSE TO
         // COMPLETE THE DRAWING OF A SINGLE SHAPE
         if (mode == PoseurState.COMPLETE_SHAPE_STATE)
@@ -597,7 +614,6 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
             
             // THERE IS NO SHAPE SELECTED, SO WE CAN'T
             // USE THE EDIT CONTROLS
-            enableSaveAsAndExport();
             setEnabledEditControls(false);
             selectionButton.setEnabled(false);
             setEnabledColorControls(true);
@@ -812,13 +828,17 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         // FILE CONTROLS
         fileToolbar  = new JToolBar();
         newButton    = (JButton)initButton(NEW_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, NEW_TOOLTIP);
-        newStateButton    = (JButton)initButton(NEW_STATE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, NEW_STATE_TOOLTIP);
-        newPoseButton    = (JButton)initButton(NEW_POSE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, NEW_POSE_TOOLTIP);
-        deleteButton    = (JButton)initButton(DELETE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, DELETE_TOOLTIP);
         openButton   = (JButton)initButton(OPEN_IMAGE_FILE,     fileToolbar,  tracker, idCounter++, JButton.class, null, OPEN_TOOLTIP);
+        newStateButton    = (JButton)initButton(NEW_STATE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, NEW_STATE_TOOLTIP);
+        copyStateButton    = (JButton)initButton(COPY_STATE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, COPY_STATE_TOOLTIP);
+        renameStateButton    = (JButton)initButton(RENAME_STATE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, RENAME_STATE_TOOLTIP);
+        deleteStateButton    = (JButton)initButton(DELETE_STATE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, DELETE_STATE_TOOLTIP);
+        newPoseButton    = (JButton)initButton(NEW_POSE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, NEW_POSE_TOOLTIP);
+        copyPoseButton    = (JButton)initButton(COPY_POSE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, COPY_POSE_TOOLTIP);
+        deletePoseButton    = (JButton)initButton(DELETE_POSE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, DELETE_POSE_TOOLTIP);
+        movePoseUpButton = (JButton)initButton(MOVE_POSE_UP_IMAGE_FILE,  fileToolbar,  tracker, idCounter++, JButton.class, null, MOVE_POSE_UP_TOOLTIP);
+        movePoseDownButton = (JButton)initButton(MOVE_POSE_DOWN_IMAGE_FILE,   fileToolbar,  tracker, idCounter++, JButton.class, null, MOVE_POSE_DOWN_TOOLTIP);
         saveButton   = (JButton)initButton(SAVE_IMAGE_FILE,     fileToolbar,  tracker, idCounter++, JButton.class, null, SAVE_TOOLTIP);
-        saveAsButton = (JButton)initButton(SAVE_AS_IMAGE_FILE,  fileToolbar,  tracker, idCounter++, JButton.class, null, SAVE_AS_TOOLTIP);
-        exportButton = (JButton)initButton(EXPORT_IMAGE_FILE,   fileToolbar,  tracker, idCounter++, JButton.class, null, EXPORT_TOOLTIP);
         exitButton   = (JButton)initButton(EXIT_IMAGE_FILE,     fileToolbar,  tracker, idCounter++, JButton.class, null, EXIT_TOOLTIP);
         
         // EDITING CONTROLS
@@ -926,7 +946,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     
       // THE POSES LIST
         poseList = new JPanel();
-        poseList.setLayout(new FlowLayout());
+        poseList.setLayout(new FlowLayout(FlowLayout.LEFT));
         scrollPane = new JScrollPane(poseList);
         scrollPane.setPreferredSize(new Dimension(1100, 166));
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -1103,16 +1123,24 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         newPoseButton.addActionListener(nph);
         NewStateHandler nsh = new NewStateHandler();
         newStateButton.addActionListener(nsh);
-        DeleteHandler dh = new DeleteHandler();
-        deleteButton.addActionListener(dh);
+        CopyPoseHandler cph = new CopyPoseHandler();
+        copyPoseButton.addActionListener(cph);
+        CopyStateHandler csh = new CopyStateHandler();
+        copyStateButton.addActionListener(csh);
+        RenameStateHandler rsh = new RenameStateHandler();
+        renameStateButton.addActionListener(rsh);
+        DeletePoseHandler dph = new DeletePoseHandler();
+        deletePoseButton.addActionListener(dph);
+        DeleteStateHandler dsh = new DeleteStateHandler();
+        deleteStateButton.addActionListener(dsh);
         OpenHandler oph = new OpenHandler();
         openButton.addActionListener(oph);
         SaveHandler sph = new SaveHandler();
         saveButton.addActionListener(sph);
-        SaveAsHandler sah = new SaveAsHandler();
-        saveAsButton.addActionListener(sah);
-        ExportPoseHandler eph = new ExportPoseHandler();
-        exportButton.addActionListener(eph);
+        MovePoseUpHandler mpuh = new MovePoseUpHandler();
+        movePoseUpButton.addActionListener(mpuh);
+        MovePoseDownHandler mpdh = new MovePoseDownHandler();
+        movePoseDownButton.addActionListener(mpdh);
         ExitHandler eh = new ExitHandler();
         exitButton.addActionListener(eh);
         
@@ -1131,8 +1159,8 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         moveToBackButton.addActionListener(mtbEh);
         
         // SHAPE SELECTION HANDLERS
-        RectangleSelectionHandler rsh = new RectangleSelectionHandler();
-        rectToggleButton.addActionListener(rsh);
+        RectangleSelectionHandler rslh = new RectangleSelectionHandler();
+        rectToggleButton.addActionListener(rslh);
         EllipseSelectionHandler ssh = new EllipseSelectionHandler();
         ellipseToggleButton.addActionListener(ssh);
         LineSelectionHandler lsh = new LineSelectionHandler();
@@ -1152,8 +1180,8 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         outlineColorSelectionButton.addActionListener(acal);
         FillColorHandler fcal = new FillColorHandler();
         fillColorSelectionButton.addActionListener(fcal);
-        ColorPalletHandler cph = new ColorPalletHandler();
-        colorPallet.registerColorPalletHandler(cph);
+        ColorPalletHandler cplh = new ColorPalletHandler();
+        colorPallet.registerColorPalletHandler(cplh);
         TransparencyHandler tph = new TransparencyHandler();
         transparencySlider.addChangeListener(tph);
         CustomColorHandler cch = new CustomColorHandler();
@@ -1203,19 +1231,9 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         
         // THESE BUTTONS START OFF AS DISABLED
         saveButton.setEnabled(false);
-        saveAsButton.setEnabled(false);
-        exportButton.setEnabled(false);
-    }
-    
-    /**
-     * Enable the save as and export image buttons.
-     */
-    private void enableSaveAsAndExport()
-    {
-    	// THESE ARE ENABLED AS SOON AS WE START EDITING
-        saveAsButton.setEnabled(true);
-        exportButton.setEnabled(true);
-    }    
+        movePoseUpButton.setEnabled(false);
+        movePoseDownButton.setEnabled(false);
+    }  
     
     /**
      * Enable/Dis enable the edit tool bar.

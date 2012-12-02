@@ -67,7 +67,13 @@ public class AnimatedSpriteEditorSettings
     public static final String NEW_IMAGE_FILE = BUTTON_IMAGES_PATH + "New.png";
     public static final String NEW_POSE_IMAGE_FILE = BUTTON_IMAGES_PATH + "NewPose.png";
     public static final String NEW_STATE_IMAGE_FILE = BUTTON_IMAGES_PATH + "NewState.png";
-    public static final String DELETE_IMAGE_FILE = BUTTON_IMAGES_PATH + "Delete.png";
+    public static final String DELETE_POSE_IMAGE_FILE = BUTTON_IMAGES_PATH + "DeletePose.png";
+    public static final String DELETE_STATE_IMAGE_FILE = BUTTON_IMAGES_PATH + "DeleteState.png";
+    public static final String COPY_POSE_IMAGE_FILE = BUTTON_IMAGES_PATH + "CopyPose.png";
+    public static final String COPY_STATE_IMAGE_FILE = BUTTON_IMAGES_PATH + "CopyState.png";
+    public static final String RENAME_STATE_IMAGE_FILE = BUTTON_IMAGES_PATH + "RenameState.png";
+    public static final String MOVE_POSE_UP_IMAGE_FILE = BUTTON_IMAGES_PATH + "MovePoseUp.png";
+    public static final String MOVE_POSE_DOWN_IMAGE_FILE = BUTTON_IMAGES_PATH + "MovePoseDown.png";
     public static final String OPEN_IMAGE_FILE = BUTTON_IMAGES_PATH + "Open.png";
     public static final String SAVE_IMAGE_FILE = BUTTON_IMAGES_PATH + "Save.png";
     public static final String SAVE_AS_IMAGE_FILE = BUTTON_IMAGES_PATH + "SaveAs.png";
@@ -117,7 +123,14 @@ public class AnimatedSpriteEditorSettings
     public static final String NEW_TOOLTIP = "New Sprite Type";
     public static final String NEW_POSE_TOOLTIP = "New Pose";
     public static final String NEW_STATE_TOOLTIP = "New State";
-    public static final String DELETE_TOOLTIP = "Delete";
+    public static final String DELETE_POSE_TOOLTIP = "Delete Pose";
+    public static final String DELETE_STATE_TOOLTIP = "Delete State";
+    public static final String COPY_POSE_TOOLTIP = "Copy Pose";
+    public static final String COPY_STATE_TOOLTIP = "Copy State";
+    public static final String RENAME_STATE_TOOLTIP = "Rename State";
+    public static final String MOVE_POSE_UP_TOOLTIP = "Move Pose Up";
+    public static final String MOVE_POSE_DOWN_TOOLTIP = "Move Pose Down";    
+
     public static final String OPEN_TOOLTIP = "Open Sprite Type";
     public static final String SAVE_TOOLTIP = "Save";
     public static final String SAVE_AS_TOOLTIP = "Save As";

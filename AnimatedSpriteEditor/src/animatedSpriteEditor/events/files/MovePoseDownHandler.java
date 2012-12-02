@@ -11,13 +11,13 @@ import javax.swing.JOptionPane;
  * @author sixin
  *
  */
-public class ExportPoseHandler implements ActionListener{
+public class MovePoseDownHandler implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		JOptionPane.showMessageDialog(null,  
-				"The Export Pose Button is clicked.", 
+				"The Move Pose Down Button is clicked.", 
 				"To the User: ",
 				JOptionPane.OK_OPTION);
 	}
