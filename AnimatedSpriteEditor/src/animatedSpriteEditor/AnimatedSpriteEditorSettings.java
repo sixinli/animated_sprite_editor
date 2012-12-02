@@ -266,10 +266,14 @@ public class AnimatedSpriteEditorSettings
     public static final String SPRITE_TYPE_SAVED_TITLE_TEXT = "Sprite Type File Saved";
     public static final String SPRITE_TYPE_SAVING_ERROR_TEXT = "An Error Occured While Saving the Sprite Type";
     public static final String SPRITE_TYPE_SAVING_ERROR_TITLE_TEXT = "Sprite Type Saving Error";
+    public static final String SPRITE_TYPE_NAME_ERROR_TEXT = "The entered sprite type name is not valid.";
+    public static final String SPRITE_TYPE_NAME_ERROR_TITLE_TEXT = "Sprite Type Name Input Error";    
     public static final String ANIMATION_STATE_SAVED_TEXT = "Animation State File has been Saved";
     public static final String ANIMATION_STATE_SAVED_TITLE_TEXT = "Animation State File Saved";
     public static final String ANIMATION_STATE_SAVING_ERROR_TEXT = "An Error Occured While Saving the Animation State";
     public static final String ANIMATION_STATE_SAVING_ERROR_TITLE_TEXT = "Animation State Saving Error";
+    public static final String ANIMATION_STATE_NAME_ERROR_TEXT = "The input animation name is not valid.";
+    public static final String ANIMATION_STATE_NAME_ERROR_TITLE_TEXT = "Animation Name Input Error";	
     public static final String IMAGE_EXPORTED_TEXT = "Your pose has been exportetd to ";
     public static final String IMAGE_EXPORTED_TITLE_TEXT = "Image Exported";
     public static final String IMAGE_EXPORTING_ERROR_TEXT = "An Error Occured While Exporting the Image";
@@ -282,6 +286,10 @@ public class AnimatedSpriteEditorSettings
     public static final String POSE_LOADED_TITLE_TEXT = "Pose File Loaded";
     public static final String POSE_LOADING_ERROR_TEXT = "An Error Occured While Loading the Pose";
     public static final String POSE_LOADING_ERROR_TITLE_TEXT = "Pose Loading Error";
+    public static final String POSE_DURATION_INPUT_ERROR_TEXT = "The input duration is not valid.";
+    public static final String POSE_DURATION_INPUT_ERROR_TITLE_TEXT = "Pose Duration Input Error";
+    public static final String POSE_NAME_INPUT_ERROR_TEXT = "The entered pose name is not valid.";
+    public static final String POSE_NAME_INPUT_ERROR_TITLE_TEXT = "Pose Name Input Error";
     public static final String CHANGE_POSE_DIMENSIONS_TEXT = "Enter New Pose Dimensions";
     public static final String CHANGE_POSE_DIMENSIONS_TITLE_TEXT = "Change Pose Dimensions";
     public static final String ENTER_POSE_WIDTH_TEXT = "Enter Pose Width: ";

@@ -20,7 +20,6 @@ public class NewPoseHandler implements ActionListener{
 		// TODO Auto-generated method stub
 		AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
 		singleton.getFileManager().getPoseurFileManager().requestNewPose();
-		singleton.getStateManager().setState(EditorState.POSEUR_STATE);
 	}
 
 }

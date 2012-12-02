@@ -19,16 +19,20 @@ public class PoseSelectionHandler implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		String poseFileName = AnimatedSpriteEditor.getEditor().getPoseFileNames().get(Integer.parseInt(e.getActionCommand()));
-		JOptionPane.showMessageDialog(null,
-										"Pose Image" + e.getActionCommand() + " is clicked " + poseFileName, 
-										"To the user: ",
-										JOptionPane.OK_OPTION);
-		
 		AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
-		singleton.getFileManager().getPoseurFileManager().setPoseID(Integer.parseInt(e.getActionCommand()));
-		singleton.getStateManager().setState(EditorState.POSEUR_STATE);
-		singleton.getFileManager().getEditorIO().getPoseIO().loadPose(poseFileName);
-		singleton.getFileManager().getPoseurFileManager().setCurrentFile(poseFileName);
+		boolean continueToChoosePose = true;
+		if(!singleton.getFileManager().getPoseurFileManager().isSaved())
+		{
+			continueToChoosePose = singleton.getFileManager().getPoseurFileManager().promptToSave();
+		}
+		
+		if(continueToChoosePose)
+		{
+			String poseFileName = singleton.getPoseFileNames().get(Integer.parseInt(e.getActionCommand()));	
+			singleton.getFileManager().getPoseurFileManager().setPoseID(Integer.parseInt(e.getActionCommand()));
+			singleton.getStateManager().setState(EditorState.POSEUR_STATE);
+			singleton.getFileManager().getEditorIO().getPoseIO().loadPose(poseFileName);
+			singleton.getFileManager().getPoseurFileManager().setCurrentFile(poseFileName);
+		}
 	}
 }
