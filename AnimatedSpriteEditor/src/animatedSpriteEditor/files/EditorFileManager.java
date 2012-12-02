@@ -218,10 +218,10 @@ public class EditorFileManager
     {
         // WE MAY HAVE TO SAVE CURRENT WORK
         boolean continueToExit = true;
-        if (!saved)
+        if (!poseurFileManager.isSaved())
         {
             // THE USER CAN OPT OUT HERE
-            continueToExit = promptToSave();
+            continueToExit = poseurFileManager.promptToSave();
         }
         
         // IF THE USER REALLY WANTS TO EXIT THE APP

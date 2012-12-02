@@ -418,6 +418,20 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         if (mode == EditorState.SPRITE_TYPE_STATE)
         {
         	stateComboBox.setEnabled(false);
+        	setEnabledColorControls(false);
+        	setEnabledEditControls(false);
+        	setEnabledShapeControls(false);
+        	setEnabledZoomControls(false);
+        	setEnabledDisplayControls(false);
+        	newStateButton.setEnabled(false);
+        	newPoseButton.setEnabled(false);
+        	selectionButton.setEnabled(false);
+        	deleteButton.setEnabled(false);
+        	saveButton.setEnabled(false);
+        	saveAsButton.setEnabled(false);
+        	exportButton.setEnabled(false);
+        	
+        	
         }
         
         else if (mode == EditorState.SELECT_ANIMATION_STATE)
@@ -436,6 +450,9 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
 //            		stateComboBoxModel.addElement(animState);
 //            	}
 //            }
+        	newStateButton.setEnabled(true);
+        	
+        	
         	updateAnimationStatesList();
             zoomableCanvas.revalidate();
             zoomableCanvas.repaint();
@@ -444,6 +461,16 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         
         else if (mode == EditorState.SELECT_POSE_STATE)
         {
+        	setEnabledColorControls(false);
+        	setEnabledEditControls(false);
+        	setEnabledShapeControls(false);
+        	setEnabledZoomControls(false);
+        	copyButton.setEnabled(true);
+        	deleteButton.setEnabled(true);
+        	saveAsButton.setEnabled(true);
+        	newPoseButton.setEnabled(true);
+        	setEnabledDisplayControls(true);
+        	
                 // WHICH ONE IS NOW SELECTED?
                 Object selectedItem = stateComboBox.getSelectedItem();
                 
@@ -1255,6 +1282,18 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         {
             shapeButtonGroup.clearSelection();
         }
+    }
+    
+    /**
+     * Enable/Dis enable the display controls
+     * @param isEnabled  whether if the display controls are enabled
+     */
+    private void setEnabledDisplayControls(boolean isEnabled)
+    {
+    	startButton.setEnabled(isEnabled);
+    	stopButton.setEnabled(isEnabled);
+    	speedUpButton.setEnabled(isEnabled);
+    	slowDownButton.setEnabled(isEnabled);
     }
     
     /**
