@@ -462,10 +462,31 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
 //            		stateComboBoxModel.addElement(animState);
 //            	}
 //            }
-        	newStateButton.setEnabled(true);
         	
+        	setEnabledColorControls(false);
+        	setEnabledEditControls(false);
+        	setEnabledShapeControls(false);
+        	setEnabledZoomControls(false);
+        	setEnabledDisplayControls(false);
+        	newStateButton.setEnabled(true);
+        	newPoseButton.setEnabled(false);
+        	copyStateButton.setEnabled(false);
+        	copyPoseButton.setEnabled(false);
+        	renameStateButton.setEnabled(false);
+        	selectionButton.setEnabled(false);
+        	deleteStateButton.setEnabled(false);
+        	deletePoseButton.setEnabled(false);
+        	saveButton.setEnabled(false);
+        	movePoseUpButton.setEnabled(false);
+        	movePoseDownButton.setEnabled(false);
         	
         	updateAnimationStatesList();
+        	
+        	singleton.getFileManager().getPoseurFileManager().setCurrentFile(null);
+        	PoseurPose tempPose = new PoseurPose(DEFAULT_POSE_WIDTH, DEFAULT_POSE_HEIGHT);
+            PoseurStateManager stateManager = singleton.getStateManager().getPoseurStateManager();
+            PoseurPose actualPose = stateManager.getPose();
+            actualPose.loadPoseData(tempPose);  
             zoomableCanvas.revalidate();
             zoomableCanvas.repaint();
             singleton.getFileManager().getEditorIO().loadImageList(singleton.getSpriteTypeName());
