@@ -89,6 +89,7 @@ import animatedSpriteEditor.events.zoom.ZoomOutHandler;
 
 
 import animatedSpriteEditor.AnimatedSpriteEditor;
+import animatedSpriteEditor.files.AnimatedSpriteEditorIO;
 import animatedSpriteEditor.files.ColorPalletLoader;
 import animatedSpriteEditor.files.InvalidXMLFileFormatException;
 import animatedSpriteEditor.files.PoseurFileManager;
@@ -421,21 +422,23 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         
         else if (mode == EditorState.SELECT_ANIMATION_STATE)
         {
-        	poseList.removeAll();
-            // NOW LOAD THE ANIMATIONS FOR THE NEWLY SELECTED SPRITE TYPE
-            if(singleton.getSpriteType() != null && singleton.getSpriteType().getAnimationStates()!=null)
-            {
-            	clearStateComboBox();
-            	spriteList.clear();
-                stateComboBox.setEnabled(true);
-            	Iterator<AnimationState> it  = singleton.getSpriteType().getAnimationStates();
-            	while(it.hasNext())
-            	{
-            		AnimationState animState = it.next();
-            		stateComboBoxModel.addElement(animState);
-            	}
-            }
-      
+//        	poseList.removeAll();
+//            // NOW LOAD THE ANIMATIONS FOR THE NEWLY SELECTED SPRITE TYPE
+//            if(singleton.getSpriteType() != null && singleton.getSpriteType().getAnimationStates()!=null)
+//            {
+//            	clearStateComboBox();
+//            	spriteList.clear();
+//                stateComboBox.setEnabled(true);
+//            	Iterator<AnimationState> it  = singleton.getSpriteType().getAnimationStates();
+//            	while(it.hasNext())
+//            	{
+//            		AnimationState animState = it.next();
+//            		stateComboBoxModel.addElement(animState);
+//            	}
+//            }
+        	updateAnimationStatesList();
+            zoomableCanvas.revalidate();
+            zoomableCanvas.repaint();
             singleton.getFileManager().getEditorIO().loadImageList(singleton.getSpriteTypeName());
         }
         
@@ -469,8 +472,8 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
                         // PUT THE SPRITE IN THE MIDDLE OF THE PANEL
                         int rendererWidth = sceneRenderingPanel.getWidth();
                         int rendererHeight = sceneRenderingPanel.getHeight();
-                        int x = (rendererWidth/2) - (singleton.getSpriteType().getWidth()/2);
-                        int y = (rendererHeight/2) - (singleton.getSpriteType().getHeight()/2);
+                        int x = (rendererWidth/2) - (singleton.getSpriteType().getWidth()/2) -64;
+                        int y = (rendererHeight/2) - (singleton.getSpriteType().getHeight()/2) -64;
                         spriteToAnimate.setPositionX(x);
                         spriteToAnimate.setPositionY(y);
                         
@@ -479,26 +482,27 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
                         
                         // AND START IT UP AGAIN
                         sceneRenderingPanel.unpauseScene();
-                        
-                        posesList = new ArrayList<Pose>();
-                        String currentSpriteTypeName = singleton.getFileManager().getCurrentSpriteTypeName();
-                        singleton.getFileManager().getEditorIO().loadPoseList(currentSpriteTypeName, selectedState.toString(), posesList);
-                        PoseSelectionHandler psh = new PoseSelectionHandler();
-                        poseList.removeAll();
-                        for(int i = 0; i<posesList.size(); i++)
-                    	{
-                            Image currentPoseImage = singleton.getSpriteType().getSpriteImages().get(posesList.get(i).getImageID()); 
-                            currentPoseImage = singleton.getFileManager().createResizedCopy(currentPoseImage, 128, 128, false);
-                            ImageIcon currentPoseIcon = new ImageIcon(currentPoseImage);
-                            JButton currentPoseButton = new JButton();
-                            currentPoseButton.setSize(128, 128);
-                            currentPoseButton.addActionListener(psh);
-                            currentPoseButton.setActionCommand("" + posesList.get(i).getImageID());
-                            currentPoseButton.setIcon(currentPoseIcon);
-                            poseList.add(currentPoseButton);
-                            
-                    	}
-                        poseList.revalidate();
+                        updateImageList();
+                        updatePoseList();
+//                        posesList = new ArrayList<Pose>();
+//                        String currentSpriteTypeName = singleton.getFileManager().getCurrentSpriteTypeName();
+//                        singleton.getFileManager().getEditorIO().loadPoseList(currentSpriteTypeName, selectedState.toString(), posesList);
+//                        PoseSelectionHandler psh = new PoseSelectionHandler();
+//                        poseList.removeAll();
+//                        for(int i = 0; i<posesList.size(); i++)
+//                    	{
+//                            Image currentPoseImage = singleton.getSpriteType().getSpriteImages().get(posesList.get(i).getImageID()); 
+//                            currentPoseImage = singleton.getFileManager().createResizedCopy(currentPoseImage, 128, 128, false);
+//                            ImageIcon currentPoseIcon = new ImageIcon(currentPoseImage);
+//                            JButton currentPoseButton = new JButton();
+//                            currentPoseButton.setSize(128, 128);
+//                            currentPoseButton.addActionListener(psh);
+//                            currentPoseButton.setActionCommand("" + posesList.get(i).getImageID());
+//                            currentPoseButton.setIcon(currentPoseIcon);
+//                            poseList.add(currentPoseButton);
+//                            
+//                    	}
+//                        poseList.revalidate();
                     
                         singleton.getFileManager().getPoseurFileManager().setCurrentFile(null);
                         PoseurPose tempPose = new PoseurPose(DEFAULT_POSE_WIDTH, DEFAULT_POSE_HEIGHT);
@@ -641,6 +645,67 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         // AND PUT IT IN THE LABEL
         zoomLabel.setText(zoomText);
     }   
+    
+    /**
+     * This method update the pose list of the animation state.
+     */
+    public void updatePoseList()
+    {
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+    	AnimationState selectedState = (AnimationState)stateComboBox.getSelectedItem();
+    	posesList = new ArrayList<Pose>();
+        String currentSpriteTypeName = singleton.getFileManager().getCurrentSpriteTypeName();
+        singleton.getFileManager().getEditorIO().loadPoseList(currentSpriteTypeName, selectedState.toString(), posesList);
+        PoseSelectionHandler psh = new PoseSelectionHandler();
+    	poseList.removeAll();
+        for(int i = 0; i<posesList.size(); i++)
+    	{
+            Image currentPoseImage = singleton.getSpriteType().getSpriteImages().get(posesList.get(i).getImageID()); 
+            currentPoseImage = singleton.getFileManager().createResizedCopy(currentPoseImage, 128, 128, false);
+            ImageIcon currentPoseIcon = new ImageIcon(currentPoseImage);
+            JButton currentPoseButton = new JButton();
+            currentPoseButton.setSize(128, 128);
+            currentPoseButton.addActionListener(psh);
+            currentPoseButton.setActionCommand("" + posesList.get(i).getImageID());
+            currentPoseButton.setIcon(currentPoseIcon);
+            poseList.add(currentPoseButton);
+            
+    	}
+  
+        poseList.revalidate();
+        poseList.repaint();
+    }
+    
+    /**
+     * This method update the image list of the sprite type.
+     */
+    public void updateImageList()
+    {
+    	AnimatedSpriteEditorIO editorIO= AnimatedSpriteEditor.getEditor().getFileManager().getEditorIO();
+    	editorIO.loadImageList(AnimatedSpriteEditor.getEditor().getSpriteTypeName());
+    }
+    
+    /**
+     * This method update the animation state list.
+     */
+    public void updateAnimationStatesList()
+    {
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+    	poseList.removeAll();
+        // NOW LOAD THE ANIMATIONS FOR THE NEWLY SELECTED SPRITE TYPE
+        if(singleton.getSpriteType() != null && singleton.getSpriteType().getAnimationStates()!=null)
+        {
+        	clearStateComboBox();
+        	spriteList.clear();
+            stateComboBox.setEnabled(true);
+        	Iterator<AnimationState> it  = singleton.getSpriteType().getAnimationStates();
+        	while(it.hasNext())
+        	{
+        		AnimationState animState = it.next();
+        		stateComboBoxModel.addElement(animState);
+        	}
+        }
+    }
     
     /**
      * This helper method empties the combo box with animations

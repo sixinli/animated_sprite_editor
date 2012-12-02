@@ -114,7 +114,7 @@ public class EditorFileManager
             {
                 // NOW THAT WE'VE SAVED, LET'S MAKE SURE WE'RE IN THE RIGHT MODE
                 EditorStateManager stateManager = AnimatedSpriteEditor.getEditor().getStateManager();
-                stateManager.setState(EditorState.SELECT_ANIMATION_STATE);
+                stateManager.setState(EditorState.POSEUR_STATE);
             }
         }
     }
@@ -439,7 +439,6 @@ public class EditorFileManager
     		int scaledWidth, int scaledHeight, 
     		boolean preserveAlpha)
     {
-    	System.out.println("resizing...");
     	int imageType = preserveAlpha ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
     	BufferedImage scaledBI = new BufferedImage(scaledWidth, scaledHeight, imageType);
     	Graphics2D g = scaledBI.createGraphics();
