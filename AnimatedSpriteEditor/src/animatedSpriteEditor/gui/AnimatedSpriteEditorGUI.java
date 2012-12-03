@@ -306,10 +306,16 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     public MediaTracker getMediaTracker(){ return tracker;}
     
     /**
-     * Accessor Method to the sprite list.
+     * Accessor method to the sprite list.
      * @return the sprite list
      */
     public ArrayList<Sprite> getSpriteList(){ return spriteList;}
+    
+    /**
+     * Accessor method to the state combobox.
+     * @return the state combo box
+     */
+    public JComboBox getStateComboBox(){ return stateComboBox;}
     
     /**
      * Accessor method to test if the outline color toggle button
@@ -573,6 +579,8 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
                     }
                 }       
             }
+            updatePoseList();
+
         }
         
         else if (mode == EditorState.POSEUR_STATE){

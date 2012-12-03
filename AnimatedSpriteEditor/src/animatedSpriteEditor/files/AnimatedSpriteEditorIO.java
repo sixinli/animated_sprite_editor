@@ -52,6 +52,7 @@ import animatedSpriteEditor.AnimatedSpriteEditor;
 import static animatedSpriteEditor.AnimatedSpriteEditorSettings.*;
 import animatedSpriteEditor.gui.AnimatedSpriteEditorGUI;
 import animatedSpriteEditor.state.EditorState;
+import animatedSpriteEditor.state.EditorStateManager;
 
 
 /**
@@ -325,9 +326,69 @@ public class AnimatedSpriteEditorIO
         }
     }
     
-    public void loadAnimationState(String animationStateFileName)
+    public boolean copyAnimationState(String newAnimationStateName)
     {
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+    	String spriteTypeName = singleton.getSpriteTypeName();
     	
+    	String spriteTypeXMLFile = SPRITE_TYPE_PATH + spriteTypeName + "/" 
+				+ spriteTypeName + XML_FILE_EXTENSION;
+    	// FIRST RETRIEVE AND LOAD THE FILE INTO A TREE
+
+        File currentSpriteTypeFile = new File(spriteTypeXMLFile);
+        
+        try {
+        	DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+			Document doc = docBuilder.parse(currentSpriteTypeFile);
+			
+			Node animationListNode = doc.getElementsByTagName(ANIMATIONS_LIST_NODE).item(0);
+			NodeList animationStates = animationListNode.getChildNodes();
+			 
+			NodeList imageNodes = doc.getElementsByTagName(IMAGES_LIST_NODE);
+			int imageCount = imageNodes.getLength()/2;
+hgghghfghhjkh			
+			
+			int len = animationStates.getLength();
+			String currentAnimationStateName = singleton.getAnimationStateName();
+			Node currentStateNode;
+			for(int i=0; i<len; i++)
+			{
+				if(animationStates.item(i).getTextContent().equals(currentAnimationStateName))
+				{
+					currentStateNode = animationStates.item(i);
+					break;
+				}
+			}
+			
+			Element animationStateNode = doc.createElement(ANIMATION_STATE_NODE);
+			Element stateNode = doc.createElement(STATE_NODE);
+			stateNode.setTextContent(newAnimationStateName);
+			
+			Element animationSequenceNode = doc.createElement(ANIMATION_SEQUENCE_NODE);
+			animationStateNode.appendChild(stateNode);
+			animationStateNode.appendChild(animationSequenceNode);
+			animationListNode.appendChild(animationStateNode);
+			
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, YES_VALUE);
+            transformer.setOutputProperty(XML_INDENT_PROPERTY, XML_INDENT_VALUE);
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(currentSpriteTypeFile);
+            return true;
+        	}
+            catch(TransformerException | ParserConfigurationException | DOMException | HeadlessException ex)
+            {
+                // SOMETHING WENT WRONG WRITING THE XML FILE
+            	AnimatedSpriteEditorGUI gui = singleton.getGUI();
+                JOptionPane.showMessageDialog(
+                    gui,
+                    SPRITE_TYPE_SAVING_ERROR_TEXT,
+                    SPRITE_TYPE_SAVING_ERROR_TITLE_TEXT,
+                    JOptionPane.ERROR_MESSAGE);  
+                return false;
+            }
     }
     
     public boolean saveAnimationState(String spriteTypeName, String animationStateName)
@@ -337,7 +398,7 @@ public class AnimatedSpriteEditorIO
     	String spriteTypeXMLFile = SPRITE_TYPE_PATH + spriteTypeName + "/" 
 				+ spriteTypeName + XML_FILE_EXTENSION;
     	// FIRST RETRIEVE AND LOAD THE FILE INTO A TREE
-
+    	
         File currentSpriteTypeFile = new File(spriteTypeXMLFile);
         
         try {
@@ -374,13 +435,7 @@ public class AnimatedSpriteEditorIO
 	                ANIMATION_STATE_SAVING_ERROR_TITLE_TEXT,
 	                JOptionPane.ERROR_MESSAGE);  
 	            return false;
-			}
-			
-    
- 
-
-        
-        
+			}      
         AnimatedSpriteEditorGUI gui = singleton.getGUI();
         JOptionPane.showMessageDialog(
                 gui,
@@ -389,8 +444,68 @@ public class AnimatedSpriteEditorIO
                 JOptionPane.INFORMATION_MESSAGE);
             
         singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
-        return true;
-       
+        return true; 
+    }
+    
+    public boolean renameAnimationState(String spriteTypeName, String newStateName)
+    {
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+        EditorStateManager editorStateManager = singleton.getStateManager();
+
+    	
+    	String spriteTypeXMLFile = SPRITE_TYPE_PATH + spriteTypeName + "/" 
+				+ spriteTypeName + XML_FILE_EXTENSION;
+    	
+    	String currentStateName = singleton.getAnimationStateName();
+        File currentSpriteTypeFile = new File(spriteTypeXMLFile);
+        
+        try {
+        	DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+			Document doc = docBuilder.parse(currentSpriteTypeFile);
+			
+			NodeList stateNodes = doc.getElementsByTagName(STATE_NODE);
+			int len = stateNodes.getLength();
+			for(int i=0; i<len; i++)
+			{	
+				Node stateNode = stateNodes.item(i);
+			
+				if (stateNode.getTextContent().equals(currentStateName))
+				{
+					stateNode.setTextContent(newStateName);
+					
+					TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		            Transformer transformer = transformerFactory.newTransformer();
+		            transformer.setOutputProperty(OutputKeys.INDENT, YES_VALUE);
+		            transformer.setOutputProperty(XML_INDENT_PROPERTY, XML_INDENT_VALUE);
+		            DOMSource source = new DOMSource(doc);
+		            StreamResult result = new StreamResult(currentSpriteTypeFile);
+		            
+		            // SAVE THE POSE TO AN XML FILE
+		            transformer.transform(source, result); 
+		            
+		            AnimatedSpriteEditorGUI gui = singleton.getGUI();
+		            JOptionPane.showMessageDialog(
+		                    gui,
+		                    ANIMATION_STATE_SAVED_TEXT,
+		                    ANIMATION_STATE_SAVED_TITLE_TEXT,
+		                    JOptionPane.INFORMATION_MESSAGE);
+		            
+		            return true; 
+				}
+			}
+		} catch (SAXException | IOException | ParserConfigurationException | TransformerException e) 
+		{
+			// TODO Auto-generated catch block
+			AnimatedSpriteEditorGUI gui = singleton.getGUI();
+	        JOptionPane.showMessageDialog(
+	                gui,
+	                ANIMATION_STATE_SAVING_ERROR_TEXT,
+	                ANIMATION_STATE_SAVING_ERROR_TITLE_TEXT,
+	                JOptionPane.ERROR_MESSAGE);  
+	         return false;
+		}      
+    	return false;
     }
     
 

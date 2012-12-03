@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Iterator;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -120,42 +122,6 @@ public class EditorFileManager
     }
     
     /**
-     * This method starts the process of editing a new state. If
-     * a pose is already being edited, it will prompt the user
-     * to save it first.
-     */
-    public void requestNewState()
-    {
-    	// WE MAY HAVE TO SAVE CURRENT WORK
-        boolean continueToMakeNew = true;
-        if (!saved)
-        {
-            // THE USER CAN OPT OUT HERE WITH A CANCEL
-            continueToMakeNew = promptToSave();
-        }
-        
-        if (!poseurFileManager.isSaved())
-        {
-        	continueToMakeNew = poseurFileManager.promptToSave();
-        }
-        
-        // IF THE USER REALLY WANTS TO MAKE A NEW POSE
-        if (continueToMakeNew)
-        {
-            // GO AHEAD AND PROCEED MAKING A NEW POSE
-            continueToMakeNew = promptForNewState();
-            
-            if(continueToMakeNew)
-            {
-            	// NOW THAT WE'VE SAVED, LET'S MAKE SURE WE'RE IN THE RIGHT MODE
-            	EditorStateManager stateManager = AnimatedSpriteEditor.getEditor().getStateManager();
-            	stateManager.setState(EditorState.SELECT_POSE_STATE);
-            }
-        }   
-        
-    }
-    
-    /**
      * This method lets the user open a spriteType saved
      * to a file. It will also make sure data for the
      * current pose is not lost.
@@ -185,32 +151,152 @@ public class EditorFileManager
     }
     
     /**
-     * This method lets the user open a state saved
-     * to a file. It will also make sure data for the
-     * current pose is not lost.
-     */
-    public void requestOpenState()
-    {
-   
-    }
+	 * This method starts the process of editing a new state. If
+	 * a pose is already being edited, it will prompt the user
+	 * to save it first.
+	 */
+	public void requestNewState()
+	{
+		// WE MAY HAVE TO SAVE CURRENT WORK
+	    boolean continueToMakeNew = true;
+	    if (!saved)
+	    {
+	        // THE USER CAN OPT OUT HERE WITH A CANCEL
+	        continueToMakeNew = promptToSave();
+	    }
+	    
+	    if (!poseurFileManager.isSaved())
+	    {
+	    	continueToMakeNew = poseurFileManager.promptToSave();
+	    }
+	    
+	    // IF THE USER REALLY WANTS TO MAKE A NEW POSE
+	    if (continueToMakeNew)
+	    {
+	        // GO AHEAD AND PROCEED MAKING A NEW POSE
+	        continueToMakeNew = promptForNewState();
+	        
+	        if(continueToMakeNew)
+	        {
+	        	// NOW THAT WE'VE SAVED, LET'S MAKE SURE WE'RE IN THE RIGHT MODE
+	        	EditorStateManager stateManager = AnimatedSpriteEditor.getEditor().getStateManager();
+	        	stateManager.setState(EditorState.SELECT_POSE_STATE);
+	        }
+	    }   
+	    
+	}
     
     /**
      * This method lets the user to duplicate an 
-     * animation state or a pose
+     * animation state 
      */
-    public void requestDuplicate()
+    public boolean requestCopyState()
     {
-    	
-    	
+    	// SO NOW ASK THE USER FOR AN ANIMATION STATE NAME
+        AnimatedSpriteEditorGUI gui = AnimatedSpriteEditor.getEditor().getGUI();
+        String stateName = JOptionPane.showInputDialog(
+                gui,
+                ANIMATION_STATE_NAME_REQUEST_TEXT,
+                ANIMATION_STATE_NAME_REQUEST_TITLE_TEXT,
+                JOptionPane.QUESTION_MESSAGE);
+        
+        // IF THE USER CANCELLED, THEN WE'LL GET A fileName
+        // OF NULL, SO LET'S MAKE SURE THE USER REALLY
+        // WANTS TO DO THIS ACTION BEFORE MOVING ON
+        if ((stateName != null)
+                &&
+            (stateName.length() > 0))
+        {
+        	boolean validInput = false;
+        	AnimationState[] states = AnimationState.values();
+        	for(int i=0; i<states.length; i++)
+        	{
+        		if(states[i].name().equals(stateName))
+        			validInput = true;
+        	}
+            if(validInput)
+            {
+            	// UPDATE THE FILE NAMES AND FILE
+            	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+            	editorIO.copyAnimationState(stateName);
+            	currentAnimationStateName = stateName;
+            	singleton.setAnimationState((AnimationState.valueOf(stateName)));
+            	singleton.getGUI().updateAnimationStatesList();
+            	singleton.getGUI().updatePoseList();
+            	singleton.getStateManager().setState(EditorState.SELECT_POSE_STATE);
+            	return true;
+            }
+            
+            JOptionPane.showMessageDialog(
+                        gui,
+                        ANIMATION_STATE_NAME_ERROR_TEXT,
+                        ANIMATION_STATE_NAME_ERROR_TITLE_TEXT,
+                        JOptionPane.ERROR_MESSAGE);
+            	return false;
+            
+        }
+    	return false;
     }
     
     /**
      * This method lets the user to delete an
-     * animation state or a pose
+     * animation state 
      */
-    public void requestDelete(){
+    public void requestDeleteState(){
     	
     	
+    }
+    
+    /**
+     * This method lets the user to rename an
+     * animation state 
+     */
+    public boolean requestRenameState(){
+    	// SO NOW ASK THE USER FOR AN ANIMATION STATE NAME
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+        AnimatedSpriteEditorGUI gui = singleton.getGUI();
+
+        String stateName = JOptionPane.showInputDialog(
+                gui,
+                ANIMATION_STATE_NAME_REQUEST_TEXT,
+                ANIMATION_STATE_NAME_REQUEST_TITLE_TEXT,
+                JOptionPane.QUESTION_MESSAGE);
+        if( (stateName!=null) && (stateName.length()>0))
+        {
+        	boolean validInput = false;
+        	AnimationState[] states = AnimationState.values();
+        	for(int i=0; i<states.length; i++)
+        	{
+        		if(states[i].name().equals(stateName))
+        			validInput = true;
+        	}
+        	if(validInput)
+        	{
+        		// UPDATE THE FILE NAMES AND FILE
+        		boolean renamed = editorIO.renameAnimationState(currentSpriteTypeName, stateName);
+        		if(renamed)
+        		{
+        			int stateID = singleton.getGUI().getStateComboBox().getSelectedIndex();
+        			currentAnimationStateName = stateName;
+        			singleton.setAnimationState((AnimationState.valueOf(stateName)));
+        			
+        			// NOW THAT WE'VE SAVED, LET'S MAKE SURE WE'RE IN THE RIGHT MODE
+        			EditorStateManager stateManager = AnimatedSpriteEditor.getEditor().getStateManager();
+        			singleton.getFileManager().getEditorIO().loadSpriteType(currentSpriteTypeName);
+        			singleton.getGUI().updateAnimationStatesList();
+        			singleton.getGUI().getStateComboBox().setSelectedIndex(stateID);
+            		stateManager.setState(EditorState.SELECT_POSE_STATE);
+            		return true;
+        		}
+        	}
+            
+        	JOptionPane.showMessageDialog(
+        				gui,
+                        ANIMATION_STATE_NAME_ERROR_TEXT,
+                        ANIMATION_STATE_NAME_ERROR_TITLE_TEXT,
+                        JOptionPane.ERROR_MESSAGE);
+        }
+         return false;
     }
     
     /**
@@ -329,7 +415,8 @@ public class EditorFileManager
     private boolean promptForNewState()
     {
     	// SO NOW ASK THE USER FOR AN ANIMATION STATE NAME
-        AnimatedSpriteEditorGUI gui = AnimatedSpriteEditor.getEditor().getGUI();
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+        AnimatedSpriteEditorGUI gui = singleton.getGUI();
         String stateName = JOptionPane.showInputDialog(
                 gui,
                 ANIMATION_STATE_NAME_REQUEST_TEXT,
@@ -343,6 +430,21 @@ public class EditorFileManager
                 &&
             (stateName.length() > 0))
         {
+        	Iterator<AnimationState> currentStates = singleton.getSpriteType().getAnimationStates();
+        	while(currentStates.hasNext())
+        	{
+        		AnimationState state = currentStates.next();
+        		if(state.name().equals(stateName))
+        		{
+        			JOptionPane.showMessageDialog(
+        	                gui,
+        	                ANIMATION_STATE_NAME_EXISTED_TEXT,
+        	                ANIMATION_STATE_NAME_EXISTED_TITLE_TEXT,
+        	                JOptionPane.ERROR_MESSAGE);
+        			return false;
+        		}
+        	}
+        	
         	boolean validInput = false;
         	AnimationState[] states = AnimationState.values();
         	for(int i=0; i<states.length; i++)
@@ -390,6 +492,7 @@ public class EditorFileManager
     {
     	return true;
     }
+    
     
     /**
      * This helper method asks the user for a file to open. The

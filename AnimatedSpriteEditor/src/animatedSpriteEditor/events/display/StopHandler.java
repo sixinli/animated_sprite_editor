@@ -3,8 +3,6 @@ package animatedSpriteEditor.events.display;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JOptionPane;
-
 import sprite_renderer.SceneRenderer;
 
 /**

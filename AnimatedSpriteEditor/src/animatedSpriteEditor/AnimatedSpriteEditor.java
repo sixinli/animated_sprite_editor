@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.swing.UIManager;
-import javax.xml.crypto.dsig.spec.HMACParameterSpec;
 
 import sprite_renderer.AnimationState;
 import sprite_renderer.SpriteType;

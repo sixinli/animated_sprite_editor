@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import animatedSpriteEditor.AnimatedSpriteEditor;
-import animatedSpriteEditor.state.EditorState;
-
 
 /**
  * This class will handler events interact with the new

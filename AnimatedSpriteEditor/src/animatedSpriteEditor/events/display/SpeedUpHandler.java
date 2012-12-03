@@ -5,8 +5,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
-import animatedSpriteEditor.AnimatedSpriteEditor;
-
 import sprite_renderer.SceneRenderer;
 
 /**

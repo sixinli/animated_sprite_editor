@@ -254,6 +254,8 @@ public class AnimatedSpriteEditorSettings
     public static final String SELECT_CUSTOM_COLOR_TEXT = "Select Custom Color";
     public static final String PROMPT_TO_SAVE_TEXT = "Would you like to save your Pose?";
     public static final String PROMPT_TO_SAVE_TITLE_TEXT = "Save your pose?";
+    public static final String PROMPT_TO_REWRITE_TEXT = "The pose file already exist, would you like to rewrite it?";
+    public static final String PROMPT_TO_REWRITE_TITLE_TEXT = "Rewrite your pose?";
     public static final String SPRITE_TYPE_NAME_REQUEST_TEXT = "What do you want to name your sprite type?";
     public static final String SPRITE_TYPE_NAME_REQUEST_TITLE_TEXT = "Enter Sprite Type File Name";
     public static final String ANIMATION_STATE_NAME_REQUEST_TEXT = "What do you want to name your animation state?";
@@ -274,6 +276,8 @@ public class AnimatedSpriteEditorSettings
     public static final String ANIMATION_STATE_SAVING_ERROR_TITLE_TEXT = "Animation State Saving Error";
     public static final String ANIMATION_STATE_NAME_ERROR_TEXT = "The input animation name is not valid.";
     public static final String ANIMATION_STATE_NAME_ERROR_TITLE_TEXT = "Animation Name Input Error";	
+    public static final String ANIMATION_STATE_NAME_EXISTED_TEXT = "The input animation name is already existed.";
+    public static final String ANIMATION_STATE_NAME_EXISTED_TITLE_TEXT = "Animation Name Input Error";	
     public static final String IMAGE_EXPORTED_TEXT = "Your pose has been exportetd to ";
     public static final String IMAGE_EXPORTED_TITLE_TEXT = "Image Exported";
     public static final String IMAGE_EXPORTING_ERROR_TEXT = "An Error Occured While Exporting the Image";
@@ -290,6 +294,8 @@ public class AnimatedSpriteEditorSettings
     public static final String POSE_DURATION_INPUT_ERROR_TITLE_TEXT = "Pose Duration Input Error";
     public static final String POSE_NAME_INPUT_ERROR_TEXT = "The entered pose name is not valid.";
     public static final String POSE_NAME_INPUT_ERROR_TITLE_TEXT = "Pose Name Input Error";
+    public static final String POSE_NAME_EXISTED_TEXT = "The input pose name is already existed.";
+    public static final String POSE_NAME_EXISTED_TITLE_TEXT = "Pose Name Input Error";
     public static final String CHANGE_POSE_DIMENSIONS_TEXT = "Enter New Pose Dimensions";
     public static final String CHANGE_POSE_DIMENSIONS_TITLE_TEXT = "Change Pose Dimensions";
     public static final String ENTER_POSE_WIDTH_TEXT = "Enter Pose Width: ";

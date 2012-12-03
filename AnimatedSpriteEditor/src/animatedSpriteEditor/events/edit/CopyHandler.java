@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import animatedSpriteEditor.AnimatedSpriteEditor;
-import animatedSpriteEditor.state.EditorState;
 import animatedSpriteEditor.state.PoseurStateManager;
 
 
@@ -20,24 +19,8 @@ public class CopyHandler implements ActionListener{
     public void actionPerformed(ActionEvent ae) 
     {
 		AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
-		if(singleton.getStateManager().getMode() == EditorState.SELECT_POSE_STATE)
-		{
-			
-		}
-		
-		else if(singleton.getStateManager().getMode() == EditorState.POSEUR_STATE)
-		{
-			PoseurStateManager poseurStateManager = singleton.getStateManager().getPoseurStateManager();
-			if(poseurStateManager.isShapeSelected())
-			{
-				poseurStateManager.copySelectedItem();
-			}
-			else
-			{
-				
-			}
-			
-		}
-    }   
+		PoseurStateManager poseurStateManager = singleton.getStateManager().getPoseurStateManager();
+		poseurStateManager.copySelectedItem();
+    }
 
 }
