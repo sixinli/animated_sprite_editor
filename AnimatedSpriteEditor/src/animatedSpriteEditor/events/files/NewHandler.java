@@ -18,7 +18,5 @@ public class NewHandler implements ActionListener{
 		// TODO Auto-generated method stub
 			AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
 			singleton.getFileManager().requestNew();
-		
 	}
-
 }

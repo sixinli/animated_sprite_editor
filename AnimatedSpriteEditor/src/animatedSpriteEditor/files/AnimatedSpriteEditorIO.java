@@ -253,7 +253,7 @@ public class AnimatedSpriteEditorIO
           singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
     }
     
-    public boolean saveSpriteTye(File spriteTypeFile, SpriteType spriteTypeToSave, String animationStateName) 
+    public boolean saveSpriteType(File spriteTypeFile, SpriteType spriteTypeToSave, String animationStateName) 
     {
         // GET THE POSE AND ITS DATA THAT WE HAVE TO SAVE
     	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();

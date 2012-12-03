@@ -595,6 +595,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         	deletePoseButton.setEnabled(true);
         	movePoseDownButton.setEnabled(true);
         	movePoseUpButton.setEnabled(true);
+        	
         }
         
         poseList.revalidate();
@@ -794,6 +795,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         	}
         }
     }
+    
     
     /**
      * This helper method empties the combo box with animations
