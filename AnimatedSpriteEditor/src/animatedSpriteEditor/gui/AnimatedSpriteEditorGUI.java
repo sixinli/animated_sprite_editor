@@ -207,6 +207,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     private JPanel poseList;
     private JScrollPane scrollPane;
     private ArrayList<Pose> posesList;
+    private int poseListLength = 0;
    
     
     private MediaTracker tracker;
@@ -316,6 +317,12 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
      * @return the state combo box
      */
     public JComboBox getStateComboBox(){ return stateComboBox;}
+    
+    /**
+     * Accessor method to the number of poses
+     * @return the number of poses
+     */
+    public int getPosesCount(){ return poseListLength;}
     
     /**
      * Accessor method to test if the outline color toggle button
@@ -728,30 +735,35 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     public void updatePoseList()
     {
     	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
-    	AnimationState selectedState = (AnimationState)stateComboBox.getSelectedItem();
-    	posesList = new ArrayList<Pose>();
-        String currentSpriteTypeName = singleton.getFileManager().getCurrentSpriteTypeName();
-        singleton.getFileManager().getEditorIO().loadPoseList(currentSpriteTypeName, selectedState.toString(), posesList);
-        PoseSelectionHandler psh = new PoseSelectionHandler();
-    	poseList.removeAll();
-        for(int i = 0; i<posesList.size(); i++)
+    	if(!stateComboBox.getSelectedItem().equals(SELECT_ANIMATION_TEXT))
     	{
-            Image currentPoseImage = singleton.getSpriteType().getSpriteImages().get(posesList.get(i).getImageID()); 
-            currentPoseImage = singleton.getFileManager().createResizedCopy(currentPoseImage, 128, 128, false);
-            ImageIcon currentPoseIcon = new ImageIcon(currentPoseImage);
-            JButton currentPoseButton = new JButton();
-            currentPoseButton.setSize(128, 128);
-            currentPoseButton.addActionListener(psh);
-            currentPoseButton.setActionCommand("" + posesList.get(i).getImageID());
-            currentPoseButton.setIcon(currentPoseIcon);
-            poseList.add(currentPoseButton);
+    		AnimationState selectedState = (AnimationState)stateComboBox.getSelectedItem();
+    		posesList = new ArrayList<Pose>();
+    		String currentSpriteTypeName = singleton.getFileManager().getCurrentSpriteTypeName();
+        
+    		singleton.getFileManager().getEditorIO().loadPoseList(currentSpriteTypeName, selectedState.toString(), posesList);
+    		poseListLength = posesList.size();
+        
+    		PoseSelectionHandler psh = new PoseSelectionHandler();
+    		poseList.removeAll();
+    		for(int i = 0; i<posesList.size(); i++)
+    		{
+    			Image currentPoseImage = singleton.getSpriteType().getSpriteImages().get(posesList.get(i).getImageID()); 
+    			currentPoseImage = singleton.getFileManager().createResizedCopy(currentPoseImage, 128, 128, false);
+    			ImageIcon currentPoseIcon = new ImageIcon(currentPoseImage);
+    			JButton currentPoseButton = new JButton();
+    			currentPoseButton.setSize(128, 128);
+    			currentPoseButton.addActionListener(psh);
+    			currentPoseButton.setActionCommand("" + posesList.get(i).getImageID());
+    			currentPoseButton.setIcon(currentPoseIcon);
+    			poseList.add(currentPoseButton);
             
-    	}
+    		}
   
-        poseList.revalidate();
-        poseList.repaint();
+    		poseList.revalidate();
+    		poseList.repaint();
+    	}
     }
-    
 //    /**
 //     * This method update the image list of the sprite type.
 //     */

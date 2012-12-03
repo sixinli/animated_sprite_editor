@@ -276,15 +276,18 @@ public class EditorFileManager
         		boolean renamed = editorIO.renameAnimationState(currentSpriteTypeName, stateName);
         		if(renamed)
         		{
-        			int stateID = singleton.getGUI().getStateComboBox().getSelectedIndex();
         			currentAnimationStateName = stateName;
         			singleton.setAnimationState((AnimationState.valueOf(stateName)));
         			
         			// NOW THAT WE'VE SAVED, LET'S MAKE SURE WE'RE IN THE RIGHT MODE
         			EditorStateManager stateManager = AnimatedSpriteEditor.getEditor().getStateManager();
-        			singleton.getFileManager().getEditorIO().loadSpriteType(currentSpriteTypeName);
-        			singleton.getGUI().updateAnimationStatesList();
-        			singleton.getGUI().getStateComboBox().setSelectedIndex(stateID);
+                	
+        			editorIO.loadSpriteType(currentSpriteTypeName);
+                	singleton.setAnimationState(AnimationState.valueOf(stateName));
+                	singleton.getGUI().updateAnimationStatesList();
+                	singleton.getGUI().getStateComboBox().setSelectedItem(AnimationState.valueOf(stateName));
+                	singleton.getGUI().getStateComboBox().revalidate();
+                	singleton.getGUI().getStateComboBox().repaint();
             		stateManager.setState(EditorState.SELECT_POSE_STATE);
             		return true;
         		}
@@ -345,66 +348,109 @@ public class EditorFileManager
         // WANTS TO DO THIS ACTION BEFORE MOVING ON
         if ( (fileName != null)&& (fileName.length() > 0))
         {
+        	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
             String animationStateName = JOptionPane.showInputDialog(
                     gui,
                     ANIMATION_STATE_NAME_REQUEST_TEXT,
                     ANIMATION_STATE_NAME_REQUEST_TITLE_TEXT,
                     JOptionPane.QUESTION_MESSAGE);
             
-            if((animationStateName != null) && (animationStateName.length() > 0))
+            if((animationStateName != null) && (animationStateName.length()>0))
             {
-            	// UPDATE THE FILE NAMES AND FILE
-            	currentSpriteTypeName = fileName;
-            	currentFileName = fileName + XML_FILE_EXTENSION;
-            	currentFile = new File(SPRITE_TYPE_PATH + fileName + File.separator + currentFileName);
-
-            	try 
+            	if(singleton.getSpriteType()!=null)
             	{
-            		boolean success = (
-            			new File(SPRITE_TYPE_PATH + fileName)).mkdir();
-            			  if (success) {
-            			  System.out.println("Directory: " 
-            			   + fileName + " created");
-            			  }
-            	    success = (
-            			  new File(SPRITE_TYPE_PATH + fileName + "/poses")).mkdir();
-            			  if (success) {
-            			  System.out.println("Directory: " 
-            			   + fileName + "/poses" + " created");
-            			  }  
-        			 success = (
-                    	new File(SPRITE_TYPE_PATH + fileName + "/images")).mkdir();
-                    	if (success) {
-                    		System.out.println("Directory: " 
-                    		+ fileName  + "/poses" + " created");
-                    		}       			  
-            	}catch (Exception e){//Catch exception if any
-            	  System.err.println("Error: " + e.getMessage());
+            		Iterator<AnimationState> currentStates = singleton.getSpriteType().getAnimationStates();
+            	
+            		while(currentStates.hasNext())
+            		{
+            			AnimationState state = currentStates.next();
+            			if(state.name().equals(animationStateName))
+            			{
+            				JOptionPane.showMessageDialog(
+            	                gui,
+            	                ANIMATION_STATE_NAME_EXISTED_TEXT,
+            	                ANIMATION_STATE_NAME_EXISTED_TITLE_TEXT,
+            	                JOptionPane.ERROR_MESSAGE);
+            				return false;
+            			}
+            		}
             	}
-	        
-            	SpriteType newSpriteType = new SpriteType();
-	        
-            	newSpriteType.setWidth(Integer.parseInt(SPRITE_TYPE_WIDTH));
-            	newSpriteType.setHeight(Integer.parseInt(SPRITE_TYPE_HEIGHT));
-            	AnimatedSpriteEditor.getEditor().setSpriteType(newSpriteType);
-            	AnimatedSpriteEditor.getEditor().setSpriteTypeName(currentSpriteTypeName);
-	        
-	        
-            	// SAVE OUR NEW FILE
-            	editorIO.saveSpriteTye(currentFile, newSpriteType, animationStateName);
-            	saved = true;
-            	currentAnimationStateName = animationStateName;
-            	AnimatedSpriteEditor.getEditor().setAnimationState(AnimationState.valueOf(animationStateName));
+            	boolean validInput = false;
+            	AnimationState[] states = AnimationState.values();
+            	for(int i=0; i<states.length; i++)
+            	{
+            		if(states[i].name().equals(animationStateName))
+            			validInput = true;
+            	}
+                if(validInput)
+                {
+                	// UPDATE THE FILE NAMES AND FILE
+                	currentSpriteTypeName = fileName;
+                	currentFileName = fileName + XML_FILE_EXTENSION;
+                	currentFile = new File(SPRITE_TYPE_PATH + fileName + File.separator + currentFileName);
 
-            	poseurFileManager.promptForNew();
+                	try 
+                	{
+                		boolean success = (
+                				new File(SPRITE_TYPE_PATH + fileName)).mkdir();
+            			  	if (success) {
+            			  		System.out.println("Directory: " 
+            			  				+ fileName + " created");
+            			  	}
+            			  	success = (
+            			  			new File(SPRITE_TYPE_PATH + fileName + "/poses")).mkdir();
+            			  	if (success) {
+            			  		System.out.println("Directory: " 
+            			  				+ fileName + "/poses" + " created");
+            			  	}  
+            			  	success = (
+            			  			new File(SPRITE_TYPE_PATH + fileName + "/images")).mkdir();
+            			  	if (success) {
+            			  		System.out.println("Directory: " 
+            			  				+ fileName  + "/poses" + " created");
+                    		}       			  
+                	}catch (Exception e){//Catch exception if any
+                		System.err.println("Error: " + e.getMessage());
+                	}
+	        
+                	SpriteType newSpriteType = new SpriteType();
+	        
+                	newSpriteType.setWidth(Integer.parseInt(SPRITE_TYPE_WIDTH));
+                	newSpriteType.setHeight(Integer.parseInt(SPRITE_TYPE_HEIGHT));
+                	singleton.setSpriteType(newSpriteType);
+                	singleton.setSpriteTypeName(currentSpriteTypeName);
+                	singleton.setAnimationState(AnimationState.valueOf(animationStateName));
+                	
+	        
+                	// SAVE OUR NEW FILE
+                	editorIO.saveSpriteTye(currentFile, newSpriteType, animationStateName);
+                	saved = true;
+                	currentAnimationStateName = animationStateName;
+
+                	
+                	poseurFileManager.promptForNew();
             
-            	// AND PUT THE FILE NAME IN THE TITLE BAR
-            	String appName = gui.getAppName();
-            	gui.setTitle(appName + APP_NAME_FILE_NAME_SEPARATOR + currentFile); 
-            	AnimatedSpriteEditor.getEditor().setSpriteTypeName(currentSpriteTypeName);
+                	// AND PUT THE FILE NAME IN THE TITLE BAR
+                	String appName = gui.getAppName();
+                	gui.setTitle(appName + APP_NAME_FILE_NAME_SEPARATOR + currentFile); 
+                	AnimatedSpriteEditor.getEditor().setSpriteTypeName(currentSpriteTypeName);
             
-            	// WE DID IT!
-            	return true;
+                	editorIO.loadSpriteType(fileName);
+                	singleton.setAnimationState(AnimationState.valueOf(animationStateName));
+                	singleton.getGUI().updateAnimationStatesList();
+                	singleton.getGUI().getStateComboBox().setSelectedItem(AnimationState.valueOf(animationStateName));
+                	singleton.getGUI().getStateComboBox().revalidate();
+                	singleton.getGUI().getStateComboBox().repaint();
+                	
+                	// WE DID IT!
+                	return true;
+            }
+                JOptionPane.showMessageDialog(
+                        gui,
+                        ANIMATION_STATE_NAME_ERROR_TEXT,
+                        ANIMATION_STATE_NAME_ERROR_TITLE_TEXT,
+                        JOptionPane.ERROR_MESSAGE);
+            	return false;
             }
             return false;
         }
@@ -459,6 +505,13 @@ public class EditorFileManager
             	currentAnimationStateName = stateName;
             	AnimatedSpriteEditor.getEditor().setAnimationState((AnimationState.valueOf(stateName)));
             	poseurFileManager.promptForNew();
+            	
+            	editorIO.loadSpriteType(currentSpriteTypeName);
+            	singleton.setAnimationState(AnimationState.valueOf(stateName));
+            	singleton.getGUI().updateAnimationStatesList();
+            	singleton.getGUI().getStateComboBox().setSelectedItem(AnimationState.valueOf(stateName));
+            	singleton.getGUI().getStateComboBox().revalidate();
+            	singleton.getGUI().getStateComboBox().repaint();
             	return true;
             }
             
