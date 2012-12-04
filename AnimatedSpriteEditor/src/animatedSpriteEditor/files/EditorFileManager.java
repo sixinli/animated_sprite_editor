@@ -269,7 +269,6 @@ public class EditorFileManager
         				singleton.setAnimationState((AnimationState.valueOf(stateName)));
         			
         			// NOW THAT WE'VE SAVED, LET'S MAKE SURE WE'RE IN THE RIGHT MODE
-        	//		editorIO.poseIO.sa
         				reloadSpriteType();
         			
         				singleton.getStateManager().setState(EditorState.SELECT_POSE_STATE);
@@ -598,7 +597,10 @@ public class EditorFileManager
 	    	for(int i=0; i<states.length; i++)
 	    	{
 	    		if(states[i].name().equals(stateName))
+	    		{
 	    			validInput = true;
+	    			break;
+	    		}
 	    	}
 	        if(validInput)
 	        {
@@ -608,9 +610,9 @@ public class EditorFileManager
 	        	
 	        	if(copied)
 	        	{
-	        		currentAnimationStateName = stateName;
-	        		singleton.setAnimationState((AnimationState.valueOf(stateName)));
-	        	
+	    //    		currentAnimationStateName = stateName;
+	    //    		singleton.setAnimationState((AnimationState.valueOf(stateName)));
+	//        	debug this 
 	        		reloadSpriteType();
 	        		return true;
 	        	}
@@ -678,13 +680,16 @@ public class EditorFileManager
 	{
 		AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
 		AnimationState state = singleton.getAnimationState();
+		AnimatedSpriteEditorGUI gui = singleton.getGUI();
 		
 		editorIO.loadSpriteType(currentSpriteTypeName);
     	singleton.setAnimationState(state);
-    	singleton.getGUI().updateAnimationStatesList();
-    	singleton.getGUI().getStateComboBox().setSelectedItem(state);
-    	singleton.getGUI().getStateComboBox().revalidate();
-    	singleton.getGUI().getStateComboBox().repaint();
+    	gui.updateAnimationStatesList();
+    	gui.getStateComboBox().setSelectedItem(state);
+    	gui.getStateComboBox().revalidate();
+    	gui.getStateComboBox().repaint();
+    	gui.updateImageHashMap();
+    	gui.updatePoseList();
 		
 	}
 	

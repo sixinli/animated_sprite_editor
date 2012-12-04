@@ -516,6 +516,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         	deleteStateButton.setEnabled(true);
         	newPoseButton.setEnabled(true);
         	setEnabledDisplayControls(true);
+        	singleton.getStateManager().getPoseurStateManager().clearClipboardShape();
         	
                 // WHICH ONE IS NOW SELECTED?
                 Object selectedItem = stateComboBox.getSelectedItem();
