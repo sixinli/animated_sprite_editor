@@ -12,7 +12,10 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -342,21 +345,20 @@ public class AnimatedSpriteEditorIO
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 			Document doc = docBuilder.parse(currentSpriteTypeFile);
 			
-			Node animationListNode = doc.getElementsByTagName(ANIMATIONS_LIST_NODE).item(0);
-			NodeList animationStates = animationListNode.getChildNodes();
-			 
-			NodeList imageNodes = doc.getElementsByTagName(IMAGES_LIST_NODE);
-			int imageCount = imageNodes.getLength()/2;
-hgghghfghhjkh			
-			
-			int len = animationStates.getLength();
+			NodeList stateNodes = doc.getElementsByTagName(STATE_NODE);
+			NodeList imageNodes = doc.getElementsByTagName(IMAGE_FILE_NODE);
+			int imageCount = imageNodes.getLength();			
+			int len = stateNodes.getLength();
 			String currentAnimationStateName = singleton.getAnimationStateName();
-			Node currentStateNode;
+			
+			Node currentStateNode = stateNodes.item(0);	
+			NodeList currentPoseNodes = currentStateNode.getNextSibling().getNextSibling().getChildNodes();
 			for(int i=0; i<len; i++)
 			{
-				if(animationStates.item(i).getTextContent().equals(currentAnimationStateName))
+				if(stateNodes.item(i).getTextContent().equals(currentAnimationStateName))
 				{
-					currentStateNode = animationStates.item(i);
+					currentStateNode = stateNodes.item(i);
+					currentPoseNodes = currentStateNode.getNextSibling().getNextSibling().getChildNodes();
 					break;
 				}
 			}
@@ -365,10 +367,48 @@ hgghghfghhjkh
 			Element stateNode = doc.createElement(STATE_NODE);
 			stateNode.setTextContent(newAnimationStateName);
 			
+			Node imageListNode = doc.getElementsByTagName(IMAGES_LIST_NODE).item(0);
+			Node animationListNodes = doc.getElementsByTagName(ANIMATIONS_LIST_NODE).item(0);
 			Element animationSequenceNode = doc.createElement(ANIMATION_SEQUENCE_NODE);
 			animationStateNode.appendChild(stateNode);
 			animationStateNode.appendChild(animationSequenceNode);
-			animationListNode.appendChild(animationStateNode);
+			animationListNodes.appendChild(animationStateNode);
+			
+			
+			
+			NodeList poseNodes = currentStateNode.getNextSibling().getNextSibling().getChildNodes();
+			len = poseNodes.getLength();
+			for(int i=1; i<len; i+=2)
+			{
+				String duration = currentPoseNodes.item(i).getAttributes().item(0).getTextContent();
+				int id = Integer.parseInt(currentPoseNodes.item(i).getAttributes().item(1).getTextContent());
+				String fileName = imageNodes.item(id-1).getAttributes().item(0).getTextContent();
+				
+				Element newPoseNode = doc.createElement(POSE_NODE);
+				newPoseNode.setAttribute(DURATION_ATTRIBUTE, duration);
+				newPoseNode.setAttribute(IMAGE_ID_ATTRIBUTE, ""+(imageCount+i/2+1));
+				animationSequenceNode.appendChild(newPoseNode);
+				Node imageFileNodeToCopy = imageNodes.item(id-1);
+				Element newImageNode = doc.createElement(IMAGE_FILE_NODE);
+				newImageNode.setAttribute(FILE_NAME_ATTRIBUTE, newAnimationStateName + "_" + fileName);
+				newImageNode.setAttribute(ID_ATTRIBUTE, ""+(imageCount+i/2+1));
+				
+				File fileSource = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + IMAGE_FOLDER_PATH + fileName);
+				File fileDest = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + IMAGE_FOLDER_PATH + newAnimationStateName + "_" + fileName);
+				copyFile(fileSource, fileDest);
+				
+				
+				
+				fileName = fileName.substring(0, fileName.lastIndexOf('.')) + ".pose";
+				fileSource = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + POSE_FOLDER_PATH + fileName);
+				fileDest = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + POSE_FOLDER_PATH + newAnimationStateName + "_" + fileName);
+				copyFile(fileSource, fileDest);
+				
+				animationSequenceNode.appendChild(newPoseNode);
+				imageListNode.appendChild(newImageNode);
+				
+			}
+			
 			
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
@@ -376,9 +416,12 @@ hgghghfghhjkh
             transformer.setOutputProperty(XML_INDENT_PROPERTY, XML_INDENT_VALUE);
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(currentSpriteTypeFile);
+            
+            transformer.transform(source, result); 
+
             return true;
         	}
-            catch(TransformerException | ParserConfigurationException | DOMException | HeadlessException ex)
+            catch(TransformerException | ParserConfigurationException | DOMException | HeadlessException | SAXException | IOException ex)
             {
                 // SOMETHING WENT WRONG WRITING THE XML FILE
             	AnimatedSpriteEditorGUI gui = singleton.getGUI();
@@ -386,9 +429,9 @@ hgghghfghhjkh
                     gui,
                     SPRITE_TYPE_SAVING_ERROR_TEXT,
                     SPRITE_TYPE_SAVING_ERROR_TITLE_TEXT,
-                    JOptionPane.ERROR_MESSAGE);  
+                    JOptionPane.ERROR_MESSAGE);   
                 return false;
-            }
+            } 
     }
     
     public boolean saveAnimationState(String spriteTypeName, String animationStateName)
@@ -662,5 +705,28 @@ hgghghfghhjkh
         {
             return false;
         }          
-}
+    }
+    
+    public static void copyFile(File sourceFile, File destFile) throws IOException {
+        if(!destFile.exists()) {
+            destFile.createNewFile();
+        }
+
+        FileChannel source = null;
+        FileChannel destination = null;
+
+        try {
+            source = new FileInputStream(sourceFile).getChannel();
+            destination = new FileOutputStream(destFile).getChannel();
+            destination.transferFrom(source, 0, source.size());
+        }
+        finally {
+            if(source != null) {
+                source.close();
+            }
+            if(destination != null) {
+                destination.close();
+            }
+        }
+    }
 }

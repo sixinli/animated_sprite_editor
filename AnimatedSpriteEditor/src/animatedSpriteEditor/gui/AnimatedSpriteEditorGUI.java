@@ -796,6 +796,13 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         }
     }
     
+    public void updateImageHashMap()
+    {
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+    	HashMap<Integer,Image> imageHM = singleton.getSpriteType().getSpriteImages();   
+        singleton.getGUI().updatePoseList();
+    }
+    
     
     /**
      * This helper method empties the combo box with animations
