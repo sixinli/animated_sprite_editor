@@ -316,7 +316,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
      * Accessor method to the state combobox.
      * @return the state combo box
      */
-    public JComboBox getStateComboBox(){ return stateComboBox;}
+    public DefaultComboBoxModel getStateComboBoxModel(){ return stateComboBoxModel;}
     
     /**
      * Accessor method to the number of poses
@@ -750,7 +750,8 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     		poseList.removeAll();
     		for(int i = 0; i<posesList.size(); i++)
     		{
-    			Image currentPoseImage = singleton.getSpriteType().getSpriteImages().get(posesList.get(i).getImageID()); 
+    			Image currentPoseImage = singleton.getSpriteType().getSpriteImages().get(posesList.get(i).getImageID());
+    			System.out.println(currentPoseImage);
     			currentPoseImage = singleton.getFileManager().createResizedCopy(currentPoseImage, 128, 128, false);
     			ImageIcon currentPoseIcon = new ImageIcon(currentPoseImage);
     			JButton currentPoseButton = new JButton();

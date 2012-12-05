@@ -141,7 +141,7 @@ public class AnimatedSpriteEditorIO
     		try {
     				cleanDoc = loadXMLDocument(xmlFile, xsdFile);
     		} catch (InvalidXMLFileFormatException e) {
-    			// TODO Auto-generated catch block
+    			e.printStackTrace();
     		return;
     		}
             
@@ -153,6 +153,14 @@ public class AnimatedSpriteEditorIO
     			Image img = loadImageInBatch(	SPRITE_TYPE_PATH + currentTypeName+ "/" + IMAGE_FOLDER_PATH,
     						imageFileNodes.get(i).getAttributeValue(FILE_NAME_ATTRIBUTE),
     						tracker, id);
+    			
+    			AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+    			   HashMap<Integer,Image> imageHM = singleton.getSpriteType().getSpriteImages();
+
+    		        imageHM.remove(id);//TODO: jkh
+    		        imageHM.put(id, img);
+    		        
+    		        
     			AnimatedSpriteEditor.getEditor().getSpriteType().addImage(id, img);
     			String fileName = imageFileNodes.get(i).getAttributeValue(FILE_NAME_ATTRIBUTE);
     			fileName = fileName.substring(0, fileName.indexOf('.'));
@@ -161,6 +169,7 @@ public class AnimatedSpriteEditorIO
     					SPRITE_TYPE_PATH + currentTypeName+ "/" + POSE_FOLDER_PATH + fileName);
     			
             }
+            
 }
     
     public void loadSpriteType(String spriteTypeName) 
@@ -217,7 +226,7 @@ public class AnimatedSpriteEditorIO
                                             + spriteTypeName
                                             + "/"
                                             + fileName;
-                Image loadedImage = tk.getImage(imageFileNameAndPath);
+                Image loadedImage = tk.createImage(imageFileNameAndPath);
                 tracker.addImage(loadedImage, id);
                 spriteTypeToLoad.addImage(id, loadedImage);
             }
@@ -253,6 +262,7 @@ public class AnimatedSpriteEditorIO
           AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
           singleton.setSpriteType(spriteTypeToLoad);
           singleton.setSpriteTypeName(spriteTypeName);
+          singleton.getFileManager().getEditorIO().loadImageList(spriteTypeName);
           singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
     }
     
@@ -313,7 +323,7 @@ public class AnimatedSpriteEditorIO
                 SPRITE_TYPE_SAVED_TITLE_TEXT,
                 JOptionPane.INFORMATION_MESSAGE);
             
-            singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
+   //lalalalalal idk         singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
             return true;
         }
         catch(TransformerException | ParserConfigurationException | DOMException | HeadlessException ex)
@@ -486,7 +496,7 @@ public class AnimatedSpriteEditorIO
                 ANIMATION_STATE_SAVED_TITLE_TEXT,
                 JOptionPane.INFORMATION_MESSAGE);
             
-        singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
+ //lalala i still dont know       singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
         return true; 
     }
     
@@ -652,12 +662,12 @@ public class AnimatedSpriteEditorIO
      * 
      * @return A reference to the Image represented by the path + fileName.
      */
-	private Image loadImageInBatch( String path, String fileName, 
+	public Image loadImageInBatch( String path, String fileName, 
 									MediaTracker tracker, int id)
 	{
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		String fullFileNameWithPath = path + fileName;
-		Image img = tk.getImage(fullFileNameWithPath);
+		Image img = tk.createImage(fullFileNameWithPath);
 		tracker.addImage(img, id);
 		return img;
 	}
