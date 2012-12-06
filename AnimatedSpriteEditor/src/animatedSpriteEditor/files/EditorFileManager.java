@@ -189,15 +189,6 @@ public class EditorFileManager
 	}
     
     /**
-     * This method lets the user to delete an
-     * animation state. 
-     */
-    public void requestDeleteState(){
-    	
-    	
-    }
-    
-    /**
      * This method lets the user to copy an
      * animation state.
      */
@@ -235,6 +226,33 @@ public class EditorFileManager
     }
     
     /**
+	 * This method lets the user to delete an
+	 * animation state. 
+	 */
+	public void requestDeleteState(){
+		AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+		AnimatedSpriteEditorGUI gui = singleton.getGUI();
+		String currentAnimationStateName = singleton.getAnimationStateName();
+		boolean deleted = editorIO.deletedAnimationState(currentSpriteTypeName, currentAnimationStateName);
+		if(deleted)
+		{
+			// NOW THAT WE'VE SAVED, LET'S MAKE SURE WE'RE IN THE RIGHT MODE
+			reloadSpriteType();
+		
+			singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
+		}
+		else
+		{
+    		JOptionPane.showMessageDialog(
+	                gui,
+	                ANIMATION_STATE_NAME_EXISTED_TEXT,
+	                ANIMATION_STATE_NAME_EXISTED_TITLE_TEXT,
+	                JOptionPane.ERROR_MESSAGE);
+		}
+		
+	}
+
+	/**
      * This method lets the user to rename an
      * animation state 
      */

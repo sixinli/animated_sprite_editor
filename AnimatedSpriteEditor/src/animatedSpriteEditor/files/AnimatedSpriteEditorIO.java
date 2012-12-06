@@ -544,6 +544,7 @@ public class AnimatedSpriteEditorIO
 		                    ANIMATION_STATE_SAVED_TITLE_TEXT,
 		                    JOptionPane.INFORMATION_MESSAGE);
 		            
+		            
 		            return true; 
 				}
 			}
@@ -562,6 +563,11 @@ public class AnimatedSpriteEditorIO
     }
     
 
+    public boolean deletedAnimationState(String spriteTypeName, String stateName)
+    {
+//rgahrgeiijerhia  
+    	return true;
+    }
     /**
      * This helper method builds elements (nodes) for us to help with building
      * a Doc which we would then save to a file.

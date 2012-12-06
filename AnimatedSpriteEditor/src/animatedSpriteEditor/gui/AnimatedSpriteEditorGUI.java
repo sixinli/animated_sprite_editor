@@ -67,6 +67,7 @@ import animatedSpriteEditor.events.edit.MoveToFrontHandler;
 import animatedSpriteEditor.events.edit.PasteHandler;
 import animatedSpriteEditor.events.edit.StartSelectionHandler;
 import animatedSpriteEditor.events.files.AnimationStateSelectionHandler;
+import animatedSpriteEditor.events.files.ChangeDurationHandler;
 import animatedSpriteEditor.events.files.CopyPoseHandler;
 import animatedSpriteEditor.events.files.CopyStateHandler;
 import animatedSpriteEditor.events.files.DeletePoseHandler;
@@ -153,6 +154,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     private JButton newPoseButton;
     private JButton copyStateButton;
     private JButton copyPoseButton;
+    private JButton changeDurationButton;
     private JButton renameStateButton;
     private JButton deleteStateButton;
     private JButton deletePoseButton;
@@ -449,6 +451,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         	copyStateButton.setEnabled(false);
         	copyPoseButton.setEnabled(false);
         	renameStateButton.setEnabled(false);
+        	changeDurationButton.setEnabled(false);
         	selectionButton.setEnabled(false);
         	deleteStateButton.setEnabled(false);
         	deletePoseButton.setEnabled(false);
@@ -460,22 +463,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         }
         
         else if (mode == EditorState.SELECT_ANIMATION_STATE)
-        {
-//        	poseList.removeAll();
-//            // NOW LOAD THE ANIMATIONS FOR THE NEWLY SELECTED SPRITE TYPE
-//            if(singleton.getSpriteType() != null && singleton.getSpriteType().getAnimationStates()!=null)
-//            {
-//            	clearStateComboBox();
-//            	spriteList.clear();
-//                stateComboBox.setEnabled(true);
-//            	Iterator<AnimationState> it  = singleton.getSpriteType().getAnimationStates();
-//            	while(it.hasNext())
-//            	{
-//            		AnimationState animState = it.next();
-//            		stateComboBoxModel.addElement(animState);
-//            	}
-//            }
-        	
+        {	
         	setEnabledColorControls(false);
         	setEnabledEditControls(false);
         	setEnabledShapeControls(false);
@@ -486,6 +474,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         	copyStateButton.setEnabled(false);
         	copyPoseButton.setEnabled(false);
         	renameStateButton.setEnabled(false);
+        	changeDurationButton.setEnabled(false);
         	selectionButton.setEnabled(false);
         	deleteStateButton.setEnabled(false);
         	deletePoseButton.setEnabled(false);
@@ -557,25 +546,6 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
                         // AND START IT UP AGAIN
                         sceneRenderingPanel.unpauseScene();
                         updatePoseList();
-//                        posesList = new ArrayList<Pose>();
-//                        String currentSpriteTypeName = singleton.getFileManager().getCurrentSpriteTypeName();
-//                        singleton.getFileManager().getEditorIO().loadPoseList(currentSpriteTypeName, selectedState.toString(), posesList);
-//                        PoseSelectionHandler psh = new PoseSelectionHandler();
-//                        poseList.removeAll();
-//                        for(int i = 0; i<posesList.size(); i++)
-//                    	{
-//                            Image currentPoseImage = singleton.getSpriteType().getSpriteImages().get(posesList.get(i).getImageID()); 
-//                            currentPoseImage = singleton.getFileManager().createResizedCopy(currentPoseImage, 128, 128, false);
-//                            ImageIcon currentPoseIcon = new ImageIcon(currentPoseImage);
-//                            JButton currentPoseButton = new JButton();
-//                            currentPoseButton.setSize(128, 128);
-//                            currentPoseButton.addActionListener(psh);
-//                            currentPoseButton.setActionCommand("" + posesList.get(i).getImageID());
-//                            currentPoseButton.setIcon(currentPoseIcon);
-//                            poseList.add(currentPoseButton);
-//                            
-//                    	}
-//                        poseList.revalidate();
                     
                         singleton.getFileManager().getPoseurFileManager().setCurrentFile(null);
                         PoseurPose tempPose = new PoseurPose(DEFAULT_POSE_WIDTH, DEFAULT_POSE_HEIGHT);
@@ -592,6 +562,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         }
         
         else if (mode == EditorState.POSEUR_STATE){
+        	changeDurationButton.setEnabled(true);
         	copyPoseButton.setEnabled(true);
         	deletePoseButton.setEnabled(true);
         	movePoseDownButton.setEnabled(true);
@@ -767,14 +738,6 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     		poseList.repaint();
     	}
     }
-//    /**
-//     * This method update the image list of the sprite type.
-//     */
-//    public void updateImageList()
-//    {
-//    	AnimatedSpriteEditorIO editorIO= AnimatedSpriteEditor.getEditor().getFileManager().getEditorIO();
-//    	editorIO.loadImageList(AnimatedSpriteEditor.getEditor().getSpriteTypeName());
-//    }
     
     /**
      * This method update the animation state list.
@@ -891,6 +854,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         deleteStateButton    = (JButton)initButton(DELETE_STATE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, DELETE_STATE_TOOLTIP);
         newPoseButton    = (JButton)initButton(NEW_POSE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, NEW_POSE_TOOLTIP);
         copyPoseButton    = (JButton)initButton(COPY_POSE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, COPY_POSE_TOOLTIP);
+        changeDurationButton = (JButton)initButton(CHANGE_DURATION_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, CHANGE_DURATION_TOOLTIP);
         deletePoseButton    = (JButton)initButton(DELETE_POSE_IMAGE_FILE,      fileToolbar,  tracker, idCounter++, JButton.class, null, DELETE_POSE_TOOLTIP);
         movePoseUpButton = (JButton)initButton(MOVE_POSE_UP_IMAGE_FILE,  fileToolbar,  tracker, idCounter++, JButton.class, null, MOVE_POSE_UP_TOOLTIP);
         movePoseDownButton = (JButton)initButton(MOVE_POSE_DOWN_IMAGE_FILE,   fileToolbar,  tracker, idCounter++, JButton.class, null, MOVE_POSE_DOWN_TOOLTIP);
@@ -1189,6 +1153,8 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         deletePoseButton.addActionListener(dph);
         DeleteStateHandler dsh = new DeleteStateHandler();
         deleteStateButton.addActionListener(dsh);
+        ChangeDurationHandler cdh = new ChangeDurationHandler();
+        changeDurationButton.addActionListener(cdh);
         OpenHandler oph = new OpenHandler();
         openButton.addActionListener(oph);
         SaveHandler sph = new SaveHandler();

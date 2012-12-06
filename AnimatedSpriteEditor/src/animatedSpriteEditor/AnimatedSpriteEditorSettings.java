@@ -72,6 +72,7 @@ public class AnimatedSpriteEditorSettings
     public static final String COPY_POSE_IMAGE_FILE = BUTTON_IMAGES_PATH + "CopyPose.png";
     public static final String COPY_STATE_IMAGE_FILE = BUTTON_IMAGES_PATH + "CopyState.png";
     public static final String RENAME_STATE_IMAGE_FILE = BUTTON_IMAGES_PATH + "RenameState.png";
+    public static final String CHANGE_DURATION_IMAGE_FILE = BUTTON_IMAGES_PATH + "Duration.png";
     public static final String MOVE_POSE_UP_IMAGE_FILE = BUTTON_IMAGES_PATH + "MovePoseUp.png";
     public static final String MOVE_POSE_DOWN_IMAGE_FILE = BUTTON_IMAGES_PATH + "MovePoseDown.png";
     public static final String OPEN_IMAGE_FILE = BUTTON_IMAGES_PATH + "Open.png";
@@ -128,6 +129,7 @@ public class AnimatedSpriteEditorSettings
     public static final String COPY_POSE_TOOLTIP = "Copy Pose";
     public static final String COPY_STATE_TOOLTIP = "Copy State";
     public static final String RENAME_STATE_TOOLTIP = "Rename State";
+    public static final String CHANGE_DURATION_TOOLTIP = "Change Pose Duration";
     public static final String MOVE_POSE_UP_TOOLTIP = "Move Pose Up";
     public static final String MOVE_POSE_DOWN_TOOLTIP = "Move Pose Down";    
 
@@ -260,6 +262,10 @@ public class AnimatedSpriteEditorSettings
     public static final String SPRITE_TYPE_NAME_REQUEST_TITLE_TEXT = "Enter Sprite Type File Name";
     public static final String ANIMATION_STATE_NAME_REQUEST_TEXT = "What do you want to name your animation state?";
     public static final String ANIMATION_STATE_NAME_REQUEST_TITLE_TEXT = "Enter Animation State File Name";
+    public static final String POSE_COPIED_TEXT = "Pose copied sucessfully";
+    public static final String POSE_COPIED_TITLE_TEXT = "Pose Copied";
+    public static final String POSE_COPIED_ERROR_TEXT = "PAn Error Occured While Copynig the Pose";
+    public static final String POSE_COPIED_ERROR_TITLE_TEXT = "Pose Copied Error";
     public static final String POSE_NAME_REQUEST_TEXT = "What do you want to name your pose?";
     public static final String POSE_NAME_REQUEST_TITLE_TEXT = "Enter Pose File Name";
     public static final String POSE_DURATION_REQUEST_TEXT = "How long do you the pose to render?";
