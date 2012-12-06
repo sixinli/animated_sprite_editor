@@ -233,13 +233,14 @@ public class EditorFileManager
 		AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
 		AnimatedSpriteEditorGUI gui = singleton.getGUI();
 		String currentAnimationStateName = singleton.getAnimationStateName();
-		boolean deleted = editorIO.deletedAnimationState(currentSpriteTypeName, currentAnimationStateName);
+		boolean deleted = editorIO.deletedAnimationState(currentAnimationStateName);
 		if(deleted)
 		{
 			// NOW THAT WE'VE SAVED, LET'S MAKE SURE WE'RE IN THE RIGHT MODE
-			reloadSpriteType();
-		
+			singleton.getFileManager().getPoseurFileManager().setCurrentFile(null);
+			singleton.setAnimationState(null);
 			singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
+			reloadSpriteType();
 		}
 		else
 		{
@@ -249,7 +250,6 @@ public class EditorFileManager
 	                ANIMATION_STATE_NAME_EXISTED_TITLE_TEXT,
 	                JOptionPane.ERROR_MESSAGE);
 		}
-		
 	}
 
 	/**
@@ -657,9 +657,12 @@ public class EditorFileManager
 		final AnimatedSpriteEditorGUI gui = singleton.getGUI();
 
 		editorIO.loadSpriteType(currentSpriteTypeName);
-    	singleton.setAnimationState(state);
-    	gui.updateAnimationStatesList();
-    	gui.getStateComboBoxModel().setSelectedItem(state);
+		if(state!=null)
+		{
+			singleton.setAnimationState(state);
+			gui.updateAnimationStatesList();
+			gui.getStateComboBoxModel().setSelectedItem(state);
+		}
     	gui.revalidate();
     	gui.repaint();
 	}

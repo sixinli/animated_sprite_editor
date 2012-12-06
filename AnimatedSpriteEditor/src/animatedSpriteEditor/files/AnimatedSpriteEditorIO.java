@@ -437,8 +437,8 @@ public class AnimatedSpriteEditorIO
             	AnimatedSpriteEditorGUI gui = singleton.getGUI();
                 JOptionPane.showMessageDialog(
                     gui,
-                    SPRITE_TYPE_SAVING_ERROR_TEXT,
-                    SPRITE_TYPE_SAVING_ERROR_TITLE_TEXT,
+                    ANIMATION_STATE_SAVING_ERROR_TEXT,
+                    ANIMATION_STATE_SAVING_ERROR_TITLE_TEXT,
                     JOptionPane.ERROR_MESSAGE);   
                 return false;
             } 
@@ -563,11 +563,93 @@ public class AnimatedSpriteEditorIO
     }
     
 
-    public boolean deletedAnimationState(String spriteTypeName, String stateName)
+    public boolean deletedAnimationState(String stateName)
     {
-//rgahrgeiijerhia  
-    	return true;
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+    	String spriteTypeName = singleton.getSpriteTypeName();
+    	
+    	String spriteTypeXMLFile = SPRITE_TYPE_PATH + spriteTypeName + "/" 
+				+ spriteTypeName + XML_FILE_EXTENSION;
+    	// FIRST RETRIEVE AND LOAD THE FILE INTO A TREE
+
+        File currentSpriteTypeFile = new File(spriteTypeXMLFile);
+        
+        try {
+        	DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+			Document doc = docBuilder.parse(currentSpriteTypeFile);
+			
+			NodeList stateNodes = doc.getElementsByTagName(STATE_NODE);
+			NodeList imageNodes = doc.getElementsByTagName(IMAGE_FILE_NODE);
+			Node imageListNode = imageNodes.item(0).getParentNode();
+			int imageCount = imageNodes.getLength();			
+			int len = stateNodes.getLength();
+			String currentAnimationStateName = singleton.getAnimationStateName();
+			
+			Node currentStateNode = stateNodes.item(0);	
+			NodeList currentPoseNodes = currentStateNode.getNextSibling().getNextSibling().getChildNodes();
+			for(int i=0; i<len; i++)
+			{
+				if(stateNodes.item(i).getTextContent().equals(currentAnimationStateName))
+				{
+					currentStateNode = stateNodes.item(i);
+					currentPoseNodes = currentStateNode.getNextSibling().getNextSibling().getChildNodes();
+					break;
+				}
+			}
+			
+			NodeList poseNodes = currentStateNode.getNextSibling().getNextSibling().getChildNodes();
+			len = poseNodes.getLength();
+			for(int i=1; i<len; i+=2)
+			{
+				int id = Integer.parseInt(currentPoseNodes.item(i).getAttributes().item(1).getTextContent());
+			 	String fileName = imageNodes.item(id-1).getAttributes().item(0).getTextContent();
+	
+				Node imageFileNodeToDelete = imageNodes.item(id-1);
+				imageListNode.removeChild(imageFileNodeToDelete);
+				File fileSource = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + IMAGE_FOLDER_PATH + fileName);
+				fileSource.setWritable(true);
+				fileSource.delete();
+				
+				
+				
+				fileName = fileName.substring(0, fileName.lastIndexOf('.')) + ".pose";
+				fileSource = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + POSE_FOLDER_PATH + fileName);
+				fileSource.setWritable(true);
+				fileSource.delete();
+				
+			}
+			
+			Node animationStateNode = currentStateNode.getParentNode();
+			Node animationListNode = animationStateNode.getParentNode();
+			animationListNode.removeChild(animationStateNode);
+			
+			
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, YES_VALUE);
+            transformer.setOutputProperty(XML_INDENT_PROPERTY, XML_INDENT_VALUE);
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(currentSpriteTypeFile);
+            
+            transformer.transform(source, result); 
+
+            return true;
+        	}
+            catch(TransformerException | ParserConfigurationException | DOMException | HeadlessException | SAXException | IOException ex)
+            {
+                // SOMETHING WENT WRONG WRITING THE XML FILE
+            	AnimatedSpriteEditorGUI gui = singleton.getGUI();
+                JOptionPane.showMessageDialog(
+                    gui,
+                    SPRITE_TYPE_SAVING_ERROR_TEXT,
+                    SPRITE_TYPE_SAVING_ERROR_TITLE_TEXT,
+                    JOptionPane.ERROR_MESSAGE);   
+                return false;
+            }   
     }
+    
+    
     /**
      * This helper method builds elements (nodes) for us to help with building
      * a Doc which we would then save to a file.

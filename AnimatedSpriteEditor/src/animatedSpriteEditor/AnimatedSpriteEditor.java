@@ -172,7 +172,14 @@ public class AnimatedSpriteEditor {
     public void setAnimationState(AnimationState state)
     {    	
     	animationState = state;
-    	animationStateName = state.name();
+    	if(state!=null)
+    	{
+    		animationStateName = state.name();
+    	}
+    	else
+    	{
+    		animationStateName = null;
+    	}
     }
     
     /**
