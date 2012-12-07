@@ -304,6 +304,12 @@ public class AnimatedSpriteEditorSettings
     public static final String POSE_NAME_EXISTED_TITLE_TEXT = "Pose Name Input Error";
     public static final String POSE_MOVED_TEXT = "The pose is moved.";
     public static final String POSE_MOVED_TITLE_TEXT = "Pose Moved";
+    public static final String POSE_MOVE_ERROR_TEXT = "An error occured when the pose is moving.";
+    public static final String POSE_MOVE_ERROR_TITLE_TEXT = "Pose Move Error";
+    public static final String POSE_DURATION_CHANGED_TEXT = "The pose duration is changed.";
+    public static final String POSE_DURATION_CHANGED_TITLE_TEXT = "Pose Changed";
+    public static final String POSE_DURATION_CHANGE_ERROR_TEXT = "An error occured when changing the pose duration.";
+    public static final String POSE_DURATION_CHANGE_ERROR_TITLE_TEXT = "Pose Duration Change Error";
     public static final String CHANGE_POSE_DIMENSIONS_TEXT = "Enter New Pose Dimensions";
     public static final String CHANGE_POSE_DIMENSIONS_TITLE_TEXT = "Change Pose Dimensions";
     public static final String ENTER_POSE_WIDTH_TEXT = "Enter Pose Width: ";
