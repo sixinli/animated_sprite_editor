@@ -167,7 +167,7 @@ public class AnimatedSpriteEditor {
     
     /**
      * Mutator of the animation state name
-     * @param stateName the name to set
+     * @param state the animation state to set
      */
     public void setAnimationState(AnimationState state)
     {    	
@@ -192,7 +192,7 @@ public class AnimatedSpriteEditor {
 
 	/**
      * Mutator method for the current Sprite Type Name.
-     * @param the name to set
+     * @param nameToSet the name to set
      */
     public void setSpriteTypeName(String nameToSet)
     {

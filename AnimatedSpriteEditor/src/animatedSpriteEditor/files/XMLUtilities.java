@@ -38,8 +38,6 @@ public class XMLUtilities
      * otherwise. Note that this is taken directly (with comments)
      * from and example on the IBM site with only slight modifications.
      * 
-     * @see http://www.ibm.com/developerworks/xml/library/x-javaxmlvalidapi/index.html
-     * 
      * @param xmlDocNameAndPath XML Doc to validate
      * 
      * @param xmlSchemaNameAndPath XML Schema to use in validation
@@ -87,7 +85,7 @@ public class XMLUtilities
      * 
      * @param xmlFile Path and name of xml file to load.
      * 
-     * @param schemaFile Path and name of schema file to use for validation.
+     * @param xsdFile Path and name of schema file to use for validation.
      * 
      * @return A normalized Document object fully loaded with the data found
      * in the xmlFile.

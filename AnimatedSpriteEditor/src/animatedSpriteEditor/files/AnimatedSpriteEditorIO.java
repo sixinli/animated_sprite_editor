@@ -83,13 +83,7 @@ public class AnimatedSpriteEditorIO
      * This method extracts the pose of a state of a sprite from the provided
      * xml file argument and loads these pose into the poseList list.
      * 
-     * @param path Path to where the sprite types home directory. Note that
-     * each sprite would have its own directory inside this directory.
-     * 
-     * @param spriteTypesXMLFile File name for the xml file with a list of
-     * all the sprite types.
-     * 
-     * @param currentTypeNames the name of the selected sprite type 
+     * @param currentTypeName the name of the selected sprite type 
      * 
      * @param currentState the state of the sprite
      * 
@@ -503,7 +497,7 @@ public class AnimatedSpriteEditorIO
 			
 			
 			} catch (SAXException | IOException | ParserConfigurationException | TransformerException e) {
-				// TODO Auto-generated catch block
+				e.printStackTrace();
 				AnimatedSpriteEditorGUI gui = singleton.getGUI();
 	            JOptionPane.showMessageDialog(
 	                gui,
@@ -526,8 +520,6 @@ public class AnimatedSpriteEditorIO
     public boolean renameAnimationState(String spriteTypeName, String newStateName)
     {
     	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
-        EditorStateManager editorStateManager = singleton.getStateManager();
-
     	
     	String spriteTypeXMLFile = SPRITE_TYPE_PATH + spriteTypeName + "/" 
 				+ spriteTypeName + XML_FILE_EXTENSION;
@@ -606,9 +598,8 @@ public class AnimatedSpriteEditorIO
 		            return true; 
 				}
 			}
-		} catch (SAXException | IOException | ParserConfigurationException | TransformerException e) 
-		{
-			// TODO Auto-generated catch block
+		} catch (SAXException | IOException | ParserConfigurationException | TransformerException e) {
+			e.printStackTrace();
 			AnimatedSpriteEditorGUI gui = singleton.getGUI();
 	        JOptionPane.showMessageDialog(
 	                gui,
@@ -822,9 +813,7 @@ public class AnimatedSpriteEditorIO
      * xmlSchemaNameAndPath schema and returns true if valid, false
      * otherwise. Note that this is taken directly (with comments)
      * from and example on the IBM site with only slight modifications.
-     * 
-     * @see http://www.ibm.com/developerworks/xml/library/x-javaxmlvalidapi/index.html
-     * 
+     *      
      * @param xmlDocNameAndPath XML Doc to validate
      * 
      * @param xmlSchemaNameAndPath XML Schema to use in validation
@@ -862,6 +851,12 @@ public class AnimatedSpriteEditorIO
         }          
     }
     
+    /**
+     * This method copies a source file to a destination file.
+     * @param sourceFile 	the file to copy
+     * @param destFile		the file copy to
+     * @throws IOException 
+     */
     public static void copyFile(File sourceFile, File destFile) throws IOException {
         if(!destFile.exists()) {
             destFile.createNewFile();

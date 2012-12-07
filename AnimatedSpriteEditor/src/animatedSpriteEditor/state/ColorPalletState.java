@@ -32,7 +32,6 @@ public class ColorPalletState
      * the data, the loadColorPallet method must be called
      * following construction.
      * 
-     * @param initView The GUI component that will represent
      * this color pallet.
      */
     public ColorPalletState()

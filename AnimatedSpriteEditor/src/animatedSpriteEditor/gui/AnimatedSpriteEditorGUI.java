@@ -234,7 +234,6 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         
         updateMode();
         
-    	setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
     
     // ACCESSOR METHODS

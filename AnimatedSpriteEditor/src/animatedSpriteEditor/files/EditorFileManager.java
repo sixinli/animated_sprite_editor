@@ -10,10 +10,8 @@ import java.util.Iterator;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 import sprite_renderer.AnimationState;
-import sprite_renderer.PoseList;
 import sprite_renderer.SpriteType;
 
 import animatedSpriteEditor.AnimatedSpriteEditor;
@@ -363,7 +361,16 @@ public class EditorFileManager
             // THE USER CAN OPT OUT HERE
             continueToExit = poseurFileManager.promptToSave();
         }
-        
+        else{
+        	AnimatedSpriteEditorGUI gui = AnimatedSpriteEditor.getEditor().getGUI();
+        	int selection = JOptionPane.showOptionDialog(
+        					gui,
+        					EXIT_MESSAGE_TEXT, 
+        					EXIT_MESSAGE_TITLE_TEXT, 
+        					JOptionPane.YES_NO_OPTION, 
+        					JOptionPane.QUESTION_MESSAGE, null, null, null);
+        	continueToExit = (selection==JOptionPane.YES_OPTION);
+        }
         // IF THE USER REALLY WANTS TO EXIT THE APP
         if (continueToExit)
         {
@@ -661,7 +668,7 @@ public class EditorFileManager
      * @param scaledWidth	the intended width
      * @param scaledHeight	the intended height
      * @param preserveAlpha	perserveAlpha or not
-     * @return
+     * @return the resized BufferedImage 
      */
     public BufferedImage createResizedCopy(Image originalImage, 
     		int scaledWidth, int scaledHeight, 

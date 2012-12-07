@@ -3,6 +3,7 @@ package animatedSpriteEditor.events.window;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import animatedSpriteEditor.AnimatedSpriteEditor;
+import animatedSpriteEditor.files.EditorFileManager;
 
 /**
  * This handler responds to interactions with the window. Note
@@ -28,6 +29,9 @@ public class PoseurWindowHandler implements WindowListener
     public void windowClosing(WindowEvent we) 
     {
         // RELAY THE REQUEST TO THE FILE MANAGER
+        AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+        EditorFileManager fileManager = singleton.getFileManager();
+        fileManager.requestExit();
     }
 
     // WE WILL NOT BE USING THE REST OF THESE METHODS,

@@ -335,6 +335,8 @@ public class AnimatedSpriteEditorSettings
     public static final String DELETE_ONLY_ANIMATION_STATE_TITLE_TEXT = "There Is Only One Animation State";
     public static final String COLOR_PALLET_LOADING_ERROR_TEXT = "An error occured while loading the color pallet";
     public static final String COLOR_PALLET_LOADING_ERROR_TITLE_TEXT = "Color Pallet Loading Error";
+    public static final String EXIT_MESSAGE_TEXT = "Exit the program?";
+    public static final String EXIT_MESSAGE_TITLE_TEXT = "Exit?";
     
     /***** POSE DIMENSIONS DIALOG TEXT *****/
     public static final String POSE_DIMENSIONS_DIALOG_TITLE = "Changing Pose Dimensions";
