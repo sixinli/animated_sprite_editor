@@ -365,6 +365,7 @@ public class AnimatedSpriteEditorSettings
     public static final int     DEFAULT_POSE_WIDTH = 256;
     public static final int     DEFAULT_POSE_HEIGHT = 256;
     public static final int     LINE_SELECTION_TOLERANCE = 5;
+    public static final int     DEFAULT_POSE_DURATION = 5;
     
     /***** DEBUG TEXT SETTINGS *****/
     public static final int     DEBUG_TEXT_START_X = 50;

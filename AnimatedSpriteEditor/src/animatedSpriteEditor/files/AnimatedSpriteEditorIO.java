@@ -522,6 +522,7 @@ public class AnimatedSpriteEditorIO
 				+ spriteTypeName + XML_FILE_EXTENSION;
     	
     	String currentStateName = singleton.getAnimationStateName();
+    	int currentStateNameLength = currentStateName.length();
         File currentSpriteTypeFile = new File(spriteTypeXMLFile);
         
         try {
@@ -531,6 +532,7 @@ public class AnimatedSpriteEditorIO
 			
 			NodeList stateNodes = doc.getElementsByTagName(STATE_NODE);
 			int len = stateNodes.getLength();
+			ArrayList<String> ids = new ArrayList<String>();
 			for(int i=0; i<len; i++)
 			{	
 				Node stateNode = stateNodes.item(i);
@@ -538,6 +540,40 @@ public class AnimatedSpriteEditorIO
 				if (stateNode.getTextContent().equals(currentStateName))
 				{
 					stateNode.setTextContent(newStateName);
+					
+					NodeList posesList = stateNode.getNextSibling().getNextSibling().getChildNodes();
+					len = posesList.getLength();
+					for(int j = 1; j<len; j+=2)
+					{
+						ids.add(posesList.item(j).getAttributes().item(1).getTextContent());
+					}
+					
+					NodeList imagesFileNodes = doc.getElementsByTagName(IMAGE_FILE_NODE);
+					len = imagesFileNodes.getLength();
+					for(int j = 0, k=0; k<ids.size(); j++)
+					{
+						NamedNodeMap imageFileNodesAttr = imagesFileNodes.item(j).getAttributes();
+						String ID = imageFileNodesAttr.item(1).getTextContent();
+						if(ID.equals(ids.get(k)))
+						{
+							String newFileName = imageFileNodesAttr.item(0).getTextContent();
+							File oldImageFile = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + IMAGE_FOLDER_PATH + newFileName);
+							File oldPoseFile = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + 
+									POSE_FOLDER_PATH + newFileName.substring(0, newFileName.lastIndexOf('.')) + POSE_FILE_EXTENSION);
+							
+							newFileName = newFileName.substring(currentStateNameLength, newFileName.length());
+							newFileName = newStateName + newFileName;
+							imageFileNodesAttr.item(0).setNodeValue(newFileName);
+							
+							File newImageFile = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + IMAGE_FOLDER_PATH + newFileName);
+							File newPoseFile = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + 
+									POSE_FOLDER_PATH + newFileName.substring(0, newFileName.lastIndexOf('.')) + POSE_FILE_EXTENSION);
+							
+							oldImageFile.renameTo(newImageFile);
+							oldPoseFile.renameTo(newPoseFile);
+							k++;
+						}
+					}
 					
 					TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		            Transformer transformer = transformerFactory.newTransformer();
@@ -555,7 +591,6 @@ public class AnimatedSpriteEditorIO
 		                    ANIMATION_STATE_SAVED_TEXT,
 		                    ANIMATION_STATE_SAVED_TITLE_TEXT,
 		                    JOptionPane.INFORMATION_MESSAGE);
-		            
 		            
 		            return true; 
 				}
