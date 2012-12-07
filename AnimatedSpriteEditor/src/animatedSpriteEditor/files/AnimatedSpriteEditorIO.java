@@ -157,7 +157,7 @@ public class AnimatedSpriteEditorIO
     			AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
     			   HashMap<Integer,Image> imageHM = singleton.getSpriteType().getSpriteImages();
 
-    		        imageHM.remove(id);//TODO: jkh
+    		        imageHM.remove(id);
     		        imageHM.put(id, img);
     		        
     		        

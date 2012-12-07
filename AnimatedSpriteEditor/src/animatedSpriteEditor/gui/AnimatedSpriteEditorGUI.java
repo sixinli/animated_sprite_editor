@@ -737,7 +737,6 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     		for(int i = 0; i<posesList.size(); i++)
     		{
     			Image currentPoseImage = singleton.getSpriteType().getSpriteImages().get(posesList.get(i).getImageID());
-    			System.out.println(currentPoseImage);
     			currentPoseImage = singleton.getFileManager().createResizedCopy(currentPoseImage, 128, 128, false);
     			ImageIcon currentPoseIcon = new ImageIcon(currentPoseImage);
     			JButton currentPoseButton = new JButton();
