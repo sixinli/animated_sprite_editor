@@ -372,6 +372,7 @@ public class AnimatedSpriteEditorIO
 			}
 			
 			String currentAnimationStateName = singleton.getAnimationStateName();
+			int currentStateNameLength = currentAnimationStateName.length();
 			
 			Node currentStateNode = stateNodes.item(0);	
 			NodeList currentPoseNodes = currentStateNode.getNextSibling().getNextSibling().getChildNodes();
@@ -404,26 +405,36 @@ public class AnimatedSpriteEditorIO
 			{
 				String duration = currentPoseNodes.item(i).getAttributes().item(0).getTextContent();
 				int id = Integer.parseInt(currentPoseNodes.item(i).getAttributes().item(1).getTextContent());
-				String fileName = imageNodes.item(id-1).getAttributes().item(0).getTextContent();
+				String fileName = "";
 				
+				for(int j=0; j<imageNodes.getLength(); j++)
+				{
+					String imageID = imageNodes.item(j).getAttributes().item(1).getTextContent();
+					if(imageID.equals(""+id))
+					{
+						fileName = imageNodes.item(j).getAttributes().item(0).getTextContent();
+					}
+				}
+				
+				String newFileName = newAnimationStateName + fileName.substring( currentStateNameLength, fileName.length());
 				Element newPoseNode = doc.createElement(POSE_NODE);
 				newPoseNode.setAttribute(DURATION_ATTRIBUTE, duration);
 				newPoseNode.setAttribute(IMAGE_ID_ATTRIBUTE, ""+(imageCount+i/2+1));
 				animationSequenceNode.appendChild(newPoseNode);
-				Node imageFileNodeToCopy = imageNodes.item(id-1);
 				Element newImageNode = doc.createElement(IMAGE_FILE_NODE);
-				newImageNode.setAttribute(FILE_NAME_ATTRIBUTE, newAnimationStateName + "_" + fileName);
+				newImageNode.setAttribute(FILE_NAME_ATTRIBUTE, newFileName);
 				newImageNode.setAttribute(ID_ATTRIBUTE, ""+(imageCount+i/2+1));
 				
 				File fileSource = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + IMAGE_FOLDER_PATH + fileName);
-				File fileDest = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + IMAGE_FOLDER_PATH + newAnimationStateName + "_" + fileName);
+				File fileDest = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + IMAGE_FOLDER_PATH + newFileName);
 				copyFile(fileSource, fileDest);
 				
 				
 				
-				fileName = fileName.substring(0, fileName.lastIndexOf('.')) + ".pose";
+				fileName = fileName.substring(0, fileName.lastIndexOf('.')) + POSE_FILE_EXTENSION;
+				newFileName = newFileName.substring(0, newFileName.lastIndexOf('.')) + POSE_FILE_EXTENSION;
 				fileSource = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + POSE_FOLDER_PATH + fileName);
-				fileDest = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + POSE_FOLDER_PATH + newAnimationStateName + "_" + fileName);
+				fileDest = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + POSE_FOLDER_PATH + newFileName);
 				copyFile(fileSource, fileDest);
 				
 				animationSequenceNode.appendChild(newPoseNode);
