@@ -455,18 +455,7 @@ public class EditorFileManager
                 	// SAVE OUR NEW FILE
                 	editorIO.saveSpriteType(currentFile, newSpriteType, animationStateName);
                 	saved = true;
-
-                	
-                	boolean poseMade = poseurFileManager.promptForNew();
-                	while(poseMade!=true)
-                	{
-                		poseMade = poseurFileManager.promptForNew();
-                	}
-                	
-                	// AND PUT THE FILE NAME IN THE TITLE BAR
-//                	String appName = gui.getAppName();
-//                	gui.setTitle(appName + APP_NAME_FILE_NAME_SEPARATOR + currentFile); 
-            
+                	poseurFileManager.promptForNew();
                 	reloadSpriteType();
                 	
                 	// WE DID IT!

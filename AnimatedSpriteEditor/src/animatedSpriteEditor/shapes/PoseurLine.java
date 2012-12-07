@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.RectangularShape;
 
 import org.w3c.dom.Element;
 import static animatedSpriteEditor.AnimatedSpriteEditorSettings.*;
@@ -88,7 +87,8 @@ public class PoseurLine extends PoseurShape
     @Override
     public boolean containsPoint(Point2D testPoint)
     {
-        return geometry.contains(testPoint);
+        double distance = geometry.ptSegDist(testPoint);
+        return distance < (super.outlineThickness.getLineWidth() + LINE_SELECTION_TOLERANCE);
     }
    
     /**
