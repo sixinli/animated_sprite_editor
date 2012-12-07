@@ -314,7 +314,15 @@ public class AnimatedSpriteEditorSettings
     public static final String DELETE_POSE_TEXT = "Are you sure to delete the current pose?";
     public static final String DELETE_POSE_TITLE_TEXT = "Delete Current Pose?";
     public static final String DELETE_POSE_ERROR_TEXT = "An error occured when deleting the pose.";
-    public static final String DELETE_POSE_ERROR_TITLE_TEXT = "Pose Deletion Error";
+	public static final String DELETE_POSE_ERROR_TITLE_TEXT = "Pose Deletion Error";
+	public static final String DELETE_ONLY_POSE_TEXT = "Delete this pose would delete the animation state, continue?";
+    public static final String DELETE_ONLY_POSE_TITLE_TEXT = "There Is Only One Pose";
+    public static final String DELETE_ANIMATION_STATE_TEXT = "Are you sure to delete the current animation state?";
+    public static final String DELETE_ANIMATION_STATE_TITLE_TEXT = "Delete Current Animation State";
+    public static final String DELETE_ANIMATION_STATE_ERROR_TEXT = "An error occured when deleting the animation state.";
+	public static final String DELETE_ANIMATION_STATE_ERROR_TITLE_TEXT = "Animation State Deletion Error";
+    public static final String DELETE_ONLY_ANIMATION_STATE_TEXT = "Delete this animation state would delete the sprite type, continue?";
+    public static final String DELETE_ONLY_ANIMATION_STATE_TITLE_TEXT = "There Is Only One Animation State";
     public static final String COLOR_PALLET_LOADING_ERROR_TEXT = "An error occured while loading the color pallet";
     public static final String COLOR_PALLET_LOADING_ERROR_TITLE_TEXT = "Color Pallet Loading Error";
     

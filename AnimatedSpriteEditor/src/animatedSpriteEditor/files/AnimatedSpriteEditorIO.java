@@ -653,8 +653,8 @@ public class AnimatedSpriteEditorIO
             	AnimatedSpriteEditorGUI gui = singleton.getGUI();
                 JOptionPane.showMessageDialog(
                     gui,
-                    SPRITE_TYPE_SAVING_ERROR_TEXT,
-                    SPRITE_TYPE_SAVING_ERROR_TITLE_TEXT,
+                    DELETE_ANIMATION_STATE_ERROR_TEXT,
+                    DELETE_ANIMATION_STATE_ERROR_TITLE_TEXT,
                     JOptionPane.ERROR_MESSAGE);   
                 return false;
             }   

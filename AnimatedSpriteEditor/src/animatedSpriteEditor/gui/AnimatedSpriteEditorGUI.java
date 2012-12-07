@@ -325,7 +325,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
      * @return the number of poses
      */
     public int getPosesCount(){ return poseListLength;}
-    
+        
     /**
      * Accessor method to test if the outline color toggle button
      * is selected. Note that either the outline or fill button
@@ -458,6 +458,21 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         	saveButton.setEnabled(false);
         	movePoseUpButton.setEnabled(false);
         	movePoseDownButton.setEnabled(false);
+        	poseList.removeAll();
+        	
+        	PoseurPose tempPose = new PoseurPose(DEFAULT_POSE_WIDTH, DEFAULT_POSE_HEIGHT);
+            PoseurStateManager stateManager = singleton.getStateManager().getPoseurStateManager();
+            PoseurPose actualPose = stateManager.getPose();
+            actualPose.loadPoseData(tempPose);  
+            zoomableCanvas.revalidate();
+            zoomableCanvas.repaint();
+            for(int i=0; i<spriteList.size(); i++)
+            {
+            	spriteList.remove(i);
+            }
+            sceneRenderingPanel.revalidate();
+            sceneRenderingPanel.repaint();
+        	singleton.getFileManager().getPoseurFileManager().setCurrentFile(null);        	
         	
         	
         }

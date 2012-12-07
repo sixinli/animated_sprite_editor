@@ -152,6 +152,19 @@ public class EditorFileManager
     }
     
     /**
+     * This method would delete the current sprite type.
+     */
+    public void requestDelete()
+    {
+    	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+    	String spriteTypeName = singleton.getSpriteTypeName();
+    	File file = new File(SPRITE_TYPE_PATH + spriteTypeName);
+    	deleteFolder(file);
+    	singleton.getStateManager().setState(EditorState.SPRITE_TYPE_STATE);
+    	singleton.getGUI().repaint();
+    }
+    
+    /**
 	 * This method starts the process of editing a new state. If
 	 * a pose is already being edited, it will prompt the user
 	 * to save it first.
@@ -229,27 +242,54 @@ public class EditorFileManager
 	 * This method lets the user to delete an
 	 * animation state. 
 	 */
-	public void requestDeleteState(){
+	public void requestDeleteState()
+	{
 		AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
-		AnimatedSpriteEditorGUI gui = singleton.getGUI();
 		String currentAnimationStateName = singleton.getAnimationStateName();
-		boolean deleted = editorIO.deletedAnimationState(currentAnimationStateName);
-		if(deleted)
-		{
-			// NOW THAT WE'VE SAVED, LET'S MAKE SURE WE'RE IN THE RIGHT MODE
-			singleton.getFileManager().getPoseurFileManager().setCurrentFile(null);
-			singleton.setAnimationState(null);
-			singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
-			reloadSpriteType();
-		}
-		else
-		{
-    		JOptionPane.showMessageDialog(
-	                gui,
-	                ANIMATION_STATE_NAME_EXISTED_TEXT,
-	                ANIMATION_STATE_NAME_EXISTED_TITLE_TEXT,
-	                JOptionPane.ERROR_MESSAGE);
-		}
+	    AnimatedSpriteEditorGUI gui = singleton.getGUI();
+	    int selection = JOptionPane.showOptionDialog(   gui, 
+	                DELETE_ANIMATION_STATE_TEXT,
+	                DELETE_ANIMATION_STATE_TITLE_TEXT, 
+	                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+	                null, null, null);
+	        
+	     // IF THE USER CLICKED YES, THEN DELETE THE STATE
+	     if (selection == JOptionPane.YES_OPTION)
+	     {
+	    	  int animationCount = singleton.getGUI().getStateComboBoxModel().getSize()-1; 
+	          if (animationCount <= 1)
+	          {
+	          	 selection = JOptionPane.showOptionDialog(   
+	          			 	 gui, 
+	                         DELETE_ONLY_ANIMATION_STATE_TEXT,
+	                         DELETE_ONLY_ANIMATION_STATE_TITLE_TEXT, 
+	                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+	                         null, null, null);
+	             if (selection == JOptionPane.YES_OPTION)
+	             {
+	            	 requestDelete();
+	             }
+	           }
+	           else{
+	            	boolean deleted = editorIO.deletedAnimationState(currentAnimationStateName);
+	        		if(deleted)
+	        		{
+	        			// NOW THAT WE'VE SAVED, LET'S MAKE SURE WE'RE IN THE RIGHT MODE
+	        			singleton.getFileManager().getPoseurFileManager().setCurrentFile(null);
+	        			singleton.setAnimationState(null);
+	        			singleton.getStateManager().setState(EditorState.SELECT_ANIMATION_STATE);
+	        			reloadSpriteType();
+	        		}
+	        		else
+	        		{
+	            		JOptionPane.showMessageDialog(
+	        	                gui,
+	        	                ANIMATION_STATE_NAME_EXISTED_TEXT,
+	        	                ANIMATION_STATE_NAME_EXISTED_TITLE_TEXT,
+	        	                JOptionPane.ERROR_MESSAGE);
+	        		}
+	            }
+	        }
 	}
 
 	/**
@@ -649,7 +689,27 @@ public class EditorFileManager
     	return scaledBI;
     }
 
+    /**
+     * This method deletes a folder and its content.
+     * @param folder the folder to delete
+     */
+    public static void deleteFolder(File folder) {
+        File[] files = folder.listFiles();
+        if(files!=null) { 
+            for(File f: files) {
+                if(f.isDirectory()) {
+                    deleteFolder(f);
+                } else {
+                    f.delete();
+                }
+            }
+        }
+        folder.delete();
+    }
 
+    /**
+     * This method reloads the sprite type.
+     */
 	public void reloadSpriteType()
 	{
 		AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
