@@ -311,8 +311,12 @@ public class AnimatedSpriteEditorSettings
     public static final String LOADING_XML_ERROR_TEXT = "Error Loading XML";
     public static final String EXPORT_POSE_TEXT = "Pose will be exported to ";
     public static final String EXPORT_POSE_TITLE_TEXT = "Export Pose?";
-    public static final String COLOR_PALLET_LOADING_ERROR_TEXT = "An error Occured While Loading the Color Pallet";
-    public static final String COLOR_PALLET_LOADING_ERROR_TITLE_TEXT = "Color Pallet Loading Errow";
+    public static final String DELETE_POSE_TEXT = "Are you sure to delete the current pose?";
+    public static final String DELETE_POSE_TITLE_TEXT = "Delete Current Pose?";
+    public static final String DELETE_POSE_ERROR_TEXT = "An error occured when deleting the pose.";
+    public static final String DELETE_POSE_ERROR_TITLE_TEXT = "Pose Deletion Error";
+    public static final String COLOR_PALLET_LOADING_ERROR_TEXT = "An error occured while loading the color pallet";
+    public static final String COLOR_PALLET_LOADING_ERROR_TITLE_TEXT = "Color Pallet Loading Error";
     
     /***** POSE DIMENSIONS DIALOG TEXT *****/
     public static final String POSE_DIMENSIONS_DIALOG_TITLE = "Changing Pose Dimensions";

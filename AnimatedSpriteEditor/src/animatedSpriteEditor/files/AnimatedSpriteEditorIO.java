@@ -357,8 +357,20 @@ public class AnimatedSpriteEditorIO
 			
 			NodeList stateNodes = doc.getElementsByTagName(STATE_NODE);
 			NodeList imageNodes = doc.getElementsByTagName(IMAGE_FILE_NODE);
-			int imageCount = imageNodes.getLength();			
-			int len = stateNodes.getLength();
+			Node imageListNode = doc.getElementsByTagName(IMAGES_LIST_NODE).item(0);
+
+			NodeList imageFileNodes = imageListNode.getChildNodes();
+			int len = imageFileNodes.getLength();
+			int imageCount = 0;
+			for(int i=1; i<len; i+=2)
+			{
+				int imageID = Integer.parseInt(imageFileNodes.item(i).getAttributes().item(1).getTextContent());
+				if(imageID>imageCount)
+				{
+					imageCount = imageID;
+				}
+			}
+			
 			String currentAnimationStateName = singleton.getAnimationStateName();
 			
 			Node currentStateNode = stateNodes.item(0);	
@@ -377,7 +389,7 @@ public class AnimatedSpriteEditorIO
 			Element stateNode = doc.createElement(STATE_NODE);
 			stateNode.setTextContent(newAnimationStateName);
 			
-			Node imageListNode = doc.getElementsByTagName(IMAGES_LIST_NODE).item(0);
+			imageListNode = doc.getElementsByTagName(IMAGES_LIST_NODE).item(0);
 			Node animationListNodes = doc.getElementsByTagName(ANIMATIONS_LIST_NODE).item(0);
 			Element animationSequenceNode = doc.createElement(ANIMATION_SEQUENCE_NODE);
 			animationStateNode.appendChild(stateNode);
@@ -582,7 +594,6 @@ public class AnimatedSpriteEditorIO
 			NodeList stateNodes = doc.getElementsByTagName(STATE_NODE);
 			NodeList imageNodes = doc.getElementsByTagName(IMAGE_FILE_NODE);
 			Node imageListNode = imageNodes.item(0).getParentNode();
-			int imageCount = imageNodes.getLength();			
 			int len = stateNodes.getLength();
 			String currentAnimationStateName = singleton.getAnimationStateName();
 			
