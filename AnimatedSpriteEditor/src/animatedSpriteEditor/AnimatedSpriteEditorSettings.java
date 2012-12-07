@@ -302,6 +302,8 @@ public class AnimatedSpriteEditorSettings
     public static final String POSE_NAME_INPUT_ERROR_TITLE_TEXT = "Pose Name Input Error";
     public static final String POSE_NAME_EXISTED_TEXT = "The input pose name is already existed.";
     public static final String POSE_NAME_EXISTED_TITLE_TEXT = "Pose Name Input Error";
+    public static final String POSE_MOVED_TEXT = "The pose is moved.";
+    public static final String POSE_MOVED_TITLE_TEXT = "Pose Moved";
     public static final String CHANGE_POSE_DIMENSIONS_TEXT = "Enter New Pose Dimensions";
     public static final String CHANGE_POSE_DIMENSIONS_TITLE_TEXT = "Change Pose Dimensions";
     public static final String ENTER_POSE_WIDTH_TEXT = "Enter Pose Width: ";
@@ -311,6 +313,8 @@ public class AnimatedSpriteEditorSettings
     public static final String LOADING_XML_ERROR_TEXT = "Error Loading XML";
     public static final String EXPORT_POSE_TEXT = "Pose will be exported to ";
     public static final String EXPORT_POSE_TITLE_TEXT = "Export Pose?";
+    public static final String MOVE_POSE_ERROR_TEXT = "An error occured when moving the pose.";
+    public static final String MOVE_POSE_ERROR_TITLE_TEXT = "Move Pose Error";
     public static final String DELETE_POSE_TEXT = "Are you sure to delete the current pose?";
     public static final String DELETE_POSE_TITLE_TEXT = "Delete Current Pose?";
     public static final String DELETE_POSE_ERROR_TEXT = "An error occured when deleting the pose.";
