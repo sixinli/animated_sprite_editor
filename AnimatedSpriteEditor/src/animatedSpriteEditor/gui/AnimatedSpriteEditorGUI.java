@@ -73,6 +73,7 @@ import animatedSpriteEditor.events.files.CopyStateHandler;
 import animatedSpriteEditor.events.files.DeletePoseHandler;
 import animatedSpriteEditor.events.files.DeleteStateHandler;
 import animatedSpriteEditor.events.files.ExitHandler;
+import animatedSpriteEditor.events.files.ExportHandler;
 import animatedSpriteEditor.events.files.MovePoseDownHandler;
 import animatedSpriteEditor.events.files.MovePoseUpHandler;
 import animatedSpriteEditor.events.files.NewHandler;
@@ -163,6 +164,10 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     private JButton movePoseDownButton;
     private JButton saveButton;
     private JButton exitButton;
+    
+    // EXPORT TO GIF CONTROL
+    private JToolBar exportToolbar;
+    private JButton exportToGIFButton;
     
     // EDIT CONTROLS
     private JToolBar editToolbar;
@@ -457,6 +462,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         	saveButton.setEnabled(false);
         	movePoseUpButton.setEnabled(false);
         	movePoseDownButton.setEnabled(false);
+        	exportToGIFButton.setEnabled(false);
         	poseList.removeAll();
         	
         	PoseurPose tempPose = new PoseurPose(DEFAULT_POSE_WIDTH, DEFAULT_POSE_HEIGHT);
@@ -495,6 +501,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         	saveButton.setEnabled(false);
         	movePoseUpButton.setEnabled(false);
         	movePoseDownButton.setEnabled(false);
+        	exportToGIFButton.setEnabled(false);
         	
         	updateAnimationStatesList();
         	
@@ -518,6 +525,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         	renameStateButton.setEnabled(true);
         	deleteStateButton.setEnabled(true);
         	newPoseButton.setEnabled(true);
+        	exportToGIFButton.setEnabled(true);
         	setEnabledDisplayControls(true);
         	singleton.getStateManager().getPoseurStateManager().clearClipboardShape();
         	
@@ -752,7 +760,11 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     	}
     }
     
-    /**
+    public ArrayList<Pose> getPosesList() {
+		return posesList;
+	}
+
+	/**
      * This method update the animation state list.
      */
     public void updateAnimationStatesList()
@@ -873,6 +885,11 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         movePoseDownButton = (JButton)initButton(MOVE_POSE_DOWN_IMAGE_FILE,   fileToolbar,  tracker, idCounter++, JButton.class, null, MOVE_POSE_DOWN_TOOLTIP);
         saveButton   = (JButton)initButton(SAVE_IMAGE_FILE,     fileToolbar,  tracker, idCounter++, JButton.class, null, SAVE_TOOLTIP);
         exitButton   = (JButton)initButton(EXIT_IMAGE_FILE,     fileToolbar,  tracker, idCounter++, JButton.class, null, EXIT_TOOLTIP);
+        
+        // EXPORT TO GIF CONTROL
+        exportToolbar = new JToolBar();
+        exportToGIFButton   = (JButton)initButton(EXPORT_IMAGE_FILE,  exportToolbar,  tracker, idCounter++, JButton.class, null, EXPORT_TOOLTIP);
+
         
         // EDITING CONTROLS
         editToolbar = new JToolBar();
@@ -1020,6 +1037,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         northOfNorthPanel.add(editToolbar);
         northOfNorthPanel.add(shapeToolbar);
         southOfNorthPanel.add(stateToolBar);
+        southOfNorthPanel.add(exportToolbar);
         southOfNorthPanel.add(zoomToolbar);
         southOfNorthPanel.add(colorSelectionToolbar);
         
@@ -1178,6 +1196,10 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         movePoseDownButton.addActionListener(mpdh);
         ExitHandler eh = new ExitHandler();
         exitButton.addActionListener(eh);
+        
+        // EXPORT TO GIF CONTROL
+        ExportHandler exh = new ExportHandler();
+        exportToGIFButton.addActionListener(exh);
         
         // EDIT TOOLBAR HANDLER
         StartSelectionHandler startSH = new StartSelectionHandler();

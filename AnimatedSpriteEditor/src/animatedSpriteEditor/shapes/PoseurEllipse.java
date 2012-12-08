@@ -7,6 +7,8 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
 
 import org.w3c.dom.Element;
+
+import animatedSpriteEditor.AnimatedSpriteEditor;
 import static animatedSpriteEditor.AnimatedSpriteEditorSettings.*;
 
 /**

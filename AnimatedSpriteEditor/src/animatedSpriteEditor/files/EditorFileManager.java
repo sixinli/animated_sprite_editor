@@ -4,6 +4,7 @@ package animatedSpriteEditor.files;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Iterator;
@@ -158,6 +159,7 @@ public class EditorFileManager
     	String spriteTypeName = singleton.getSpriteTypeName();
     	File file = new File(SPRITE_TYPE_PATH + spriteTypeName);
     	deleteFolder(file);
+    	singleton.getFileManager().getPoseurFileManager().setCurrentFile(null);
     	singleton.getStateManager().setState(EditorState.SPRITE_TYPE_STATE);
     	singleton.getGUI().repaint();
     }
@@ -677,6 +679,8 @@ public class EditorFileManager
     	int imageType = preserveAlpha ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
     	BufferedImage scaledBI = new BufferedImage(scaledWidth, scaledHeight, imageType);
     	Graphics2D g = scaledBI.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
     	if (preserveAlpha) {
     		g.setComposite(AlphaComposite.Src);
     	}

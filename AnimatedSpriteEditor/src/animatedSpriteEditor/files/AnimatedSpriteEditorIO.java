@@ -3,9 +3,11 @@ package animatedSpriteEditor.files;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.MediaTracker;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
@@ -21,6 +23,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.imageio.stream.ImageOutputStream;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -879,4 +883,39 @@ public class AnimatedSpriteEditorIO
             }
         }
     }
+    private BufferedImage processImage(Image img){
+    	BufferedImage image = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
+      	Graphics2D g = image.createGraphics();
+      	g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+  		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+  		g.setColor(Color.WHITE);
+        g.fillRect(0, 0, 256, 256);
+  		g.drawImage(img, 0, 0, 256, 256, null); 
+    	g.dispose();
+    	return image;
+    }
+    public void exportToGIF() throws IOException
+    {
+    	  AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
+    	  ArrayList<Pose> posesList = singleton.getGUI().getPosesList();
+    	  HashMap<Integer, Image> imageList = singleton.getSpriteType().getSpriteImages();
+    	  
+    		    ImageOutputStream output = 
+    		      new FileImageOutputStream(new File(SPRITE_TYPE_PATH + singleton.getSpriteTypeName() + "_" + singleton.getAnimationStateName() + ".gif"));
+    		    BufferedImage firstImage = processImage(imageList.get(posesList.get(1).getImageID()));
+    		    // create a gif sequence with the type of the first image, 1 second
+    		    // between frames, which loops continuously
+    		    GifSequenceWriter writer = 
+    		      new GifSequenceWriter(output, firstImage.getType(), 1, true);
+
+    		    // write out the first image to our sequence...
+    		    writer.writeToSequence(firstImage);
+    		    for(int i=1; i<posesList.size()-1; i++) {
+    		    	  BufferedImage nextImage = processImage(imageList.get(posesList.get(i).getImageID()));
+    		    	  writer.writeToSequence(nextImage);
+    		    }
+    		    writer.close();
+    		    output.close();
+    }
+
 }
