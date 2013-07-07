@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<sprite_type>
+     <width>128</width>
+     <height>128</height>
+     <images_list>
+          <image_file file_name="IDLE_0.png" id="1"/>
+     
+     
+     
+     
+     
+     <image_file file_name="IDLE_1.png" id="2"/>
+     <image_file file_name="IDLE_2.png" id="3"/>
+     <image_file file_name="IDLE_3.png" id="4"/>
+     <image_file file_name="IDLE_4.png" id="5"/>
+     <image_file file_name="IDLE_5.png" id="6"/>
+     </images_list>
+     <animations_list>
+          <animation_state>
+               <state>IDLE</state>
+               <animation_sequence>
+                    <pose duration="5" image_id="1"/>
+               
+               
+               
+               
+               
+               <pose duration="5" image_id="2"/>
+               <pose duration="5" image_id="3"/>
+               <pose duration="5" image_id="4"/>
+               <pose duration="5" image_id="5"/>
+               <pose duration="5" image_id="6"/>
+               </animation_sequence>
+          </animation_state>
+     </animations_list>
+</sprite_type>

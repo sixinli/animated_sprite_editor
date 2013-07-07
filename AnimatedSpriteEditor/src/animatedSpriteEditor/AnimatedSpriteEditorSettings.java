@@ -135,8 +135,8 @@ public class AnimatedSpriteEditorSettings
 
     public static final String OPEN_TOOLTIP = "Open Sprite Type";
     public static final String SAVE_TOOLTIP = "Save";
-    public static final String SAVE_AS_TOOLTIP = "Save As";
-    public static final String EXPORT_TOOLTIP = "Export Pose to Image";
+    public static final String SAVE_AS_TOOLTIP = "Save Sprite Type As";
+    public static final String EXPORT_TOOLTIP = "Export Pose to GIF";
     public static final String EXIT_TOOLTIP = "Exit Application";
 
     // TOOLTIPS FOR CONTROLS ON EDIT TOOLBAR
@@ -260,6 +260,12 @@ public class AnimatedSpriteEditorSettings
     public static final String PROMPT_TO_REWRITE_TITLE_TEXT = "Rewrite your pose?";
     public static final String SPRITE_TYPE_NAME_REQUEST_TEXT = "What do you want to name your sprite type?";
     public static final String SPRITE_TYPE_NAME_REQUEST_TITLE_TEXT = "Enter Sprite Type File Name";
+    public static final String SPRITE_TYPE_NAME_EXIST_TEXT = "The name of the new sprite type already exist, please choose another name.";
+    public static final String SPRITE_TYPE_NAME_EXIST_TITLE_TEXT = "Sprite Type Name Exist Error";
+    public static final String SPRITE_TYPE_SAVED_AS_TEXT = "The current sprite type has been saved as ";
+    public static final String SPRITE_TYPE_SAVED_AS_TITLE_TEXT = "Sprite Type Saved As";
+    public static final String SPRITE_TYPE_SAVE_AS_ERROR_TEXT = "An error occured while saving as the sprite type.";
+    public static final String SPRITE_TYPE_SAVE_AS_ERROR_TITLE_TEXT = "Sprite Type Save As Error";
     public static final String ANIMATION_STATE_NAME_REQUEST_TEXT = "What do you want to name your animation state?";
     public static final String ANIMATION_STATE_NAME_REQUEST_TITLE_TEXT = "Enter Animation State File Name";
     public static final String POSE_COPIED_TEXT = "Pose copied sucessfully";
@@ -285,7 +291,7 @@ public class AnimatedSpriteEditorSettings
     public static final String ANIMATION_STATE_NAME_EXISTED_TEXT = "The input animation name is already existed.";
     public static final String ANIMATION_STATE_NAME_EXISTED_TITLE_TEXT = "Animation Name Input Error";	
     public static final String IMAGE_EXPORTED_TEXT = "Your pose has been exportetd to ";
-    public static final String IMAGE_EXPORTED_TITLE_TEXT = "Image Exported";
+    public static final String IMAGE_EXPORTED_TITLE_TEXT = "GIF Exported";
     public static final String IMAGE_EXPORTING_ERROR_TEXT = "An Error Occured While Exporting the Image";
     public static final String IMAGE_EXPORTING_ERROR_TITLE_TEXT = "Image Exporting Error";
     public static final String POSE_SAVED_TEXT = "Pose File has been Saved";

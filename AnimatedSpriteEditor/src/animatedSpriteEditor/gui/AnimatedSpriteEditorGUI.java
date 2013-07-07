@@ -82,6 +82,7 @@ import animatedSpriteEditor.events.files.NewStateHandler;
 import animatedSpriteEditor.events.files.OpenHandler;
 import animatedSpriteEditor.events.files.PoseSelectionHandler;
 import animatedSpriteEditor.events.files.RenameStateHandler;
+import animatedSpriteEditor.events.files.SaveAsHandler;
 import animatedSpriteEditor.events.files.SaveHandler;
 import animatedSpriteEditor.events.files.StateSelectionHandler;
 import animatedSpriteEditor.events.shape.EllipseSelectionHandler;
@@ -162,6 +163,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
     private JButton openButton;
     private JButton movePoseUpButton;
     private JButton movePoseDownButton;
+    private JButton saveAsButton;
     private JButton saveButton;
     private JButton exitButton;
     
@@ -463,6 +465,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         	movePoseUpButton.setEnabled(false);
         	movePoseDownButton.setEnabled(false);
         	exportToGIFButton.setEnabled(false);
+        	saveAsButton.setEnabled(false);
         	poseList.removeAll();
         	
         	PoseurPose tempPose = new PoseurPose(DEFAULT_POSE_WIDTH, DEFAULT_POSE_HEIGHT);
@@ -489,7 +492,10 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         	setEnabledShapeControls(false);
         	setEnabledZoomControls(false);
         	setEnabledDisplayControls(false);
+        	
+        	saveAsButton.setEnabled(true);
         	newStateButton.setEnabled(true);
+        	
         	newPoseButton.setEnabled(false);
         	copyStateButton.setEnabled(false);
         	copyPoseButton.setEnabled(false);
@@ -884,6 +890,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         movePoseUpButton = (JButton)initButton(MOVE_POSE_UP_IMAGE_FILE,  fileToolbar,  tracker, idCounter++, JButton.class, null, MOVE_POSE_UP_TOOLTIP);
         movePoseDownButton = (JButton)initButton(MOVE_POSE_DOWN_IMAGE_FILE,   fileToolbar,  tracker, idCounter++, JButton.class, null, MOVE_POSE_DOWN_TOOLTIP);
         saveButton   = (JButton)initButton(SAVE_IMAGE_FILE,     fileToolbar,  tracker, idCounter++, JButton.class, null, SAVE_TOOLTIP);
+        saveAsButton   = (JButton)initButton(SAVE_AS_IMAGE_FILE,     fileToolbar,  tracker, idCounter++, JButton.class, null, SAVE_AS_TOOLTIP);
         exitButton   = (JButton)initButton(EXIT_IMAGE_FILE,     fileToolbar,  tracker, idCounter++, JButton.class, null, EXIT_TOOLTIP);
         
         // EXPORT TO GIF CONTROL
@@ -1190,6 +1197,8 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         openButton.addActionListener(oph);
         SaveHandler sph = new SaveHandler();
         saveButton.addActionListener(sph);
+        SaveAsHandler sah = new SaveAsHandler();
+        saveAsButton.addActionListener(sah);
         MovePoseUpHandler mpuh = new MovePoseUpHandler();
         movePoseUpButton.addActionListener(mpuh);
         MovePoseDownHandler mpdh = new MovePoseDownHandler();
@@ -1284,6 +1293,7 @@ public class AnimatedSpriteEditorGUI  extends JFrame{
         // THESE BUTTONS ARE ALWAYS ENABLED
         newButton.setEnabled(true);
         openButton.setEnabled(true);
+        saveAsButton.setEnabled(true);
         exitButton.setEnabled(true);
         
         // THESE BUTTONS START OFF AS DISABLED

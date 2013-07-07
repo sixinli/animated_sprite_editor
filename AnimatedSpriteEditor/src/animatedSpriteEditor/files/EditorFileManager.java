@@ -1,12 +1,13 @@
 package animatedSpriteEditor.files;
 
-
 import java.awt.AlphaComposite;
+
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
 import javax.swing.JFileChooser;
@@ -162,6 +163,77 @@ public class EditorFileManager
     	singleton.getFileManager().getPoseurFileManager().setCurrentFile(null);
     	singleton.getStateManager().setState(EditorState.SPRITE_TYPE_STATE);
     	singleton.getGUI().repaint();
+    }
+    
+    /**
+     * This method will copy the sprite type file under 
+     * another name.
+     */
+    public void requestSaveAs()
+    {
+	    boolean continueToSaveAs = true;
+	    if (!saved)
+	    {
+	        // THE USER CAN OPT OUT HERE WITH A CANCEL
+	        continueToSaveAs = poseurFileManager.promptToSave();
+	    }
+	    
+	    if (!poseurFileManager.isSaved())
+	    {
+	    	continueToSaveAs = poseurFileManager.promptToSave();
+	    }
+	    
+	    // IF THE USER REALLY WANTS TO MAKE A NEW POSE
+	    if (continueToSaveAs)
+	    {
+	    	AnimatedSpriteEditorGUI gui = AnimatedSpriteEditor.getEditor().getGUI();
+	    	 String saveAsName = JOptionPane.showInputDialog(
+	                 gui,
+	                 SPRITE_TYPE_NAME_REQUEST_TEXT,
+	                 SPRITE_TYPE_NAME_REQUEST_TITLE_TEXT,
+	                 JOptionPane.QUESTION_MESSAGE);
+	         if( (saveAsName!=null) && (saveAsName.length()>0))
+	         {
+	        	 File destFile = new File(SPRITE_TYPE_PATH + saveAsName);
+	        	 if (destFile.exists())
+	        	 {
+	        		 JOptionPane.showMessageDialog(
+	        				 gui,
+	        				 SPRITE_TYPE_NAME_EXIST_TEXT,
+	        				 SPRITE_TYPE_NAME_EXIST_TITLE_TEXT,
+	        				 JOptionPane.ERROR_MESSAGE
+	        				 );
+	        		 continueToSaveAs = false;
+	        	 }
+	        	 if(continueToSaveAs)
+	        	 {
+	        		 try {
+	        			 File sourceFile = new File(SPRITE_TYPE_PATH + currentSpriteTypeName + File.separatorChar); 
+	        			 File destXMLFile = new File(SPRITE_TYPE_PATH + saveAsName + File.separatorChar + 
+	        					 currentSpriteTypeName + XML_FILE_EXTENSION);
+					
+					
+	        			 editorIO.copyDirectory(sourceFile, destFile);
+
+	        			 File destXMLFileRenameTo = new File(SPRITE_TYPE_PATH + saveAsName + File.separatorChar + 
+	        					 saveAsName + XML_FILE_EXTENSION);
+	        			 destXMLFile.renameTo(destXMLFileRenameTo);
+	        			 JOptionPane.showMessageDialog(
+	        	                 gui,
+	        	                 SPRITE_TYPE_SAVED_AS_TEXT + saveAsName,
+	        	                 SPRITE_TYPE_SAVED_AS_TITLE_TEXT,
+	        	                 JOptionPane.INFORMATION_MESSAGE);
+	        		 } catch (IOException e) {
+	        			 JOptionPane.showMessageDialog(
+	        	                 gui,
+	        	                 SPRITE_TYPE_SAVE_AS_ERROR_TEXT,
+	        	                 SPRITE_TYPE_SAVE_AS_ERROR_TITLE_TEXT,
+	        	                 JOptionPane.ERROR_MESSAGE);
+	        			 e.printStackTrace();
+	        		 }
+	        	 } 
+	         }
+	    }
     }
     
     /**
@@ -405,6 +477,19 @@ public class EditorFileManager
         // WANTS TO DO THIS ACTION BEFORE MOVING ON
         if ( (fileName != null)&& (fileName.length() > 0))
         {
+        	File check = new File(SPRITE_TYPE_PATH + fileName);
+        	if (check.exists())
+        	{
+        		JOptionPane.showMessageDialog(
+       				 gui,
+       				 SPRITE_TYPE_NAME_EXIST_TEXT,
+       				 SPRITE_TYPE_NAME_EXIST_TITLE_TEXT,
+       				 JOptionPane.ERROR_MESSAGE
+       				 );
+        			return false;
+        		
+        		
+        	}
         	AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
             String animationStateName = JOptionPane.showInputDialog(
                     gui,
@@ -446,8 +531,14 @@ public class EditorFileManager
             			  			new File(SPRITE_TYPE_PATH + fileName + "/images")).mkdir();
             			  	if (success) {
             			  		System.out.println("Directory: " 
-            			  				+ fileName  + "/poses" + " created");
-                    		}       			  
+            			  				+ fileName  + "/images" + " created");
+            			  	success = (
+                			  	new File(SPRITE_TYPE_PATH + fileName + "/gifs")).mkdir();
+                			if (success) {
+                			  		System.out.println("Directory: " 
+                			  				+ fileName  + "/gifs" + " created");
+                    		} 
+            			  }
                 	}catch (Exception e){//Catch exception if any
                 		System.err.println("Error: " + e.getMessage());
                 	}

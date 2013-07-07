@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<sprite_type>
+     <width>128</width>
+     <height>128</height>
+     <images_list>
+          <image_file file_name="Zee_1.png" id="1"/>
+         <image_file file_name="Zee_2.png" id="2"/>
+         <image_file file_name="Zee_3.png" id="3"/>
+         <image_file file_name="Zee_4.png" id="4"/>
+     <image_file file_name="ZeeAgain.png" id="5"/>
+     <image_file file_name="ZeeAgain_6.png" id="6"/>
+     
+     <image_file file_name="Dorarmon_1_9.png" id="9"/>
+     
+     <image_file file_name="Dorarmon_1_9_11.png" id="11"/>
+     <image_file file_name="Dorarmon_1_9_11_12.png" id="12"/>
+     <image_file file_name="Dorarmon_1_9_13.png" id="13"/>
+     <image_file file_name="Dorarmon_1_9_11_14.png" id="14"/>
+     <image_file file_name="Dorarmon_1_9_11_14_15.png" id="15"/>
+     <image_file file_name="Dorarmon_1_9_11_14_15_16.png" id="16"/>
+     <image_file file_name="Dorarmon_1_9_11_14_15_16_17.png" id="17"/>
+     <image_file file_name="Dorarmon_1_9_11_14_15_16_18.png" id="18"/>
+     <image_file file_name="Dorarmon_1_9_11_14_15_19.png" id="19"/>
+     <image_file file_name="Dorarmon_1_9_11_14_20.png" id="20"/>
+     <image_file file_name="IDLE_0.png" id="21"/>
+     <image_file file_name="IDLE_1.png" id="22"/>
+     <image_file file_name="IDLE_2.png" id="23"/>
+     </images_list>
+     <animations_list>
+          <animation_state>
+               <state>IDLE</state>
+               <animation_sequence>
+                    <pose duration="4" image_id="1"/>
+                   <pose duration="4" image_id="2"/>
+                   <pose duration="4" image_id="3"/>
+                   <pose duration="4" image_id="4"/>
+               <pose duration="4" image_id="21"/>
+               <pose duration="4" image_id="22"/>
+               <pose duration="4" image_id="23"/>
+               </animation_sequence>
+          </animation_state>
+     <animation_state>
+               <state>WALKING_UP</state>
+               <animation_sequence>
+                    <pose duration="4" image_id="6"/>
+               <pose duration="4" image_id="5"/>
+               </animation_sequence>
+          </animation_state>
+     <animation_state>
+               <state>WALKING_DOWN</state>
+               <animation_sequence>
+                    
+               <pose duration="4" image_id="9"/>
+               <pose duration="4" image_id="11"/>
+               
+               <pose duration="4" image_id="12"/>
+               <pose duration="4" image_id="13"/>
+               <pose duration="4" image_id="14"/>
+               <pose duration="4" image_id="15"/>
+               <pose duration="4" image_id="16"/>
+               <pose duration="4" image_id="17"/>
+               <pose duration="4" image_id="18"/>
+               <pose duration="4" image_id="19"/>
+               <pose duration="4" image_id="20"/>
+               </animation_sequence>
+          </animation_state>
+     </animations_list>
+</sprite_type>

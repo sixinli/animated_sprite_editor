@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -105,7 +107,7 @@ public class AnimatedSpriteEditorIO
 		try {
 			cleanDoc = loadXMLDocument(xmlFile, xsdFile);
 		} catch (InvalidXMLFileFormatException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
 			return;
 		}
                 
@@ -655,20 +657,27 @@ public class AnimatedSpriteEditorIO
 			for(int i=1; i<len; i+=2)
 			{
 				int id = Integer.parseInt(currentPoseNodes.item(i).getAttributes().item(1).getTextContent());
-			 	String fileName = imageNodes.item(id-1).getAttributes().item(0).getTextContent();
-	
-				Node imageFileNodeToDelete = imageNodes.item(id-1);
-				imageListNode.removeChild(imageFileNodeToDelete);
-				File fileSource = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + IMAGE_FOLDER_PATH + fileName);
-				fileSource.setWritable(true);
-				fileSource.delete();
-				
-				
-				
-				fileName = fileName.substring(0, fileName.lastIndexOf('.')) + ".pose";
-				fileSource = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + POSE_FOLDER_PATH + fileName);
-				fileSource.setWritable(true);
-				fileSource.delete();
+			 	String fileName = imageNodes.item(1).getAttributes().item(0).getTextContent();
+			 	for(int j=0; j<imageNodes.getLength(); j++)
+			 	{
+			 		if(imageNodes.item(j).getAttributes().item(1).getTextContent().equals(""+id))
+			 		{
+			 			fileName = imageNodes.item(j).getAttributes().item(0).getTextContent();
+						Node imageFileNodeToDelete = imageNodes.item(j);
+						imageListNode.removeChild(imageFileNodeToDelete);
+						File fileSource = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + IMAGE_FOLDER_PATH + fileName);
+						fileSource.setWritable(true);
+						fileSource.delete();
+						
+						
+						
+						fileName = fileName.substring(0, fileName.lastIndexOf('.')) + ".pose";
+						fileSource = new File(SPRITE_TYPE_PATH + spriteTypeName + File.separatorChar + POSE_FOLDER_PATH + fileName);
+						fileSource.setWritable(true);
+						fileSource.delete();
+			 		}
+			 	}
+
 				
 			}
 			
@@ -883,6 +892,45 @@ public class AnimatedSpriteEditorIO
             }
         }
     }
+    
+    /**
+     * This method copies a directory to another.
+     * @param sourceLocation the directory to copy
+     * @param targetLocation	the directory copy to
+     * @throws IOException
+     */
+    public void copyDirectory(File sourceLocation , File targetLocation) throws IOException {
+    	 
+        if (sourceLocation.isDirectory()) {
+            if (!targetLocation.exists()) {
+                targetLocation.mkdir();
+            }
+     
+            String[] children = sourceLocation.list();
+            for (int i=0; i<children.length; i++) {
+                copyDirectory(new File(sourceLocation, children[i]),
+                        new File(targetLocation, children[i]));
+            }
+        } else {
+            InputStream in = new FileInputStream(sourceLocation);
+            OutputStream out = new FileOutputStream(targetLocation);
+     
+            // Copy the bits from instream to outstream
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            in.close();
+            out.close();
+        }
+    }
+    
+    /**
+     * This process the image for gif.
+     * @param img
+     * @return
+     */
     private BufferedImage processImage(Image img){
     	BufferedImage image = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
       	Graphics2D g = image.createGraphics();
@@ -894,6 +942,11 @@ public class AnimatedSpriteEditorIO
     	g.dispose();
     	return image;
     }
+    
+    /**
+     * This method exports the animation to a gif file.
+     * @throws IOException
+     */
     public void exportToGIF() throws IOException
     {
     	  AnimatedSpriteEditor singleton = AnimatedSpriteEditor.getEditor();
@@ -901,7 +954,8 @@ public class AnimatedSpriteEditorIO
     	  HashMap<Integer, Image> imageList = singleton.getSpriteType().getSpriteImages();
     	  
     		    ImageOutputStream output = 
-    		      new FileImageOutputStream(new File(SPRITE_TYPE_PATH + singleton.getSpriteTypeName() + "_" + singleton.getAnimationStateName() + ".gif"));
+    		      new FileImageOutputStream(new File(SPRITE_TYPE_PATH + singleton.getSpriteTypeName() + 
+    		    		  File.separatorChar + "gifs/" + singleton.getAnimationStateName() + ".gif"));
     		    BufferedImage firstImage = processImage(imageList.get(posesList.get(1).getImageID()));
     		    // create a gif sequence with the type of the first image, 1 second
     		    // between frames, which loops continuously
