@@ -1,0 +1,542 @@
+commit 62cdb340020e25ed256df141f5d4493b893af2f2
+Author: sixin <sixin210@hotmail.com>
+Date:   Fri Dec 7 15:10:20 2012 -0500
+
+    Fix the line selection bug from the poseurSolution.
+
+ .../animatedSpriteEditor/files/EditorFileManager.class    |  Bin 12874 -> 12826 bytes
+ .../bin/animatedSpriteEditor/files/PoseIO.class           |  Bin 23894 -> 23865 bytes
+ .../src/animatedSpriteEditor/files/EditorFileManager.java |   13 +------------
+ .../src/animatedSpriteEditor/shapes/PoseurLine.java       |    4 ++--
+ 4 files changed, 3 insertions(+), 14 deletions(-)
+
+commit 5a0df058ab805f0952202991b1215f02a89052f9
+Author: sixin <sixin210@hotmail.com>
+Date:   Fri Dec 7 04:03:42 2012 -0500
+
+    Fix all the file name convention problem and set the default pose
+    duration to 5.
+
+ .../bin/animatedSpriteEditor/AnimatedSpriteEditorSettings.class        |  Bin 0 -> 18140 bytes
+ .../bin/animatedSpriteEditor/files/EditorFileManager.class             |  Bin 0 -> 12874 bytes
+ AnimatedSpriteEditor/bin/animatedSpriteEditor/files/PoseIO.class       |  Bin 0 -> 23894 bytes
+ .../bin/animatedSpriteEditor/files/PoseurFileManager.class             |  Bin 0 -> 10250 bytes
+ 4 files changed, 0 insertions(+), 0 deletions(-)
+
+commit aac64a9faf33397761515b75b1425e5acab85d59
+Author: sixin <sixin210@hotmail.com>
+Date:   Fri Dec 7 03:35:13 2012 -0500
+
+    Fix the copy animation file name problem.
+
+ .../files/AnimatedSpriteEditorIO.java              |   23 +++++++++++++++-----
+ 1 file changed, 17 insertions(+), 6 deletions(-)
+
+commit 3b8514ec27d3bb8b8c8085f5013101cd87ae5ea5
+Author: sixin <sixin210@hotmail.com>
+Date:   Fri Dec 7 03:12:49 2012 -0500
+
+    Finish new pose and rename state file name handling, not fully test yet.
+
+ .../AnimatedSpriteEditorSettings.java              |    1 +
+ .../files/AnimatedSpriteEditorIO.java              |   37 +++++++++++++++++++-
+ 2 files changed, 37 insertions(+), 1 deletion(-)
+
+commit ea64e59f2b4f0fc00f5fb5c4cc0b67d20ebca7da
+Author: sixin <sixin210@hotmail.com>
+Date:   Fri Dec 7 02:26:19 2012 -0500
+
+    Save before trying to fix the pose name problem.
+
+ .../src/animatedSpriteEditor/files/AnimatedSpriteEditorIO.java       |    2 +-
+ .../src/animatedSpriteEditor/gui/AnimatedSpriteEditorGUI.java        |    1 -
+ 2 files changed, 1 insertion(+), 2 deletions(-)
+
+commit 6614503c52afa9c870cd2d434616427a90b50f2e
+Author: sixin <sixin210@hotmail.com>
+Date:   Fri Dec 7 00:35:27 2012 -0500
+
+    All functions basically completed. Maybe modifed the pose file names
+    format later.
+
+ .../src/animatedSpriteEditor/AnimatedSpriteEditorSettings.java   |    6 ++++++
+ 1 file changed, 6 insertions(+)
+
+commit dff86e1a49fa3e1510b7d264e5f4a745c5ad3640
+Author: sixin <sixin210@hotmail.com>
+Date:   Thu Dec 6 23:21:50 2012 -0500
+
+    Finish move pose up and down functions.
+
+ .../animatedSpriteEditor/AnimatedSpriteEditorSettings.java   |    4 ++++
+ .../events/files/MovePoseDownHandler.java                    |   10 ++++------
+ .../animatedSpriteEditor/events/files/MovePoseUpHandler.java |    5 ++++-
+ 3 files changed, 12 insertions(+), 7 deletions(-)
+
+commit 2b3e32690272ac8673ccd7f71a9d8369dc9957db
+Author: sixin <sixin210@hotmail.com>
+Date:   Thu Dec 6 22:26:18 2012 -0500
+
+    Done with the delete sprite type function. Fixed the image ID value
+    error.
+
+ .../AnimatedSpriteEditorSettings.java              |   10 +-
+ .../events/files/MovePoseUpHandler.java            |    6 +-
+ .../files/AnimatedSpriteEditorIO.java              |    4 +-
+ .../files/EditorFileManager.java                   |   98 ++++++++++++++++----
+ .../gui/AnimatedSpriteEditorGUI.java               |   17 +++-
+ 5 files changed, 107 insertions(+), 28 deletions(-)
+
+commit 93e66b7ef1e4e9292a1d553b7f021215de08ef08
+Author: sixin <sixin210@hotmail.com>
+Date:   Thu Dec 6 19:15:13 2012 -0500
+
+    Finish delete pose. Got the fix if the pose is the only pose of the
+    state problem.
+
+ .../AnimatedSpriteEditorSettings.java               |    8 ++++++--
+ .../files/AnimatedSpriteEditorIO.java               |   19 +++++++++++++++----
+ 2 files changed, 21 insertions(+), 6 deletions(-)
+
+commit f00102b004af30502ec2113c7fc8a5a0949e2db7
+Author: sixin <sixin210@hotmail.com>
+Date:   Thu Dec 6 17:45:58 2012 -0500
+
+    Finish delete state. Possibly bugs because the XML leaves a lot of empty
+    lines.
+
+ .../animatedSpriteEditor/AnimatedSpriteEditor.java |    9 +-
+ .../files/AnimatedSpriteEditorIO.java              |   92 ++++++++++++++++++--
+ .../files/EditorFileManager.java                   |   17 ++--
+ 3 files changed, 105 insertions(+), 13 deletions(-)
+
+commit 558eb338193548e9cc28bd0c1133482294894a6a
+Author: sixin <sixin210@hotmail.com>
+Date:   Thu Dec 6 16:43:56 2012 -0500
+
+    Finish pose copying.
+
+ .../AnimatedSpriteEditorSettings.java              |    6 +++
+ .../files/AnimatedSpriteEditorIO.java              |    6 +++
+ .../files/EditorFileManager.java                   |   36 ++++++++++----
+ .../gui/AnimatedSpriteEditorGUI.java               |   52 ++++----------------
+ 4 files changed, 48 insertions(+), 52 deletions(-)
+
+commit a92ac698c2d0e8226be3e695d1cf35333976ef99
+Author: sixin <sixin210@hotmail.com>
+Date:   Wed Dec 5 03:59:59 2012 -0500
+
+    Changed tk.getImage() to tk.createImage() to finally resolve the image
+    refreshing problem.
+
+ .../files/AnimatedSpriteEditorIO.java              |   22 +++--
+ .../files/EditorFileManager.java                   |   89 +++++---------------
+ .../gui/AnimatedSpriteEditorGUI.java               |    5 +-
+ 3 files changed, 40 insertions(+), 76 deletions(-)
+
+commit a850d7e3ce0d477c40ccdbea493294c5eb562386
+Author: sixin <sixin210@hotmail.com>
+Date:   Tue Dec 4 12:29:07 2012 -0500
+
+    Fixed refreshing problem by adding refresh hashmap and refresh pose list
+    to the reload sprite type method.
+
+ .../files/EditorFileManager.java                   |   21 ++++++++++++--------
+ .../gui/AnimatedSpriteEditorGUI.java               |    1 +
+ 2 files changed, 14 insertions(+), 8 deletions(-)
+
+commit 7b3fcce30a332b643dd8f7c5cf0709402502972d
+Author: sixin <sixin210@hotmail.com>
+Date:   Tue Dec 4 00:05:09 2012 -0500
+
+    Finish copy state function, but the pose displaying still has problem
+    displaying the old image.
+
+ .../files/AnimatedSpriteEditorIO.java              |   98 +++++++++--
+ .../files/EditorFileManager.java                   |  184 +++++++++++++-------
+ .../gui/AnimatedSpriteEditorGUI.java               |    7 +
+ 3 files changed, 210 insertions(+), 79 deletions(-)
+
+commit 2cc380d51b7cd7b701cc25f22f65ddd6f28773e6
+Author: sixin <sixin210@hotmail.com>
+Date:   Mon Dec 3 14:53:53 2012 -0500
+
+    Having problem of rendering the new pose.
+
+ .../events/files/NewHandler.java                   |    2 -
+ .../files/AnimatedSpriteEditorIO.java              |    2 +-
+ .../files/EditorFileManager.java                   |   50 ++++++++++----------
+ .../gui/AnimatedSpriteEditorGUI.java               |    2 +
+ 4 files changed, 29 insertions(+), 27 deletions(-)
+
+commit 9588b0387194d26cf05b064fae958d8ebbb25fd8
+Author: sixin <sixin210@hotmail.com>
+Date:   Mon Dec 3 01:41:54 2012 -0500
+
+    A lot of bugs, not sure if it's making more bugs, this is a break point.
+
+ .../files/EditorFileManager.java                   |  151 +++++++++++++-------
+ .../gui/AnimatedSpriteEditorGUI.java               |   52 ++++---
+ 2 files changed, 134 insertions(+), 69 deletions(-)
+
+commit 61aeb922b7d6896984bd5e32efc0ba5e2a7dd509
+Author: sixin <sixin210@hotmail.com>
+Date:   Sun Dec 2 20:35:02 2012 -0500
+
+    Finish the rename state function.
+
+ .../animatedSpriteEditor/AnimatedSpriteEditor.java |    1 -
+ .../AnimatedSpriteEditorSettings.java              |    6 +
+ .../events/canvas/PoseCanvasMouseHandler.java      |    2 -
+ .../events/colors/ColorPalletHandler.java          |    1 -
+ .../events/display/SpeedUpHandler.java             |    2 -
+ .../events/display/StartHandler.java               |    2 -
+ .../events/display/StopHandler.java                |    2 -
+ .../events/edit/CopyHandler.java                   |   23 +--
+ .../events/edit/MoveToFrontHandler.java            |    1 -
+ .../events/edit/PasteHandler.java                  |    2 -
+ .../events/edit/StartSelectionHandler.java         |    2 -
+ .../events/files/ExitHandler.java                  |    1 -
+ .../events/files/NewHandler.java                   |    3 -
+ .../events/files/NewPoseHandler.java               |    2 -
+ .../events/files/PoseSelectionHandler.java         |    2 -
+ .../files/AnimatedSpriteEditorIO.java              |  137 +++++++++++--
+ .../files/EditorFileManager.java                   |  205 +++++++++++++++-----
+ .../gui/AnimatedSpriteEditorGUI.java               |   10 +-
+ 18 files changed, 298 insertions(+), 106 deletions(-)
+
+commit 9a80f51d4d7abb0fc854df907d97158d9138f04e
+Author: sixin <sixin210@hotmail.com>
+Date:   Sun Dec 2 02:18:19 2012 -0500
+
+    Functions needed to be implement: copy state, rename state, delete
+    state, copy pose, delete pose, and move pose.
+
+ .../gui/AnimatedSpriteEditorGUI.java               |   23 +++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
+
+commit fb296928e6e84e1c586ee8b33fd996726dfc760d
+Author: sixin <sixin210@hotmail.com>
+Date:   Sun Dec 2 01:59:03 2012 -0500
+
+    Modified the feedbacks while error occurs when creating a file.
+
+ .../AnimatedSpriteEditorSettings.java              |    8 ++
+ .../events/files/NewPoseHandler.java               |    1 -
+ .../events/files/PoseSelectionHandler.java         |   24 ++--
+ .../files/EditorFileManager.java                   |  119 ++++++++++++--------
+ 4 files changed, 93 insertions(+), 59 deletions(-)
+
+commit 4bcb05b7e2d3bee972bd81342999d0212cbb8461
+Author: sixin <sixin210@hotmail.com>
+Date:   Sun Dec 2 00:25:57 2012 -0500
+
+    Fixed image refreshing problem for adding a new pose.
+
+ .../events/files/NewPoseHandler.java               |   11 +++++-----
+ .../events/files/NewStateHandler.java              |    2 --
+ .../events/files/OpenHandler.java                  |    3 ---
+ .../events/files/PoseSelectionHandler.java         |    9 ++++----
+ .../gui/AnimatedSpriteEditorGUI.java               |   22 ++++++++++++--------
+ 5 files changed, 24 insertions(+), 23 deletions(-)
+
+commit ce5dca5e04ed8a440ed4f7cb8f772fda4a781080
+Author: sixin <sixin210@hotmail.com>
+Date:   Sat Dec 1 23:04:16 2012 -0500
+
+    Add more buttons for the state and pose file controls. Fixed the display
+    layout problem.
+
+ .../AnimatedSpriteEditorSettings.java              |   17 ++-
+ .../events/edit/CopyHandler.java                   |   19 ++--
+ .../events/files/DeleteHandler.java                |   25 -----
+ .../events/files/ExportPoseHandler.java            |   25 -----
+ .../events/files/MovePoseDownHandler.java          |   25 +++++
+ .../events/files/MovePoseUpHandler.java            |   25 +++++
+ .../events/files/SaveAsHandler.java                |   25 -----
+ .../gui/AnimatedSpriteEditorGUI.java               |  108 ++++++++++++--------
+ 8 files changed, 139 insertions(+), 130 deletions(-)
+
+commit eaa59b7a1e76a3bbe9787c5cf81850243479ab3d
+Author: sixin <sixin210@hotmail.com>
+Date:   Sat Dec 1 21:37:21 2012 -0500
+
+    Finish gui control set up.
+
+ .../events/files/ExitHandler.java                  |    8 ++--
+ .../files/EditorFileManager.java                   |    4 +-
+ .../gui/AnimatedSpriteEditorGUI.java               |   39 ++++++++++++++++++++
+ 3 files changed, 45 insertions(+), 6 deletions(-)
+
+commit dd98ba429f4d761f199b6bb728543d0d0d6b1fae
+Author: sixin <sixin210@hotmail.com>
+Date:   Sat Dec 1 19:21:20 2012 -0500
+
+    Finish the pose list displaying refreshing function.
+
+ .../events/files/PoseSelectionHandler.java         |    1 +
+ .../files/EditorFileManager.java                   |    3 +-
+ .../gui/AnimatedSpriteEditorGUI.java               |  139 ++++++++++++++------
+ 3 files changed, 104 insertions(+), 39 deletions(-)
+
+commit 7c8770b559deea3a448a0ddd49c92662b39528c8
+Author: sixin <sixin210@hotmail.com>
+Date:   Sat Dec 1 17:59:16 2012 -0500
+
+    Finish the image exporting problem.
+
+ .../animatedSpriteEditor/AnimatedSpriteEditor.java |   43 ++++++++--
+ .../files/AnimatedSpriteEditorIO.java              |   84 +++++++++++---------
+ .../files/EditorFileManager.java                   |   44 ++++++++--
+ .../gui/AnimatedSpriteEditorGUI.java               |    7 +-
+ 4 files changed, 126 insertions(+), 52 deletions(-)
+
+commit 93eb668bde482206b10f9ccb4ae5d53167b46112
+Author: sixin <sixin210@hotmail.com>
+Date:   Sat Dec 1 05:07:24 2012 -0500
+
+    Fixed new sprite type xml error, finish new animation state function.
+
+ .../AnimatedSpriteEditorSettings.java              |    6 ++
+ .../files/AnimatedSpriteEditorIO.java              |   74 +++++++++++++--
+ .../files/EditorFileManager.java                   |   96 ++++++++++++++++++--
+ .../gui/AnimatedSpriteEditorGUI.java               |    2 +-
+ 4 files changed, 161 insertions(+), 17 deletions(-)
+
+commit f0c797f609ce3ff3af4a48960d4bceadadce4369
+Author: sixin <sixin210@hotmail.com>
+Date:   Sat Dec 1 02:37:37 2012 -0500
+
+    Fixed the pose not saved and select another animation state function.
+
+ .../events/files/NewStateHandler.java              |    8 +++---
+ .../events/files/PoseSelectionHandler.java         |    3 ++
+ .../gui/AnimatedSpriteEditorGUI.java               |   30 ++++++++++++++++----
+ 3 files changed, 31 insertions(+), 10 deletions(-)
+
+commit 559521ee37b315f47c7b6f3a2c00b7324b293ff3
+Author: sixin <sixin210@hotmail.com>
+Date:   Sat Dec 1 01:16:11 2012 -0500
+
+    Finish pose saving.
+
+ .../events/edit/CopyHandler.java                   |   30 +++++++++----
+ .../events/edit/CutHandler.java                    |   26 ++++++++---
+ .../events/edit/MoveToBackHandler.java             |   29 ++++++++----
+ .../events/edit/MoveToFrontHandler.java            |   29 +++++++++---
+ .../events/edit/PasteHandler.java                  |   24 +++++++---
+ .../events/files/PoseSelectionHandler.java         |    1 +
+ .../events/files/SaveHandler.java                  |   11 +++--
+ .../events/zoom/ChangePoseDimensionsHandler.java   |   10 ++---
+ .../events/zoom/ZoomInHandler.java                 |   19 +++++---
+ .../events/zoom/ZoomOutHandler.java                |   22 ++++++---
+ .../gui/AnimatedSpriteEditorGUI.java               |   47 +++++++++++++++++---
+ .../gui/PoseDimensionsDialog.java                  |   12 ++++-
+ 12 files changed, 194 insertions(+), 66 deletions(-)
+
+commit af700a5af19dd09c75b3f7d8707078ba69001cb0
+Author: sixin <sixin210@hotmail.com>
+Date:   Fri Nov 30 19:02:18 2012 -0500
+
+    Done with the animation display event handlers.
+
+ .../events/display/SlowDownHandler.java            |   43 +++++++++++++----
+ .../events/display/SpeedUpHandler.java             |   49 ++++++++++++++++----
+ .../events/display/StartHandler.java               |   36 ++++++++++----
+ .../events/display/StopHandler.java                |   35 ++++++++++----
+ .../gui/AnimatedSpriteEditorGUI.java               |    9 ++--
+ 5 files changed, 133 insertions(+), 39 deletions(-)
+
+commit 62cb1570a4f32e61a15e34afa05bae28ba81d519
+Author: sixin <sixin210@hotmail.com>
+Date:   Fri Nov 30 18:43:57 2012 -0500
+
+    Imported the color and canvas handlers from the PoseurSolution.
+
+ .../events/colors/ColorPalletHandler.java          |   21 ++++---
+ .../events/colors/CustomColorHandler.java          |   61 ++++++++++++++-----
+ .../events/colors/FillColorHandler.java            |   47 ++++++++++-----
+ .../events/colors/LineThicknessHandler.java        |   62 ++++++++++++++------
+ .../events/colors/OutlineColorHandler.java         |   47 +++++++++------
+ .../events/colors/TransparencyHandler.java         |   40 ++++++++-----
+ .../gui/AnimatedSpriteEditorGUI.java               |    4 +-
+ 7 files changed, 191 insertions(+), 91 deletions(-)
+
+commit e9c0c6c097b42a9c24d74f60513c11e3f3895077
+Author: sixin <sixin210@hotmail.com>
+Date:   Fri Nov 30 18:31:46 2012 -0500
+
+    Done with pose loading and shape dragging.
+
+ .../events/canvas/PoseCanvasComponentHandler.java  |   18 +-
+ .../events/canvas/PoseCanvasMouseHandler.java      |  112 +++++-----
+ .../events/edit/StartSelectionHandler.java         |   10 +-
+ .../events/shape/EllipseSelectionHandler.java      |   45 ++--
+ .../events/shape/LineSelectionHandler.java         |   43 ++--
+ .../events/shape/RectangleSelectionHandler.java    |   45 ++--
+ .../gui/AnimatedSpriteEditorGUI.java               |   18 +-
+ .../src/animatedSpriteEditor/gui/EditorCanvas.java |  236 --------------------
+ .../animatedSpriteEditor/shapes/PoseurLine.java    |   18 +-
+ .../state/PoseCanvasState.java                     |    8 +-
+ 10 files changed, 184 insertions(+), 369 deletions(-)
+
+commit 7a5dc7cf83c9d3edd56d4e90a19759f67696008f
+Author: sixin <sixin210@hotmail.com>
+Date:   Fri Nov 30 16:18:11 2012 -0500
+
+    Finish loading poseur pose.
+
+ .../animatedSpriteEditor/AnimatedSpriteEditor.java |   22 ++++++++++++++++++++
+ .../AnimatedSpriteEditorSettings.java              |    4 +++-
+ .../events/files/PoseSelectionHandler.java         |    6 +++++-
+ .../files/AnimatedSpriteEditorIO.java              |   16 ++++++++++++--
+ .../gui/AnimatedSpriteEditorGUI.java               |    7 ++-----
+ 5 files changed, 46 insertions(+), 9 deletions(-)
+
+commit b4b1dcb76aa16d720a2e5ae972a9994a6009d1cb
+Author: sixin <sixin210@hotmail.com>
+Date:   Fri Nov 30 14:52:34 2012 -0500
+
+    Finish pose image loading.
+
+ .../animatedSpriteEditor/AnimatedSpriteEditor.java |   14 ++++
+ .../events/files/PoseSelectionHandler.java         |    3 +-
+ .../files/AnimatedSpriteEditorIO.java              |   70 ++++++++++++++++++--
+ .../files/EditorFileManager.java                   |   11 ++-
+ .../gui/AnimatedSpriteEditorGUI.java               |   53 +++++++--------
+ 5 files changed, 111 insertions(+), 40 deletions(-)
+
+commit 87de38242bcea634f641a990dd736a6cfa0f9776
+Author: sixin <sixin210@hotmail.com>
+Date:   Fri Nov 30 01:41:22 2012 -0500
+
+    Still trying to load the pose images.
+
+ .../animatedSpriteEditor/AnimatedSpriteEditor.java |    6 +-
+ .../events/files/NewHandler.java                   |    6 +-
+ .../events/files/OpenHandler.java                  |    3 +
+ .../files/AnimatedSpriteEditorIO.java              |   64 ++++++++++++++++----
+ .../files/EditorFileManager.java                   |   15 +++++
+ .../gui/AnimatedSpriteEditorGUI.java               |   24 +++++++-
+ .../state/EditorStateManager.java                  |    1 +
+ 7 files changed, 102 insertions(+), 17 deletions(-)
+
+commit 67164698d536e764c6a46d3588dd1f74c06ffca0
+Author: sixin <sixin210@hotmail.com>
+Date:   Thu Nov 29 22:14:47 2012 -0500
+
+    Finish the rendering function.
+
+ .../animatedSpriteEditor/AnimatedSpriteEditor.java |    2 +-
+ .../AnimatedSpriteEditorSettings.java              |    3 +
+ .../files/AnimatedSpriteEditorIO.java              |   14 +--
+ .../files/EditorFileManager.java                   |    6 +-
+ .../gui/AnimatedSpriteEditorGUI.java               |  130 +++++++++++++++-----
+ 5 files changed, 113 insertions(+), 42 deletions(-)
+
+commit b9a4a8219ddbb7fb97814eac803471a5022dbeae
+Author: sixin <sixin210@hotmail.com>
+Date:   Thu Nov 29 19:52:54 2012 -0500
+
+    Finish with the new and open sprite type fileIO.
+
+ .../animatedSpriteEditor/AnimatedSpriteEditor.java |   30 +-
+ .../AnimatedSpriteEditorSettings.java              |   31 +-
+ .../events/files/NewHandler.java                   |    8 +-
+ .../events/files/OpenHandler.java                  |    8 +-
+ .../files/AnimatedSpriteEditorIO.java              |  299 +++++++++++++++++++-
+ .../files/EditorFileManager.java                   |  179 ++++++++----
+ .../gui/AnimatedSpriteEditorGUI.java               |   12 +-
+ .../state/EditorStateManager.java                  |   20 ++
+ 8 files changed, 521 insertions(+), 66 deletions(-)
+
+commit 5c9bf79e5e26ffe7cfa66debc39528bf33f011dc
+Author: sixin <sixin210@hotmail.com>
+Date:   Thu Nov 29 14:35:14 2012 -0500
+
+    Imported the managers and IO class from the Poseur Solution.
+
+ AnimatedSpriteEditor/src/.DS_Store                 |  Bin 6148 -> 6148 bytes
+ .../animatedSpriteEditor/AnimatedSpriteEditor.java |    4 +-
+ .../files/AnimatedSpriteEditorGUILoader.java       |    2 +-
+ .../files/AnimatedSpriteEditorIO.java              |  374 +----------
+ .../files/ColorPalletLoader.java                   |    2 +-
+ .../files/EditorFileManager.java                   |   10 +
+ .../src/animatedSpriteEditor/files/GUILoader.java  |    2 +-
+ .../gui/AnimatedSpriteEditorGUI.java               |  200 +++++-
+ .../src/animatedSpriteEditor/gui/EditorCanvas.java |   14 +-
+ .../gui/PoseDimensionsDialog.java                  |    4 +-
+ .../animatedSpriteEditor/shapes/PoseurShape.java   |    2 +-
+ .../state/EditorStateManager.java                  |  677 +-------------------
+ 12 files changed, 232 insertions(+), 1059 deletions(-)
+
+commit 8b6e0d66a03da0343ae51b078b7da9bd7ed3f85d
+Author: sixin <sixin210@hotmail.com>
+Date:   Tue Nov 27 14:07:53 2012 -0500
+
+    yeah!
+
+ AnimatedSpriteEditor/src/.DS_Store                 |  Bin 0 -> 6148 bytes
+ AnimatedSpriteEditor/src/README.txt                |    3 +
+ .../src/animatedSpriteEditor/.DS_Store             |  Bin 0 -> 6148 bytes
+ .../animatedSpriteEditor/AnimatedSpriteEditor.java |  180 ++++
+ .../AnimatedSpriteEditorSettings.java              |  289 +++++++
+ .../events/canvas/PoseCanvasComponentHandler.java  |   42 +
+ .../events/canvas/PoseCanvasMouseHandler.java      |   64 ++
+ .../events/colors/ColorPalletHandler.java          |   25 +
+ .../events/colors/CustomColorHandler.java          |   24 +
+ .../events/colors/FillColorHandler.java            |   24 +
+ .../events/colors/LineThicknessHandler.java        |   25 +
+ .../events/colors/OutlineColorHandler.java         |   25 +
+ .../events/colors/TransparencyHandler.java         |   29 +
+ .../events/display/SlowDownHandler.java            |   25 +
+ .../events/display/SpeedUpHandler.java             |   25 +
+ .../events/display/StartHandler.java               |   25 +
+ .../events/display/StopHandler.java                |   25 +
+ .../events/edit/CopyHandler.java                   |   26 +
+ .../events/edit/CutHandler.java                    |   25 +
+ .../events/edit/MoveToBackHandler.java             |   25 +
+ .../events/edit/MoveToFrontHandler.java            |   25 +
+ .../events/edit/PasteHandler.java                  |   25 +
+ .../events/edit/StartSelectionHandler.java         |   25 +
+ .../events/files/DeleteHandler.java                |   25 +
+ .../events/files/ExitHandler.java                  |   25 +
+ .../events/files/ExportPoseHandler.java            |   25 +
+ .../events/files/NewHandler.java                   |   25 +
+ .../events/files/NewPoseHandler.java               |   25 +
+ .../events/files/NewStateHandler.java              |   25 +
+ .../events/files/OpenHandler.java                  |   25 +
+ .../events/files/PoseSelectionHandler.java         |   25 +
+ .../events/files/SaveAsHandler.java                |   25 +
+ .../events/files/SaveHandler.java                  |   25 +
+ .../events/files/StateSelectionHandler.java        |   25 +
+ .../events/shape/EllipseSelectionHandler.java      |   25 +
+ .../events/shape/LineSelectionHandler.java         |   25 +
+ .../events/shape/RectangleSelectionHandler.java    |   25 +
+ .../events/window/PoseurWindowHandler.java         |   57 ++
+ .../events/zoom/ChangePoseDimensionsHandler.java   |   25 +
+ .../events/zoom/ZoomInHandler.java                 |   25 +
+ .../events/zoom/ZoomOutHandler.java                |   25 +
+ .../files/AnimatedSpriteEditorGUILoader.java       |  114 +++
+ .../files/AnimatedSpriteEditorIO.java              |  426 ++++++++++
+ .../files/ColorPalletLoader.java                   |   87 ++
+ .../files/EditorFileManager.java                   |  228 +++++
+ .../src/animatedSpriteEditor/files/GUILoader.java  |  109 +++
+ .../files/InvalidXMLFileFormatException.java       |   53 ++
+ .../animatedSpriteEditor/files/XMLUtilities.java   |  332 ++++++++
+ .../gui/AnimatedSpriteEditorGUI.java               |  896 ++++++++++++++++++++
+ .../src/animatedSpriteEditor/gui/ColorPallet.java  |  153 ++++
+ .../gui/ColorToggleButton.java                     |   62 ++
+ .../src/animatedSpriteEditor/gui/EditorCanvas.java |  236 ++++++
+ .../gui/PoseDimensionsDialog.java                  |  222 +++++
+ .../animatedSpriteEditor/shapes/PoseurEllipse.java |  280 ++++++
+ .../animatedSpriteEditor/shapes/PoseurLine.java    |  308 +++++++
+ .../shapes/PoseurRectangle.java                    |  280 ++++++
+ .../animatedSpriteEditor/shapes/PoseurShape.java   |  287 +++++++
+ .../shapes/PoseurShapeType.java                    |   17 +
+ .../state/ColorPalletState.java                    |  177 ++++
+ .../state/EditorStateManager.java                  |  704 +++++++++++++++
+ .../state/PoseCanvasState.java                     |  247 ++++++
+ .../src/animatedSpriteEditor/state/PoseurPose.java |  195 +++++
+ .../animatedSpriteEditor/state/PoseurState.java    |   54 ++
+ 63 files changed, 6930 insertions(+)
